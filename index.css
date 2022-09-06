@@ -471,21 +471,21 @@ a:not([href]):not([tabindex]):focus {
 
 @font-face {
   font-family: pxplus_ibm_vga8regular;
-  src: url(../fonts/pxplus_ibm_vga8-webfont.woff) format("woff");
+  src: url(fonts/pxplus_ibm_vga8-webfont.woff) format("woff");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: pxplus_ibm_vga9regular;
-  src: url(../fonts/pxplus_ibm_vga9-webfont.woff) format("woff");
+  src: url(fonts/pxplus_ibm_vga9-webfont.woff) format("woff");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: dosgamesicons;
-  src: url(../fonts/dosgamesicons.woff);
+  src: url(fonts/dosgamesicons.woff);
   font-weight: 400;
   font-style: normal;
 }
@@ -592,7 +592,7 @@ a:not([href]):not([tabindex]):focus {
 }
 
 body {
-  background: url(../imgs/heh2.gif) #555;
+  background: url(imgs/heh2.gif) #555;
   overflow-x: hidden;
   text-decoration-skip-ink: auto;
 }
@@ -640,7 +640,7 @@ header>.container {
 
 @media (min-width: 992px) {
   header {
-    background: url(../imgs/bg-logo.gif) #ddd;
+    background: url(imgs/bg-logo.gif) #ddd;
     background-position-y: 8px;
     margin-bottom: 16px;
   }
@@ -651,7 +651,6 @@ header>.container {
 }
 
 .logo {
-  background: url(../imgs/logo.png) left top no-repeat transparent;
   display: inline-block;
   height: 111px;
   max-width: 656px;
@@ -660,7 +659,6 @@ header>.container {
 
 @media (max-width: 991px) {
   .logo {
-    background-image: url(../imgs/logo-mobile.png);
   }
 }
 
@@ -755,7 +753,7 @@ header>.container {
 }
 
 .dosmenu ul.bullets a {
-  background: url(../imgs/bullet.gif) top left no-repeat;
+  background: url(imgs/bullet.gif) top left no-repeat;
   color: #fff;
   display: block;
   padding-left: 24px;
@@ -800,7 +798,7 @@ header>.container {
 }
 
 .dosmenu--shadow:after {
-  background: url(../imgs/mask.gif) transparent;
+  background: url(imgs/mask.gif) transparent;
 }
 
 .dosmenu-inner {
