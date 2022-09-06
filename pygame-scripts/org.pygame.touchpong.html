@@ -6,6 +6,7 @@ import asyncio
 
 try:
     import android
+
     __ANDROID__ = True
 except:
     __ANDROID__ = False
@@ -17,21 +18,21 @@ try:
 except:
     __EMSCRIPTEN__ = hasattr(sys, "_emscripten_info")
 
-import pygame as pg
+import pygame
 
-pg.init()
+pygame.init()
 
-if __ANDROID__ :
-    screen = pg.display.set_mode((640, 360), pg.SCALED | pg.FULLSCREEN)
+if __ANDROID__:
+    screen = pygame.display.set_mode((640, 360), pygame.SCALED | pygame.FULLSCREEN)
 else:
-    screen = pg.display.set_mode((640, 360), 0 )
+    screen = pygame.display.set_mode((640, 360), 0)
 
-clock = pg.time.Clock()
-score_font = pg.font.SysFont("monospace", 64)
+clock = pygame.time.Clock()
+score_font = pygame.font.SysFont("monospace", 64)
 
-left_paddle = pg.Rect(45, 5, 15, 60)
-right_paddle = pg.Rect(580, 5, 15, 60)
-ball = pg.Rect(320, 240, 20, 20)
+left_paddle = pygame.Rect(45, 5, 15, 60)
+right_paddle = pygame.Rect(580, 5, 15, 60)
+ball = pygame.Rect(320, 240, 20, 20)
 ball_speed = [-2, 1]
 
 fingers = {}
@@ -62,25 +63,25 @@ def step():
 
     if audio:
         if os.path.isfile("Eisenfunk - Pong.ogg"):
-            pg.mixer.init()
-            pg.mixer.music.set_volume(0.5)
-            pg.mixer.music.load("Eisenfunk - Pong.ogg")
-            pg.mixer.music.play()
+            pygame.mixer.init()
+            pygame.mixer.music.set_volume(0.5)
+            pygame.mixer.music.load("Eisenfunk - Pong.ogg")
+            pygame.mixer.music.play()
         audio = False
 
-    pg.event.pump()
+    pygame.event.pump()
 
-    for event in pg.event.get(pg.FINGERDOWN, pump=False):
+    for event in pygame.event.get(pygame.FINGERDOWN, pump=False):
         fingers[event.finger_id] = (event.x, event.y)
         if event.x < 0.5:
             p1fingers.append(event.finger_id)
         else:
             p2fingers.append(event.finger_id)
 
-    for event in pg.event.get(pg.FINGERMOTION, pump=False):
+    for event in pygame.event.get(pygame.FINGERMOTION, pump=False):
         fingers[event.finger_id] = (event.x, event.y)
 
-    for event in pg.event.get(pg.FINGERUP, pump=False):
+    for event in pygame.event.get(pygame.FINGERUP, pump=False):
         del fingers[event.finger_id]
 
         if event.finger_id in p1fingers:
@@ -88,36 +89,35 @@ def step():
         if event.finger_id in p2fingers:
             p2fingers.remove(event.finger_id)
 
-    for event in pg.event.get(pg.QUIT, pump=False):
+    for event in pygame.event.get(pygame.QUIT, pump=False):
         running = False
 
-    for event in pg.event.get():
+    for event in pygame.event.get():
         st = repr(event)
-        if st.find('-MouseMotion')>0:
+        if st.find("-MouseMotion") > 0:
             # works fine actually
             pass
-        elif st.find('-MouseButton')>0:
+        elif st.find("-MouseButton") > 0:
             # works fine actually
             pass
-        elif st.find('-KeyDown')>0:
+        elif st.find("-KeyDown") > 0:
             # works fine actually
             pass
-        elif st.find('-KeyUp')>0:
+        elif st.find("-KeyUp") > 0:
             # works fine actually
             pass
-        elif st.find('-TextInput')>0:
+        elif st.find("-TextInput") > 0:
             # works fine actually
             pass
         else:
             print(st)
 
-
-    keys = pg.key.get_pressed()
+    keys = pygame.key.get_pressed()
 
     if score_time > 0:
         score_time -= 1
         if score_time == 0:
-            ball = pg.Rect(320, 240, 20, 20)
+            ball = pygame.Rect(320, 240, 20, 20)
             if last_scorer == 1:
                 ball_speed = [-2, 1]
             else:
@@ -143,16 +143,15 @@ def step():
             else:
                 right_paddle.centery = y
 
-        if keys[pg.K_f]:
+        if keys[pygame.K_f]:
             left_paddle.centery -= 3
-        if keys[pg.K_v]:
+        if keys[pygame.K_v]:
             left_paddle.centery += 3
 
-        if keys[pg.K_UP]:
+        if keys[pygame.K_UP]:
             right_paddle.centery -= 3
-        if keys[pg.K_DOWN]:
+        if keys[pygame.K_DOWN]:
             right_paddle.centery += 3
-
 
         if left_paddle.bottom > 360:
             left_paddle.bottom = 360
@@ -201,38 +200,39 @@ def step():
 
     screen.fill(bg)
     if big_left_time > 0:
-        pg.draw.rect(screen, fg, left_paddle, 5)
+        pygame.draw.rect(screen, fg, left_paddle, 5)
         big_left_time -= 1
     else:
-        pg.draw.rect(screen, fg, left_paddle)
+        pygame.draw.rect(screen, fg, left_paddle)
 
     if big_right_time > 0:
-        pg.draw.rect(screen, fg, right_paddle, 5)
+        pygame.draw.rect(screen, fg, right_paddle, 5)
         big_right_time -= 1
     else:
-        pg.draw.rect(screen, fg, right_paddle)
+        pygame.draw.rect(screen, fg, right_paddle)
 
     if big_ball_time > 0:
-        pg.draw.rect(screen, fg, ball, 5)
+        pygame.draw.rect(screen, fg, ball, 5)
         big_ball_time -= 1
     else:
-        pg.draw.rect(screen, fg, ball)
+        pygame.draw.rect(screen, fg, ball)
 
-    pg.draw.line(screen, fg, (320 - 1, 0), (320 - 1, 360), 2)
+    pygame.draw.line(screen, fg, (320 - 1, 0), (320 - 1, 360), 2)
     score_surf = score_font.render(f"{p1score:02}:{p2score:02}", 1, fg)
     screen.blit(score_surf, (320 - score_surf.get_width() // 2, 5))
 
     clock.tick(30)
 
-    pg.display.flip()
+    pygame.display.flip()
+
 
 async def main():
     while True:
         step()
         await asyncio.sleep(0)
 
-asyncio.run(main())
 
+asyncio.run(main())
 
 
 # --></script></html>
