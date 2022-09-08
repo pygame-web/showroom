@@ -4,19 +4,13 @@ import sys
 import os
 import asyncio
 
+__ANDROID__ = hasattr(sys, "getandroidapilevel")
+__EMSCRIPTEN__ = hasattr(sys, "_emscripten_info")
+
 try:
     import android
-
-    __ANDROID__ = True
-except:
-    __ANDROID__ = False
+except:    
     android = None
-
-
-try:
-    __EMSCRIPTEN__
-except:
-    __EMSCRIPTEN__ = hasattr(sys, "_emscripten_info")
 
 import pygame
 
