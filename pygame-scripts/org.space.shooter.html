@@ -292,11 +292,11 @@ def game(events):
 
     if lives>0 and player.health>0:
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_q] and player.x - player_vel > 0:  # left
+        if keys[pygame.K_a] and player.x - player_vel > 0:  # left
             player.x -= player_vel
         if keys[pygame.K_d] and player.x + player_vel + player.get_width() < WIDTH:  # right
             player.x += player_vel
-        if keys[pygame.K_z] and player.y - player_vel > 0:  # up
+        if keys[pygame.K_w] and player.y - player_vel > 0:  # up
             player.y -= player_vel
         if (
             keys[pygame.K_s] and player.y + player_vel + player.get_height() + 15 < HEIGHT
