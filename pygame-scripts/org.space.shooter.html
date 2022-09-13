@@ -1,15 +1,16 @@
-<html><head><meta charset="utf-8"></head><script src="/archives/0.3.0/pythons.js" type=module id="__main__" data-src="fs,gui" async defer>#<!--
+<html><head><meta charset="utf-8"></head><script src="https://pygame-web.github.io/archives/0.3.0/pythons.js" data-src="gui" type=module id="__main__" async defer>#<!--
 PYGBAG_FS=10
+__import__('os').chdir(__import__('tempfile').gettempdir())
 def fs_decode(fsname, o248):
     from pathlib import Path
-    import os
-    filename = Path( os.getcwd() ,  fsname)
-    filename.parent.mkdir(parents=True, exist_ok=True)
-    print("FS:", filename)
-    with open(fsname,"wb") as fs:
-        for input in o248.split("\n"):
-            if not input: continue
-            fs.write(bytes([ord(c) - 248 for c in input]))
+    filename = Path.cwd() / fsname
+    if not filename.is_file():
+        filename.parent.mkdir(parents=True, exist_ok=True)
+        print("FS:", filename)
+        with open(fsname,"wb") as fs:
+            for input in o248.split("\n"):
+                if not input: continue
+                fs.write(bytes([ord(c) - 248 for c in input]))
 
 fs_decode('assets/background-black.png','''
 ƁňņĿąĂĒĂøøøąŁŀļŊøøùƈøøùƈüûøøøŪƉģǷøøøćňńŌĽċĉĉǉǔıžƔǖǎĽħƩęƹĸŖŖĉøøùĻŁļĹŌŰǒǥǕĹŦŻĨĈýň
@@ -52,7 +53,7 @@ fs_decode('assets/pixel_ship_yellow.png','''
 øøùŬŊņŋøĸǞǐŞøøøĲŁļĹŌŀƿśŘĐýŀĘČüľŝľŝľƲĄţŠǠĢĈĀąąĐƍđƑĪŔƣŎǵǷǷčĦċǷǷǷƢōăľŝľƔǄƀħċùţħƧƬż
 ŋĜǛøøøøŁĽņļƦĺŘź''')
 
-del PYGBAG_FS
+del fs_decode, PYGBAG_FS
 
 import asyncio
 import pygame
@@ -316,7 +317,7 @@ def game(events):
                 player.health -= 10
                 enemies.remove(enemy)
             elif enemy.y + enemy.get_height() > HEIGHT:
-                player.health = -1
+                player.health = 0
                 enemies.remove(enemy)
 
         player.move_lasers(-laser_vel, enemies)
@@ -345,8 +346,10 @@ def game(events):
             if (lost_count < FPS * 3):
                 lost_label = lost_font.render("You Lost a ship !!", 1, (255, 255, 255))
             else:
+                lost_count = 0
                 lives -= 1
                 player.health = 100
+
     finally:
         if lost_label:
             WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, 350))
