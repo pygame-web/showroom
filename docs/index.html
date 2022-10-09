@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/showroom/static/images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/showroom/static/styles/style.css" />
+    <title> Pygame WebAssembly CDN </title>
+  </head>
+
+  <header class="header header--loggedIn">
+    <div class="container">
+        <a href="/" class="header__logo">
+            <img src="/showroom/static/images/favicon.ico" />
+            <h1> Pygame WebAssembly CDN </h1>
+        </a>
+
+        <div class="sections">
+            <a href="/showroom/"> <h1> HOME </h1></a>
+        </div>
+
+        <div class="sections">
+            <a href="/showroom/wiki/pygbag/"> <h1> HOW TO USE </h1></a>
+        </div>
+
+        <div class="sections">
+            <a href="/showroom/contact/"> <h1> CONTACT </h1></a>
+        </div>
+
+        <div class="sections">
+            <a href="/showroom/about/"> <h1> ABOUT </h1></a>
+        </div>
+
+        <div class="language">
+            <div>
+                <a href="/showroom/"> EN </a>
+            </div>
+            |
+            <div>
+                <a href="/showroom/"> ES </a>  <!--TODO versión español-->
+            </div>
+        </div>
+
+    </div>
+  </header>
+
+  <body>
+    <main class="layout layout--3">
+      <div class="container">
+        <div class="topics">
+            <div class="topics__header">
+                <h2> Browse Topics </h2>
+            </div>
+
+            <ul class="topics__list">
+                <li>
+                    <a href="/showroom/" class="active"> All <span> 4 </span></a>
+                </li>
+
+                <li>
+                    <a href="/showroom/heavy/" target="iframe"> Heavy CPU Load <span> 1 </span></a>
+                </li>
+
+                <li>
+                    <a href="/showroom/light/" target="iframe"> Light CPU Load <span> 2 </span></a>
+                </li>
+
+                <li>
+                    <a href="/showroom/arcade/" target="iframe"> Arcade <span> 1 </span></a>
+                </li>
+            </ul>
+
+            <!--<a class="btn btn--link" href="topics.html">
+                More
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                    <title>chevron-down</title>
+                    <path d="M16 21l-13-13h-3l16 16 16-16h-3l-13 13z"></path>
+                </svg>
+            </a>-->
+
+            <div class="activities">
+                <div class="activities__header">
+                    <h2> WIKI ENTRIES </h2>
+                </div>
+
+                <div class="activities__box">
+                    <div class="activities__boxHeader">
+                        <a href="/showroom/wiki/pygbag/" class="roomListRoom__author">
+                            <!--<div class="avatar avatar--small">
+                                <img src="https://randomuser.me/api/portraits/women/11.jpg" />
+                            </div>-->
+
+                            <p> PYGBAG PACKAGER </p>
+                        </a>
+                    </div>
+
+                    <div class="activities__boxContent">
+                        <p> Tutorial on how to use pygbag to convert your pygame code into a package
+                            that can be run on a web browser. Mobile too!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="activities__box">
+                    <div class="activities__boxHeader">
+                        <a href="/showroom/wiki/python-wasm/" class="roomListRoom__author">
+                            <!--<div class="avatar avatar--small">
+                                <img src="https://randomuser.me/api/portraits/women/11.jpg" />
+                            </div>-->
+
+                            <p> PYTHON WASM </p>
+                        </a>
+                    </div>
+
+                    <div class="activities__boxContent">
+                        <p> CPython WASM specifics, when in the browser with emscripten runtime. </p>
+                    </div>
+                </div>
+
+                <div class="activities__box">
+                    <div class="activities__boxHeader">
+                        <a href="/showroom/wiki/pygbag-code/" class="roomListRoom__author">
+                            <!--<div class="avatar avatar--small">
+                                <img src="https://randomuser.me/api/portraits/women/11.jpg" />
+                            </div>-->
+
+                            <p> PYGBAG FAQ </p>
+                        </a>
+                    </div>
+
+                    <div class="activities__boxContent">
+                        <p> Solutions for some of the most common problems encountered using pygbag. </p>
+                    </div>
+                </div>
+
+                <div class="activities__box">
+                    <div class="activities__boxHeader">
+                        <a href="/showroom/wiki/pygbag-debug/" class="roomListRoom__author">
+                            <!--<div class="avatar avatar--small">
+                                <img src="https://randomuser.me/api/portraits/women/11.jpg" />
+                            </div>-->
+
+                            <p> DEBUG MODE </p>
+                        </a>
+                    </div>
+
+                    <div class="activities__boxContent">
+                        <p> How to enter debug mode while running your game on a browser. </p>
+                    </div>
+                </div>
+
+                <div class="activities__box">
+                    <div class="activities__boxHeader">
+                        <a href="/showroom/wiki/pygame-script/" class="roomListRoom__author">
+                            <!--<div class="avatar avatar--small">
+                                <img src="https://randomuser.me/api/portraits/women/11.jpg" />
+                            </div>-->
+
+                            <p> PYGAME SCRIPT </p>
+                        </a>
+                    </div>
+
+                    <div class="activities__boxContent">
+                        <p> When to use pygame script directly on your html. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="roomList">
+            <canvas class="emscripten" id="canvas"
+                width="1px"
+                height="1px"
+                style="width: 100%; height: 0%"
+                oncontextmenu="event.preventDefault()" tabindex=1>
+            </canvas>
+
+            <iframe id="iframe" class="topright" name="iframe"
+                allow="autoplay; fullscreen *; geolocation; microphone; camera; midi; xr-spatial-tracking; gyroscope; accelerometer;"
+                frameborder="0"
+                width="80%"
+                height="100%"
+                src="games.html"
+                msallowfullscreen="true"
+                scrolling="yes"
+                seamless="seamless"
+                allowfullscreen="true"
+                webkitallowfullscreen="true"
+                allowtransparency="true">
+            </iframe>
+        </div>
+
+      </div>
+    </main>
+
+    <script src="/showroom/static/js/script.js"></script>
+  </body>
+</html>
