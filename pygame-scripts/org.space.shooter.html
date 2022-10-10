@@ -1,57 +1,89 @@
 <html><head><meta charset="utf-8"></head><script src="https://pygame-web.github.io/archives/0.3/pythons.js" data-src="gui" type=module id="__main__" async defer>#<!--
-PYGBAG_FS=10
-__import__('os').chdir(__import__('tempfile').gettempdir())
+PYGBAG_FS = 10
+__import__("os").chdir(__import__("tempfile").gettempdir())
+
+
 def fs_decode(fsname, o248):
     from pathlib import Path
+
     filename = Path.cwd() / fsname
     if not filename.is_file():
         filename.parent.mkdir(parents=True, exist_ok=True)
         print("FS:", filename)
-        with open(fsname,"wb") as fs:
+        with open(fsname, "wb") as fs:
             for input in o248.split("\n"):
-                if not input: continue
+                if not input:
+                    continue
                 fs.write(bytes([ord(c) - 248 for c in input]))
 
-fs_decode('assets/background-black.png','''
+
+fs_decode(
+    "assets/background-black.png",
+    """
 ƁňņĿąĂĒĂøøøąŁŀļŊøøùƈøøùƈüûøøøŪƉģǷøøøćňńŌĽċĉĉǉǔıžƔǖǎĽħƩęƹĸŖŖĉøøùĻŁļĹŌŰǒǥǕĹŦŻĨĈýň
 ŀŲŸǩąĈğƨƼýưǷơŒōƥǌýŊœƁŸĵŶŧƑčīûƾķĹŜƒøøŸšƂĜſĮďċùŖťĶǲŨǏďǒƪĜơǛƩƒĀƕƠŁǢŰŦĞúŸǵčǟƈƋǙǐǔŐü
 ǀǊǏĥŅĠūƅĸŻţǝŽŚƴƊėǆůøøŘĸšƪǈƲƐĀĬŜǏúưŌŠùǨƥŢùøøǊħŴŁǫǤŗāċùøøĸžƏǙǷƣƒĀøøøøǔĜŲħƸůżøøøøǯ
 ǩĒĲŸīƥŒøøøøøøĸīĚŁĕūđŧĚƃǋďøŸǜŮŽǈţľǥǳǨǋƼŅƱđøŤƣƸƱŀƃĺƲúƨƬúƸſşƎĺƮŢĚøŨƉįĥŸƗŞŽŨƃňōǃƏŋĩ
 ĉøøøƉûøǠƻǟƗǙǱƍüĸŬƛŽĳĪƸŗǧľŮǨŔƘŢùŻłƫƼƎĨĉøøĐĮƢǐĿėƣŒøøøǨŊƙýşǨĘđǨƓĽăøĸƮúøŘŔǧāħþǗǦƍįĮ
-øøøøŁĽņļƦĺŘź''')
+øøøøŁĽņļƦĺŘź""",
+)
 
-fs_decode('assets/pixel_laser_blue.png','''
+fs_decode(
+    "assets/pixel_laser_blue.png",
+    """
 ƁňņĿąĂĒĂøøøąŁŀļŊøøøŜøøøŒùûøøøŬŔřǂøøøāŨŀőūøøăċøøăċùøƒƔĐøøøþňńŌĽĿŨńŅƕǘŻƅƄǥøøøùŬŊņ
-ŋøĸǞǐŞøøøĐŁļĹŌİǃśŘĐýŻÿƨǷēǝąŮǖĠĐƢøøƟǔĖƏŬƦŻƱøøøøŁĽņļƦĺŘź''')
+ŋøĸǞǐŞøøøĐŁļĹŌİǃśŘĐýŻÿƨǷēǝąŮǖĠĐƢøøƟǔĖƏŬƦŻƱøøøøŁĽņļƦĺŘź""",
+)
 
-fs_decode('assets/pixel_laser_green.png','''
+fs_decode(
+    "assets/pixel_laser_green.png",
+    """
 ƁňņĿąĂĒĂøøøąŁŀļŊøøøŜøøøŒùûøøøŬŔřǂøøøāŨŀőūøøăċøøăċùøƒƔĐøøøþňńŌĽĿŨńĳƪūƠǣŚƔøøøùŬŊņ
-ŋøĸǞǐŞøøøĐŁļĹŌİǃśŘĐýŻÿƨǷēǝąŮǖĠĐƢøøƟǔĖƏŬƦŻƱøøøøŁĽņļƦĺŘź''')
+ŋøĸǞǐŞøøøĐŁļĹŌİǃśŘĐýŻÿƨǷēǝąŮǖĠĐƢøøƟǔĖƏŬƦŻƱøøøøŁĽņļƦĺŘź""",
+)
 
-fs_decode('assets/pixel_laser_red.png','''
+fs_decode(
+    "assets/pixel_laser_red.png",
+    """
 ƁňņĿąĂĒĂøøøąŁŀļŊøøøŜøøøŒùûøøøŬŔřǂøøøāŨŀőūøøăċøøăċùøƒƔĐøøøþňńŌĽĿŨńǙōŌƔƸúĲøøøùŬŊņ
-ŋøĸǞǐŞøøøĐŁļĹŌİǃśŘĐýŻÿƨǷēǝąŮǖĠĐƢøøƟǔĖƏŬƦŻƱøøøøŁĽņļƦĺŘź''')
+ŋøĸǞǐŞøøøĐŁļĹŌİǃśŘĐýŻÿƨǷēǝąŮǖĠĐƢøøƟǔĖƏŬƦŻƱøøøøŁĽņļƦĺŘź""",
+)
 
-fs_decode('assets/pixel_laser_yellow.png','''
+fs_decode(
+    "assets/pixel_laser_yellow.png",
+    """
 ƁňņĿąĂĒĂøøøąŁŀļŊøøøŜøøøŒùûøøøŬŔřǂøøøāŨŀőūøøăċøøăċùøƒƔĐøøøþňńŌĽĿŨńǙƴġĵǀĿĖøøøùŬŊņ
-ŋøĸǞǐŞøøøĐŁļĹŌİǃśŘĐýŻÿƨǷēǝąŮǖĠĐƢøøƟǔĖƏŬƦŻƱøøøøŁĽņļƦĺŘź''')
+ŋøĸǞǐŞøøøĐŁļĹŌİǃśŘĐýŻÿƨǷēǝąŮǖĠĐƢøøƟǔĖƏŬƦŻƱøøøøŁĽņļƦĺŘź""",
+)
 
-fs_decode('assets/pixel_ship_blue_small.png','''
+fs_decode(
+    "assets/pixel_ship_blue_small.png",
+    """
 ƁňņĿąĂĒĂøøøąŁŀļŊøøøĪøøøĪúûøøøśŉŘĚøøøāňńŌĽĿŨńŌőŎĖƿǲƍŲŢĿøøøùŬŊņŋøĸǞǐŞøøøĘŁļĹŌĠǇśŘ
-ĐŤĘĬĬŘƌſǆśąąŕƭŢšŠǠŘǘąĒøøŇŏĬƵŧøƁƩøøøøŁĽņļƦĺŘź''')
+ĐŤĘĬĬŘƌſǆśąąŕƭŢšŠǠŘǘąĒøøŇŏĬƵŧøƁƩøøøøŁĽņļƦĺŘź""",
+)
 
-fs_decode('assets/pixel_ship_green_small.png','''
+fs_decode(
+    "assets/pixel_ship_green_small.png",
+    """
 ƁňņĿąĂĒĂøøøąŁŀļŊøøøľøøøĪúûøøøƔǫĽƸøøøāňńŌĽĿŨńŌőŎĳƪūťǈŐųøøøùŬŊņŋøĸǞǐŞøøøĝŁļĹŌĠǇśŘ
-ĐĆŸĭĬŬǀĂŽžľƥŒčĒĒĨüŽĈŶŹƫžƈǈĈþøƘǩĭƯƫƧƊƖøøøøŁĽņļƦĺŘź''')
+ĐĆŸĭĬŬǀĂŽžľƥŒčĒĒĨüŽĈŶŹƫžƈǈĈþøƘǩĭƯƫƧƊƖøøøøŁĽņļƦĺŘź""",
+)
 
-fs_decode('assets/pixel_ship_red_small.png','''
+fs_decode(
+    "assets/pixel_ship_red_small.png",
+    """
 ƁňņĿąĂĒĂøøøąŁŀļŊøøøľøøøĪúûøøøƔǫĽƸøøøāŨŀőūøøăċøøăċùøƒƔĐøøøāňńŌĽĿŨńźƂŽǙōŌşĠǌĉøøøù
-ŬŊņŋøĸǞǐŞøøøĝŁļĹŌĠǇśŘĐĆŸĭĬŬǀĂŽžľƥŒčĒĒĨüŽĈŶŹƫžƈǈĈþøƘǩĭƯƫƧƊƖøøøøŁĽņļƦĺŘź''')
+ŬŊņŋøĸǞǐŞøøøĝŁļĹŌĠǇśŘĐĆŸĭĬŬǀĂŽžľƥŒčĒĒĨüŽĈŶŹƫžƈǈĈþøƘǩĭƯƫƧƊƖøøøøŁĽņļƦĺŘź""",
+)
 
-fs_decode('assets/pixel_ship_yellow.png','''
+fs_decode(
+    "assets/pixel_ship_yellow.png",
+    """
 ƁňņĿąĂĒĂøøøąŁŀļŊøøøŜøøøŒúûøøøīǴēĒøøøāŨŀőūøøăċøøăċùøƒƔĐøøøĄňńŌĽĿŨńưƼƵǙƴġƺǇƿŁĐǂĞø
 øøùŬŊņŋøĸǞǐŞøøøĲŁļĹŌŀƿśŘĐýŀĘČüľŝľŝľƲĄţŠǠĢĈĀąąĐƍđƑĪŔƣŎǵǷǷčĦċǷǷǷƢōăľŝľƔǄƀħċùţħƧƬż
-ŋĜǛøøøøŁĽņļƦĺŘź''')
+ŋĜǛøøøøŁĽņļƦĺŘź""",
+)
 
 del fs_decode, PYGBAG_FS
 
@@ -291,16 +323,19 @@ def game(events):
             )
             enemies.append(enemy)
 
-    if lives>0 and player.health>0:
+    if lives > 0 and player.health > 0:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and player.x - player_vel > 0:  # left
             player.x -= player_vel
-        if keys[pygame.K_d] and player.x + player_vel + player.get_width() < WIDTH:  # right
+        if (
+            keys[pygame.K_d] and player.x + player_vel + player.get_width() < WIDTH
+        ):  # right
             player.x += player_vel
         if keys[pygame.K_w] and player.y - player_vel > 0:  # up
             player.y -= player_vel
         if (
-            keys[pygame.K_s] and player.y + player_vel + player.get_height() + 15 < HEIGHT
+            keys[pygame.K_s]
+            and player.y + player_vel + player.get_height() + 15 < HEIGHT
         ):  # down
             player.y += player_vel
         if keys[pygame.K_SPACE]:
@@ -343,7 +378,7 @@ def game(events):
 
         if player.health <= 0:
             lost_count += 1
-            if (lost_count < FPS * 3):
+            if lost_count < FPS * 3:
                 lost_label = lost_font.render("You Lost a ship !!", 1, (255, 255, 255))
             else:
                 lost_count = 0
@@ -353,6 +388,7 @@ def game(events):
     finally:
         if lost_label:
             WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, 350))
+
 
 # loop
 state = main_menu
@@ -377,4 +413,3 @@ async def main():
 asyncio.run(main())
 
 # --></script></html>
-
