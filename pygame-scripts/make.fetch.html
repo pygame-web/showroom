@@ -7,21 +7,43 @@ import json
 async def sitecustomize():
 
     # start async top level machinery and add a console.
-    await TopLevel_async_handler.start_toplevel(platform.shell, console=window.python.config.debug)
+    await TopLevel_async_handler.start_toplevel(platform.shell, console=platform.window.python.config.debug)
 
 
 
     platform.window.eval("""
-window.myfetch = function myfetch(url, json_opts ) {
+window.POST = function * POST(url, json_opts, data ) {
     console.log("myfetch", url)
-    console.log("myfetch", JSON.parse(json_opts) )
+    var options = JSON.parse(json_opts)
+    options.cors = "no-cors"
+    options.method = "POST"
+    options.credentials = "omit"
+    options.body = data
+    options.headers = {'content-type' : 'application/json'}
+
+    console.log("POST", options )
+
+    var content = 0
+    fetch(url, options)
+        .then( response => {
+                if (checkStatus(response))
+                    response.arrayBuffer()
+            })
+        .then( buffer => content = new Uint8Array(buffer) )
+        .catch(x => console.error("POST :",x))
+
+    while (!content && !response.error)
+        yield content
+
+    if (response.error)
+        return response.error
 }
 """)
 
     # required to process eval
     await asyncio.sleep(0)
 
-    platform.window.myfetch("https://", json.dumps({1:2,3:4}) )
+    await jsiter(platform.window.POST("https://localhost/some/service", json.dumps({1:2,3:4}) ))
 
 
 asyncio.run( sitecustomize() )
