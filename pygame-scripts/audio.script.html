@@ -1,18 +1,19 @@
 <html><head><meta charset="utf-8"></head><script src="/archives/0.5/pythons.js" data-src="stdout" type=module id="__main__" async defer>#<!--
-PYGBAG_FS=1
-__import__('os').chdir(__import__('tempfile').gettempdir())
+PYGBAG_FS = 1
+# fmt: off
+__import__("os").chdir(__import__("tempfile").gettempdir())
 def fs_decode(fsname, o248):
     from pathlib import Path
     filename = Path.cwd() / fsname
     if not filename.is_file():
         filename.parent.mkdir(parents=True, exist_ok=True)
-        with open(fsname,"wb") as fs:
+        with open(fsname, "wb") as fs:
             for input in o248.split("\n"):
-                if not input: continue
+                if not input:
+                    continue
                 fs.write(bytes([ord(c) - 248 for c in input]))
 
-
-fs_decode('/tmp/horn.ogg','''
+fs_decode("/tmp/horn.ogg","""
 ŇşşŋøúøøøøøøøøƸŴǳŔøøøøōŬûěùĖùŮŧŪŚšūøøøøùļƤøøøøøøŸƳøøøøøøưùŇşşŋøøøøøøøøøøƸŴǳŔùøø
 øĴŁƮǠĈǷžǷǷǷǷǷǷǷǷǷǷǷǷǷĪûŮŧŪŚšūąøøøńřŮŞĭİĦįĮĦĩĨĨýøøøĘøøøŝŦśŧŜŝŪĵńřŮśĭİĦĩīĬĦĩĨĨĘŤš
 ŚŮŧŪŚšūĈøøøŬšťŝŗŪŝŞŝŪŝŦśŝĵĨƓøøøśŧŜšŦşŗŠšūŬŧŪűĵĹĵŅňĽĿĩńĪĤľĵĬĬĩĨĨĤĺĵĪĭĮĤŅĵŋŌĽŊĽŇĤ
@@ -386,24 +387,41 @@ fs_decode('/tmp/horn.ogg','''
 ƊƲĤƠĤňǇƧǩǷŎǴƯŦƦƦŬƷƮŚƴąĖőœŷƦƪǛŭŖƭƗƌǃťŐĥƎǎƆŗƯŋƎǭǚŽƟǧǫŘĶěŅƟġĭǫƐǅţƈǡĥƾŐƴþĆƖƓŘřƣťŭŭǢ
 ĒŔİŊūēŌťĝƽƸǫĒůƚþĄǱĨǇŬĒůǐĠćęűĝƸǴĒǨŠƚžǓÿƖǀŵŖƆŧƏƂōǓǓŢŌƑşőƺƢøĘņƶƕıčĖŲŰďǱǧſǐǥĎŕƖČƳƐĆ
 ŰśďǌøƩùŻĹǖǜŤǦĨĔüǤǎģûƆěŖƩƯŮÿġŃǩęŹǞƙǎĮŇƛŎĝŠǈľřƌǋŕĂŸĨƒČŘņāŐĨùƖǀǵǧĤŗƲøŦøøƙøøøøŸüƘŬø
-ĆĆ''')
-
+ĆĆ""")
+# fmt: on
 del fs_decode, PYGBAG_FS
 
 """
 pyscript sample from Jeff Glass :
 _________________________________
 <py-config>
-  paths = ['horn.wav']
 </py-config>
 
 <button id="b" py-click="make_noise()">Make Some Noise!</button>
+<br>
+<button id="download" py-click="download_file()">Download File</button>
 
 <py-script>
-  from js import Audio
-  horn = Audio.new('horn.wav')
-  def make_noise():
+from js import Audio, document, File, window
+from pyodide.ffi import to_js
+
+# Read data from Emscripten Filsystem
+with open('/tmp/horn.ogg', 'rb') as fp:
+    data_from_FS = fp.read()
+
+js_horn_file = File.new([to_js(data_from_FS)], '/tmp/horn.ogg')
+url = window.URL.createObjectURL(js_horn_file)
+horn = Audio.new(url)
+
+def make_noise():
     horn.play()
+
+def download_file():
+    hidden_link = document.createElement("a")
+    hidden_link.download="soundfile.wav"
+    hidden_link.href=url
+    hidden_link.click()
+
 </py-script>
 ___________________________________
 """
@@ -416,10 +434,19 @@ ___________________________________
 #   Reflect.construct(oclass, Array(*argv) )
 
 
-print('''<button id="b" onclick="py.make_noise('bouh')">Make Some Noise!</button>''')
-horn = new(window.Audio, window.blob('/tmp/horn.ogg'))
+print(
+    """
+<button id="b" onclick="py.make_noise('bouh')">Make Some Noise!</button>
+<br>
+<button id="download" onclick="py.download_file()">Download File</button>
+"""
+)
+
+horn = new(window.Audio, window.blob("/tmp/horn.ogg"))
+
 
 def make_noise(*argv):
     horn.play()
+
 
 # --></script></html>
