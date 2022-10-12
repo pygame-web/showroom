@@ -1,0 +1,235 @@
+<html><head><meta charset="utf-8"><py-config type=json>{"runtimes":[{"src":"https://km19809.github.io/pyxelodide/pyodide.js","name":"pyodide-sdl2","lang":"python"}]}</py-config></head><html><py-script>#<!--
+PYGBAG_FS=10
+# fmt: off
+__import__('os').chdir(__import__('tempfile').gettempdir())
+def fs_decode(fsname, o248):
+    from pathlib import Path
+    filename = Path.cwd() / fsname
+    if not filename.is_file():
+        filename.parent.mkdir(parents=True, exist_ok=True)
+        #print("FS:", filename)
+        with open(fsname,"wb") as fs:
+            for input in o248.split("\n"):
+                if not input: continue
+                fs.write(bytes([ord(c) - 248 for c in input]))
+
+fs_decode('assets/background-black.png','''
+ƁňņĿąĂĒĂøøøąŁŀļŊøøùƈøøùƈüûøøøŪƉģǷøøøćňńŌĽċĉĉǉǔıžƔǖǎĽħƩęƹĸŖŖĉøøùĻŁļĹŌŰǒǥǕĹŦŻĨĈýň
+ŀŲŸǩąĈğƨƼýưǷơŒōƥǌýŊœƁŸĵŶŧƑčīûƾķĹŜƒøøŸšƂĜſĮďċùŖťĶǲŨǏďǒƪĜơǛƩƒĀƕƠŁǢŰŦĞúŸǵčǟƈƋǙǐǔŐü
+ǀǊǏĥŅĠūƅĸŻţǝŽŚƴƊėǆůøøŘĸšƪǈƲƐĀĬŜǏúưŌŠùǨƥŢùøøǊħŴŁǫǤŗāċùøøĸžƏǙǷƣƒĀøøøøǔĜŲħƸůżøøøøǯ
+ǩĒĲŸīƥŒøøøøøøĸīĚŁĕūđŧĚƃǋďøŸǜŮŽǈţľǥǳǨǋƼŅƱđøŤƣƸƱŀƃĺƲúƨƬúƸſşƎĺƮŢĚøŨƉįĥŸƗŞŽŨƃňōǃƏŋĩ
+ĉøøøƉûøǠƻǟƗǙǱƍüĸŬƛŽĳĪƸŗǧľŮǨŔƘŢùŻłƫƼƎĨĉøøĐĮƢǐĿėƣŒøøøǨŊƙýşǨĘđǨƓĽăøĸƮúøŘŔǧāħþǗǦƍįĮ
+øøøøŁĽņļƦĺŘź''')
+
+fs_decode('assets/pixel_laser_blue.png','''
+ƁňņĿąĂĒĂøøøąŁŀļŊøøøŜøøøŒùûøøøŬŔřǂøøøāŨŀőūøøăċøøăċùøƒƔĐøøøþňńŌĽĿŨńŅƕǘŻƅƄǥøøøùŬŊņ
+ŋøĸǞǐŞøøøĐŁļĹŌİǃśŘĐýŻÿƨǷēǝąŮǖĠĐƢøøƟǔĖƏŬƦŻƱøøøøŁĽņļƦĺŘź''')
+
+fs_decode('assets/pixel_laser_green.png','''
+ƁňņĿąĂĒĂøøøąŁŀļŊøøøŜøøøŒùûøøøŬŔřǂøøøāŨŀőūøøăċøøăċùøƒƔĐøøøþňńŌĽĿŨńĳƪūƠǣŚƔøøøùŬŊņ
+ŋøĸǞǐŞøøøĐŁļĹŌİǃśŘĐýŻÿƨǷēǝąŮǖĠĐƢøøƟǔĖƏŬƦŻƱøøøøŁĽņļƦĺŘź''')
+
+fs_decode('assets/pixel_laser_red.png','''
+ƁňņĿąĂĒĂøøøąŁŀļŊøøøŜøøøŒùûøøøŬŔřǂøøøāŨŀőūøøăċøøăċùøƒƔĐøøøþňńŌĽĿŨńǙōŌƔƸúĲøøøùŬŊņ
+ŋøĸǞǐŞøøøĐŁļĹŌİǃśŘĐýŻÿƨǷēǝąŮǖĠĐƢøøƟǔĖƏŬƦŻƱøøøøŁĽņļƦĺŘź''')
+
+fs_decode('assets/pixel_laser_yellow.png','''
+ƁňņĿąĂĒĂøøøąŁŀļŊøøøŜøøøŒùûøøøŬŔřǂøøøāŨŀőūøøăċøøăċùøƒƔĐøøøþňńŌĽĿŨńǙƴġĵǀĿĖøøøùŬŊņ
+ŋøĸǞǐŞøøøĐŁļĹŌİǃśŘĐýŻÿƨǷēǝąŮǖĠĐƢøøƟǔĖƏŬƦŻƱøøøøŁĽņļƦĺŘź''')
+
+fs_decode('assets/pixel_ship_blue_small.png','''
+ƁňņĿąĂĒĂøøøąŁŀļŊøøøĪøøøĪúûøøøśŉŘĚøøøāňńŌĽĿŨńŌőŎĖƿǲƍŲŢĿøøøùŬŊņŋøĸǞǐŞøøøĘŁļĹŌĠǇśŘ
+ĐŤĘĬĬŘƌſǆśąąŕƭŢšŠǠŘǘąĒøøŇŏĬƵŧøƁƩøøøøŁĽņļƦĺŘź''')
+
+fs_decode('assets/pixel_ship_green_small.png','''
+ƁňņĿąĂĒĂøøøąŁŀļŊøøøľøøøĪúûøøøƔǫĽƸøøøāňńŌĽĿŨńŌőŎĳƪūťǈŐųøøøùŬŊņŋøĸǞǐŞøøøĝŁļĹŌĠǇśŘ
+ĐĆŸĭĬŬǀĂŽžľƥŒčĒĒĨüŽĈŶŹƫžƈǈĈþøƘǩĭƯƫƧƊƖøøøøŁĽņļƦĺŘź''')
+
+fs_decode('assets/pixel_ship_red_small.png','''
+ƁňņĿąĂĒĂøøøąŁŀļŊøøøľøøøĪúûøøøƔǫĽƸøøøāŨŀőūøøăċøøăċùøƒƔĐøøøāňńŌĽĿŨńźƂŽǙōŌşĠǌĉøøøù
+ŬŊņŋøĸǞǐŞøøøĝŁļĹŌĠǇśŘĐĆŸĭĬŬǀĂŽžľƥŒčĒĒĨüŽĈŶŹƫžƈǈĈþøƘǩĭƯƫƧƊƖøøøøŁĽņļƦĺŘź''')
+
+fs_decode('assets/pixel_ship_yellow.png','''
+ƁňņĿąĂĒĂøøøąŁŀļŊøøøŜøøøŒúûøøøīǴēĒøøøāŨŀőūøøăċøøăċùøƒƔĐøøøĄňńŌĽĿŨńưƼƵǙƴġƺǇƿŁĐǂĞø
+øøùŬŊņŋøĸǞǐŞøøøĲŁļĹŌŀƿśŘĐýŀĘČüľŝľŝľƲĄţŠǠĢĈĀąąĐƍđƑĪŔƣŎǵǷǷčĦċǷǷǷƢōăľŝľƔǄƀħċùţħƧƬż
+ŋĜǛøøøøŁĽņļƦĺŘź''')
+
+# fmt:on
+del fs_decode, PYGBAG_FS
+
+import sys
+
+print(f"<pre>{sys.platform=}\n{sys.version}</pre>")
+
+if sys.platform=="emscripten":
+    try:
+        # pygbag
+        from embed import HTML
+        import js
+
+    except ModuleNotFoundError:
+        # pyscript
+        import js
+        import pyodide.ffi
+
+        class HTML:
+
+            def __init__(self, file = "stdout"):
+                self.file = file
+                self.buffer = []
+                self.ctx = 0
+
+            def __call__(self, *argv, **kw):
+                sys.__stderr__.write(f"HTML {argv}")
+                kw.setdefault("end", "\n")
+                kw.setdefault("pre", "  "*self.ctx)
+                for pos,arg in enumerate(argv):
+                    pre = ""
+                    suf = ""
+                    if not pos:
+                        pre
+                    else:
+                        pre=""
+                    arg = arg.replace("py-click=", 'onclick="route(this)" py-click=')
+                    self.buffer.append(kw['pre']+arg+kw['end'])
+                if self.ctx is None:
+                    self.flush()
+
+            def read(self):
+                return str().join(self.buffer)
+
+            def flush(self):
+                import js
+                extend =  js.document.createElement('div')
+                extend.innerHTML = self.read()
+                jsid(self.file).appendChild(extend)
+                self.buffer.clear()
+
+
+            def __enter__(self):
+                self.ctx += 1
+                return self
+
+            def __exit__(self, *_):
+                self.ctx -= 1
+                if not self.ctx:
+                    self.flush()
+
+
+        __import__('js').window.eval(
+            """
+            try {
+                python
+            } catch (x) {
+                window.rpc = {}
+                window.rpc.path = []
+                window.rpc.call = ""
+                window.rpc.this = null
+                window.rpc.event = null
+            }
+
+            window.route = function router(elem) {
+                window.rpc.event = window.event
+                window.rpc.this = elem
+                console.log(window.event)
+                const pyev  = elem.getAttribute("py-click")
+                console.warn("py-routing", elem, pyev )
+                py_route.click()
+            }
+        """
+        )
+        # Read data from Emscripten Filesystem
+        ObjectURLs = {}
+        def File(path):
+            global ObjectURLs
+            from js import window
+            import pyodide.ffi
+
+            filename = str(path)
+            bloburl = ObjectURLs.get(filename, None)
+            if bloburl is None:
+                with open(filename, "rb") as fp:
+                    data_from_FS = fp.read()
+                jsfile = window.File.new([pyodide.ffi.to_js(data_from_FS)], filename)
+                bloburl = window.URL.createObjectURL(jsfile)
+                ObjectURLs[filename] = bloburl
+            return bloburl
+
+
+        def new(oclass, *argv):
+            return getattr(oclass, "new")(*argv)
+
+        def jsid(elemid):
+            # Element(str(elemid)).element
+            return js.document.getElementById(str(elemid))
+
+        import builtins
+        builtins.new = new
+        builtins.File = File
+        builtins.html = HTML()
+        builtins.jsid = jsid
+
+import os
+from pathlib import Path
+
+
+def gen_click(event):
+    try:
+        console.log(f"got {event=} from {this=}")
+    except:
+        console.log(f"got {event=} {{this : N/A}}")
+
+with html as print:
+    path = Path('/tmp/assets')
+    for bid,fname in enumerate(os.listdir(path)):
+        if 1:
+            print(f'<button id="b{bid}" data-src="{path/fname}" py-click="make_pic()">{fname}</button>')
+        else:
+            print(f'<button id="b{bid}" data-src="{path/fname}">{fname}</button>',"<hr>")
+            print.flush()
+            jsid(f"b{bid}").addEventListener("click", pyodide.ffi.create_proxy(gen_click))
+
+    print('<br><img id=pic height=200 alt="show image" border=1>')
+
+
+
+class py:
+    @classmethod
+    def route(cls, *argv):
+        import js
+        host = __import__("__main__")
+        client = str(js.window.rpc.call)
+        event = js.window.rpc.event
+        __import__("builtins").this = js.window.rpc.this
+        # TODO: expand dots
+        route = client.split('.')
+        solved = host
+        while len(route):
+            step = route.pop(0)
+            if hasattr(solved, step):
+                solved = getattr(solved, step)
+
+        if hasattr(host, client):
+            call = getattr(host, client)()
+            if (call.__code__.co_argcount==1) and (call.__code__.co_varnames=="event"):
+                call(event)
+            else:
+                call()
+        print(f"routed {event=} to {this=}")
+
+print("Hello")
+
+# import ctypes
+# print(ctypes)
+
+
+def download_file():
+    global tempfile
+    hidden_link = document.createElement("a")
+    hidden_link.download = tempfile.rsplit("/")[-1]
+    hidden_link.href = File(tempfile)
+    hidden_link.click()
+
+
+# fmt: off
+# --></py-script><script src="https://pyscript.net/releases/2022.09.1/pyscript.js" defer></script><div id=py_route py-click="py.route()" hidden></div><div id="stdout"></div></html>
