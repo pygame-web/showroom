@@ -208,43 +208,71 @@ if sys.platform == "emscripten":
         builtins.jsid = jsid
         builtins.jsattr = jsattr
 
+        #
+        def py_route(*argv):
+            py.route(*argv)
+
+        class py:
+            @classmethod
+            def route(cls, *argv):
+                import js
+                import builtins
+
+                # recover this, event and maybe argv
+                host = __import__("__main__")
+                client = str(js.window.rpc.call).rstrip("()")
+                event = js.window.rpc.event
+                js.window.event = event
+                builtins.this = js.window.rpc.this
+
+                if not len(argv):
+                    argv = tuple(js.window.rpc.argv)
+                    # argv = js.window.rpc.argv
+
+                # expand dot path
+                route = client.split(".")
+                call = host
+                while len(route):
+                    step = route.pop(0)
+                    if hasattr(call, step):
+                        call = getattr(call, step)
+
+                # call with good number of args
+
+                if call is host:
+                    print(f"py.route not found {client=} {event=} {this=} {argv=} {type(argv)} {len(argv)}")
+                else:
+                    argc = call.__code__.co_argcount
+                    if (argc == 0) and not len(call.__code__.co_varnames):
+                        call()
+                    else:
+                        # varargs
+                        call(*argv)
+
+
 import os
 from pathlib import Path
 
 print("<br>")
 
 
-def gen_click(event):
+def make_pic(this):
+    jsid("pic").src = File(jsattr(this, "data-src"))
+
+
+def make_click():
+    print(f"make_click() {js.window.rpc.event=} {type(js.window.rpc.event)=}")
+    jsid("pic").src = File(jsattr(window.event.target, "data-src"))
+
+
+def listen_click(event):
     console.log(f"got {event=} from {event.target=}")
-
-
-#
-def py_route(*argv):
-    py.route(*argv)
+    jsid("pic").src = File(jsattr(event.target, "data-src"))
 
 
 print("Hello")
 
 from js import window
-
-
-def make_pic(*argv):
-    argc = len(argv)
-    print(f"CALLED: make_pic {argc=} {argv=} {this=} {jsattr(this,'id')}")
-    if len(argv) == 1:
-        event = argv[0]
-        filename = jsattr(event.target, "data-src")
-    else:
-        if len(argv) > 1:
-            builtins.this = argv[1]
-            filename = jsattr(this, "data-src")
-            print(filename)
-        else:
-            event = js.event
-            filename = jsattr(event.target, "data-src")
-            print(filename)
-
-    jsid("pic").src = File(filename)
 
 
 with html as printf:
@@ -253,59 +281,21 @@ with html as printf:
         printf("")
         if bid == 0:
             printf("with py-click=")
-            printf('<button id="b{bid}" data-src="{path/fname}" py-click="make_pic()">{fname}</button>')
+            printf('<button id="b{bid}" data-src="{path/fname}" py-click="make_click()">{fname}</button>')
         elif bid == 1:
             printf("with onclick=py. and (js args)")
-            printf('<button id="b{bid}" data-src="{path/fname}" onclick="py.make_pic(0, this, 123)">{fname}</button>')
+            printf('<button id="b{bid}" data-src="{path/fname}" onclick="py.make_pic(this)">{fname}</button>')
         elif bid == 2:
             printf("with addEventListener (will pass only event)")
             printf('<button id="b{bid}" data-src="{path/fname}">{fname}</button>', "<hr>")
             printf.flush()
-            jsid(f"b{bid}").addEventListener("click", pyodide.ffi.create_proxy(make_pic))
+            jsid(f"b{bid}").addEventListener("click", pyodide.ffi.create_proxy(listen_click))
         else:
-            printf('<button id="b{bid}" data-src="{path/fname}" onclick="py.make_pic(0, this, 123)">{fname}</button>')
+            printf('<button id="b{bid}" data-src="{path/fname}" onclick="py.make_pic(this)">{fname}</button>')
 
     printf('<br><hr><img id=pic height=200 alt="show image" border=1>')
 
 jsid("pic").src = "../imgs/lcd.gif"
-
-
-class py:
-    @classmethod
-    def route(cls, *argv):
-        import js
-        import builtins
-
-        # recover this, event and maybe argv
-        host = __import__("__main__")
-        client = str(js.window.rpc.call).rstrip("()")
-        event = js.window.rpc.event
-        js.event = event
-        builtins.this = js.window.rpc.this
-
-        if not len(argv):
-            argv = tuple(js.window.rpc.argv)
-            # argv = js.window.rpc.argv
-
-        # expand dot path
-        route = client.split(".")
-        call = host
-        while len(route):
-            step = route.pop(0)
-            if hasattr(call, step):
-                call = getattr(call, step)
-
-        # call with good number of args
-
-        if call is host:
-            print(f"306 py.route not found {client=} {event=} {this=} {argv=} {type(argv)} {len(argv)}")
-        else:
-            argc = call.__code__.co_argcount
-            if (argc == 0) and not len(call.__code__.co_varnames):
-                call()
-            else:
-                # varargs
-                call(*argv)
 
 
 # import ctypes
