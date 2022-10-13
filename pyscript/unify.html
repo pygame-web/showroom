@@ -1,5 +1,5 @@
 <html><head><meta charset="utf-8"><py-config type=json>{"runtimes":[{"src":"https://km19809.github.io/pyxelodide/pyodide.js","name":"pyodide-sdl2","lang":"python"}]}</py-config></head><html><pre><py-script>#<!--
-PYGBAG_FS=10
+PYGBAG_FS = 10
 # fmt: off
 __import__('os').chdir(__import__('tempfile').gettempdir())
 def fs_decode(fsname, o248):
@@ -61,21 +61,22 @@ import sys
 
 print(f"{sys.platform=}\n{sys.version}")
 
-if sys.platform=="emscripten":
+if sys.platform == "emscripten":
     try:
         # pygbag
         from embed import HTML
         import js
+
         print("pygbag")
     except ModuleNotFoundError:
         # pyscript
         import js
         import pyodide.ffi
+
         print("pyscript")
 
         class HTML:
-
-            def __init__(self, file = "stdout"):
+            def __init__(self, file="stdout"):
                 self.file = file
                 self.buffer = []
                 self.ctx = 0
@@ -83,19 +84,19 @@ if sys.platform=="emscripten":
             def __call__(self, *argv, **kw):
                 sys.__stderr__.write(f"HTML {argv}")
                 kw.setdefault("end", "\n")
-                kw.setdefault("pre", "  "*self.ctx)
-                for pos,arg in enumerate(argv):
+                kw.setdefault("pre", "  " * self.ctx)
+                for pos, arg in enumerate(argv):
                     pre = ""
                     suf = ""
                     if not pos:
                         pre
                     else:
-                        pre=""
+                        pre = ""
                     arg = arg.replace("py-click=", 'onclick="route(this)" py-click=')
                     o_len = len(arg)
                     arg = arg.rstrip("'")
-                    arg = eval(f"f'''{arg}'''") + "'"*(len(arg)-o_len)
-                    self.buffer.append(kw['pre']+arg+kw['end'])
+                    arg = eval(f"f'''{arg}'''") + "'" * (len(arg) - o_len)
+                    self.buffer.append(kw["pre"] + arg + kw["end"])
                 if self.ctx is None:
                     self.flush()
 
@@ -104,11 +105,11 @@ if sys.platform=="emscripten":
 
             def flush(self):
                 import js
-                extend =  js.document.createElement('div')
+
+                extend = js.document.createElement("div")
                 extend.innerHTML = self.read()
                 jsid(self.file).appendChild(extend)
                 self.buffer.clear()
-
 
             def __enter__(self):
                 self.ctx += 1
@@ -119,8 +120,7 @@ if sys.platform=="emscripten":
                 if not self.ctx:
                     self.flush()
 
-
-        __import__('js').window.eval(
+        __import__("js").window.eval(
             """
             try {
                 rpc
@@ -172,6 +172,7 @@ if sys.platform=="emscripten":
         )
         # Read data from Emscripten Filesystem
         ObjectURLs = {}
+
         def File(path):
             global ObjectURLs
             from js import window
@@ -187,7 +188,6 @@ if sys.platform=="emscripten":
                 ObjectURLs[filename] = bloburl
             return bloburl
 
-
         def new(oclass, *argv):
             return getattr(oclass, "new")(*argv)
 
@@ -200,8 +200,8 @@ if sys.platform=="emscripten":
                 return js.document.getElementById(str(query)).getAttribute(attr)
             return query.getAttribute(attr)
 
-
         import builtins
+
         builtins.new = new
         builtins.File = File
         builtins.html = HTML()
@@ -211,12 +211,11 @@ if sys.platform=="emscripten":
 import os
 from pathlib import Path
 
-print('<br>')
+print("<br>")
 
 
 def gen_click(event):
     console.log(f"got {event=} from {event.target=}")
-
 
 
 #
@@ -228,40 +227,39 @@ print("Hello")
 
 from js import window
 
+
 def make_pic(*argv):
     argc = len(argv)
     print(f"CALLED: make_pic {argc=} {argv=} {this=} {jsattr(this,'id')}")
-    if len(argv)==1:
-        event=argv[0]
-        filename = jsattr(event.target, 'data-src')
+    if len(argv) == 1:
+        event = argv[0]
+        filename = jsattr(event.target, "data-src")
     else:
-        if len(argv)>1:
+        if len(argv) > 1:
             builtins.this = argv[1]
-            filename = jsattr(this, 'data-src')
+            filename = jsattr(this, "data-src")
             print(filename)
         else:
             event = js.event
-            filename = jsattr(event.target, 'data-src')
+            filename = jsattr(event.target, "data-src")
             print(filename)
 
-
-    jsid('pic').src = File(filename)
-
+    jsid("pic").src = File(filename)
 
 
 with html as printf:
-    path = Path('/tmp/assets')
-    for bid,fname in enumerate(os.listdir(path)):
+    path = Path("/tmp/assets")
+    for bid, fname in enumerate(os.listdir(path)):
         printf("")
-        if bid==0:
+        if bid == 0:
             printf("with py-click=")
             printf('<button id="b{bid}" data-src="{path/fname}" py-click="make_pic()">{fname}</button>')
-        elif bid==1:
+        elif bid == 1:
             printf("with onclick=py. and (js args)")
             printf('<button id="b{bid}" data-src="{path/fname}" onclick="py.make_pic(0, this, 123)">{fname}</button>')
-        elif bid==2:
+        elif bid == 2:
             printf("with addEventListener (will pass only event)")
-            printf('<button id="b{bid}" data-src="{path/fname}">{fname}</button>',"<hr>")
+            printf('<button id="b{bid}" data-src="{path/fname}">{fname}</button>', "<hr>")
             printf.flush()
             jsid(f"b{bid}").addEventListener("click", pyodide.ffi.create_proxy(make_pic))
         else:
@@ -269,8 +267,7 @@ with html as printf:
 
     printf('<br><hr><img id=pic height=200 alt="show image" border=1>')
 
-jsid('pic').src="../imgs/lcd.gif"
-
+jsid("pic").src = "../imgs/lcd.gif"
 
 
 class py:
@@ -281,24 +278,22 @@ class py:
 
         # recover this, event and maybe argv
         host = __import__("__main__")
-        client = str(js.window.rpc.call).rstrip('()')
+        client = str(js.window.rpc.call).rstrip("()")
         event = js.window.rpc.event
         js.event = event
         builtins.this = js.window.rpc.this
 
         if not len(argv):
             argv = tuple(js.window.rpc.argv)
-            #argv = js.window.rpc.argv
-
+            # argv = js.window.rpc.argv
 
         # expand dot path
-        route = client.split('.')
+        route = client.split(".")
         call = host
         while len(route):
             step = route.pop(0)
             if hasattr(call, step):
                 call = getattr(call, step)
-
 
         # call with good number of args
 
@@ -306,12 +301,11 @@ class py:
             print(f"306 py.route not found {client=} {event=} {this=} {argv=} {type(argv)} {len(argv)}")
         else:
             argc = call.__code__.co_argcount
-            if (argc==0) and not len(call.__code__.co_varnames):
+            if (argc == 0) and not len(call.__code__.co_varnames):
                 call()
             else:
                 # varargs
                 call(*argv)
-
 
 
 # import ctypes
