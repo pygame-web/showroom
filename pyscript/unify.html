@@ -222,7 +222,7 @@ if sys.platform == "emscripten":
                 host = __import__("__main__")
                 client = str(js.window.rpc.call).rstrip("()")
                 builtins.event = js.window.rpc.event
-                #js.window.event = event
+                # js.window.event = event
                 builtins.this = js.window.rpc.this
 
                 if not len(argv):
@@ -258,6 +258,7 @@ print("<br>")
 def make_pic(event, this):
     jsid("pic").src = File(jsattr(this, "data-src"))
 
+
 def make_pic_noargs():
     jsid("pic").src = File(jsattr(this, "data-src"))
 
@@ -285,7 +286,9 @@ with html as printf:
             printf("with py-click=make_click()  BAD")
             printf('<button id="b{bid}" data-src="{path/fname}" py-click="make_click()">{fname}</button>')
         elif bid == 1:
-            printf("with onclick=py.make_pic_noargs()  BAD but just work and less typing:  uses implicit event/this (builtins) on python side")
+            printf(
+                "with onclick=py.make_pic_noargs()  BAD but just work and less typing:  uses implicit event/this (builtins) on python side"
+            )
             printf('<button id="b{bid}" data-src="{path/fname}" onclick="py.make_pic_noargs()">{fname}</button>')
         elif bid == 2:
             printf("with onclick=py.make_pic(event, this)  BETTER but still use window.event js side")
@@ -304,8 +307,6 @@ with html as printf:
 
 
 jsid("pic").src = "../imgs/lcd.gif"
-
-
 
 
 # import ctypes
