@@ -97,7 +97,7 @@ if sys.platform == "emscripten":
                     arg = arg.rstrip("'")
                     arg = eval(f"f'''{arg}'''") + "'" * (len(arg) - o_len)
                     self.buffer.append(kw["pre"] + arg + kw["end"])
-                if self.ctx is None:
+                if not self.ctx:
                     self.flush()
 
             def read(self):
@@ -295,7 +295,12 @@ with html as printf:
 
     printf('<br><hr><img id=pic height=200 alt="show image" border=1>')
 
+    printf('<canvas id="canvas" width="1024" height="600" style="background-color:#050505"></canvas>')
+
+
 jsid("pic").src = "../imgs/lcd.gif"
+
+
 
 
 # import ctypes
