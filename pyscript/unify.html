@@ -255,7 +255,8 @@ print("<br>")
 
 
 # normally event.target === this
-def make_pic(event, this):
+def make_pic(event):
+    this = event.target
     jsid("pic").src = File(jsattr(this, "data-src"))
 
 
@@ -291,15 +292,15 @@ with html as printf:
             )
             printf('<button id="b{bid}" data-src="{path/fname}" onclick="py.make_pic_noargs()">{fname}</button>')
         elif bid == 2:
-            printf("with onclick=py.make_pic(event, this)  BETTER but still use window.event js side")
-            printf('<button id="b{bid}" data-src="{path/fname}" onclick="py.make_pic(event, this)">{fname}</button>')
+            printf("with onclick=py.make_pic(event)  BETTER but still use window.event js side")
+            printf('<button id="b{bid}" data-src="{path/fname}" onclick="py.make_pic(event)">{fname}</button>')
         elif bid == 3:
             printf("with addEventListener (will pass only event)  BEST")
             printf('<button id="b{bid}" data-src="{path/fname}">{fname}</button>', "<hr>")
             printf.flush()
             jsid(f"b{bid}").addEventListener("click", pyodide.ffi.create_proxy(listen_click))
         else:
-            printf('<button id="b{bid}" data-src="{path/fname}" onclick="py.make_pic_noargs()">{fname}</button>')
+            printf('<button id="b{bid}" data-src="{path/fname}" onclick="py.make_pic(event)">{fname}</button>')
 
     printf('<br><hr><img id=pic height=200 alt="show image" border=1>')
 
