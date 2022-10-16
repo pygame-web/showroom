@@ -433,20 +433,30 @@ ___________________________________
 # and new a shortcut to:
 #   Reflect.construct(oclass, Array(*argv) )
 
+import os
 
 print(
     """
-<button id="b" onclick="py.make_noise('bouh')">Make Some Noise!</button>
+<button id="b" onclick="py.make_noise(event)">Make Some Noise!</button>
 <br>
-<button id="download" onclick="py.download_file()">Download File</button>
+<button id="download" onclick="py.download_file(event)">Download File</button>
 """
 )
 
-horn = new(window.Audio, window.blob("/tmp/horn.ogg"))
+
+media_file =  "/tmp/horn.ogg"
+media_blob = File(media_file)
+
+horn = new(window.Audio, media_blob)
 
 
-def make_noise(*argv):
+
+def make_noise(event):
     horn.play()
+
+def download_file(event):
+    os.popen(shell.rx(media_file))
+
 
 
 # --></script></html>

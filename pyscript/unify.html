@@ -1,4 +1,4 @@
-<html><head><meta charset="utf-8"><py-config type=json>{"runtimes":[{"src":"https://km19809.github.io/pyxelodide/pyodide.js","name":"pyodide-sdl2","lang":"python"}]}</py-config></head><html><pre><py-script>#<!--
+<html><head><meta charset="utf-8"><py-config type=json>{"runtimes":[{"src":"pyodide-sdl2/pyodide.js","name":"pyodide-sdl2","lang":"python"}]}</py-config></head><html><pre><py-script>#<!--
 PYGBAG_FS = 10
 # fmt: off
 __import__('os').chdir(__import__('tempfile').gettempdir())
@@ -92,7 +92,7 @@ if sys.platform == "emscripten":
                         pre
                     else:
                         pre = ""
-                    arg = arg.replace("py-click=", 'onclick="route(this)" py-click=')
+                    arg = arg.replace("py-click=", 'onclick="route(event)" py-click=')
                     o_len = len(arg)
                     arg = arg.rstrip("'")
                     arg = eval(f"f'''{arg}'''") + "'" * (len(arg) - o_len)
@@ -128,8 +128,6 @@ if sys.platform == "emscripten":
                 window.rpc = {}
                 window.rpc.path = []
                 window.rpc.call = ""
-                window.rpc.this = null
-                window.rpc.event = null
                 window.rpc.argv = []
             }
 
@@ -141,14 +139,19 @@ if sys.platform == "emscripten":
                 },
                 apply(_, o, argv) {
                     const method = rpc.path.join(".")
-                    window.rpc.event = window.event
-                    window.rpc.this  = window.event.target
-
-                    if (host === window.python)
-                        queue_event("rpc",{ "method": method, "argv" : argv})
-                    else {
+                    if (host === window.python) {
+// TODO: rpc id and serialisation
+                        queue_event("rpc", { "call": method, "argv" : argv, "rpcid": window.event} )
+                    } else {
                         window.rpc.call = method
                         window.rpc.argv = Array.from(argv)
+                        if (!argv.length) {
+                            console.error("event should always be first param")
+                            window.rpc.argv.unshift(window.event)
+                        } else if (argv.length>0 && (window.event!==argv[0])) {
+                            console.error("event should always be first param")
+                            window.rpc.argv.unshift(window.event)
+                        }
                         host.click()
                     }
                     rpc.path.length=0
@@ -158,14 +161,10 @@ if sys.platform == "emscripten":
             }
 
             window.py = bridge(py_router)
-
-            window.route = function router(elem) {
-                window.rpc.event = window.event
-                window.rpc.this = elem
-                //console.log(window.event)
-                const pyev  = elem.getAttribute("py-click")
-                //console.warn("py-routing", elem, pyev )
-                window.rpc.call = pyev
+// onclick() case, which is BAD, deprecated and used.
+            window.route = function router(event) {
+                window.rpc.argv = [event]
+                window.rpc.call = event.target.getAttribute("py-click")
                 py_router.click()
             }
         """
@@ -221,12 +220,13 @@ if sys.platform == "emscripten":
                 # recover this, event and maybe argv
                 host = __import__("__main__")
                 client = str(js.window.rpc.call).rstrip("()")
-                builtins.event = js.window.rpc.event
-                # js.window.event = event
-                builtins.this = js.window.rpc.this
-
+                argv = tuple(js.window.rpc.argv)
                 if not len(argv):
-                    argv = tuple(js.window.rpc.argv)
+                    console.log("bad call", client)
+                    return
+                else:
+                    event = argv[0]
+                    this = event.target
 
                 # expand dot path
                 route = client.split(".")
@@ -239,9 +239,14 @@ if sys.platform == "emscripten":
                 if call is host:
                     print(f"py.route not found {client=} {event=} {this=} {argv=} {type(argv)} {len(argv)}")
                 else:
+                    # print(f"py.route found {client=} {event=} {this=} {argv=} {type(argv)} {len(argv)}")
+
                     # call with good number of args
                     argc = call.__code__.co_argcount
                     if (argc == 0) and not len(call.__code__.co_varnames):
+                        print(f"argument less call {client=}() is DEPRECATED use {client}(event)")
+                        builtins.event = event
+                        builtins.this = event.target
                         call()
                     else:
                         # varargs
@@ -310,8 +315,43 @@ with html as printf:
 jsid("pic").src = "../imgs/lcd.gif"
 
 
-# import ctypes
-# print(ctypes)
+import ctypes
+print(ctypes)
+
+cdll = ctypes.CDLL(None)
+
+
+
+def dll(*argv):
+    print(getattr(cdll, argv[0])(*argv[1:]))
+
+#dll("emscripten_run_script", "console.log(666)" )
+#window.eval("console.log(_pyodide)")
+
+
+
+if 1:
+    from pyodide.http import pyfetch
+    response = await pyfetch("pygame-2.1.3.dev5-cp310-cp310-wasm32_mvp_emscripten.whl") # .zip, .whl, ...
+    await response.unpack_archive() # by default, unpacks to the current dir
+
+    import micropip
+    micropip.install("pygame-2.1.3.dev5-cp310-cp310-wasm32_mvp_emscripten.whl")
+
+    import os
+    os.chdir('pygame')
+    #for f in os.listdir('.'):
+    #    print(f)
+    sys.path.insert(0, '.')
+    import pygame_static
+    print(pygame_static)
+else:
+    import pyodide
+    pyodide.loadPackage("pygame-2.1.3.dev5-cp310-cp310-wasm32_mvp_emscripten.whl")
+
+
+#pkg.do_something();
+#dll( "emscripten_run_preload_plugins", "/", None , None)
 
 
 def download_file():
