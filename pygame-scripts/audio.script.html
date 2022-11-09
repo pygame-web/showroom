@@ -430,7 +430,7 @@ ___________________________________
 
 # blob is a shortcut for :
 #   URL.createObjectURL( new Blob([FS.readFile(filename)]))
-# and new a shortcut to:
+# and platform.new a shortcut to:
 #   Reflect.construct(oclass, Array(*argv) )
 
 import os
@@ -447,7 +447,7 @@ print(
 media_file =  "/tmp/horn.ogg"
 media_blob = File(media_file)
 
-horn = new(window.Audio, media_blob)
+horn = platform.new(window.Audio, media_blob)
 
 
 
