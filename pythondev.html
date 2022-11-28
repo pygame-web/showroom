@@ -1,0 +1,36 @@
+<html><head><meta charset=utf-8></head><script src=/pygbag/0.6/pythons.js data-src=vtx,gui data-python=cpython3.11 type=module id=__main__ async defer>#<!--
+
+import asyncio
+from pathlib import Path
+
+async def custom_site():
+
+    if sys.platform in ("emscripten","wasi",):
+        platform.window.python.is_ready = True
+        await shell.exec( shell.debug )
+
+    await TopLevel_async_handler.start_toplevel(platform.shell, console=True)
+
+    def ui_callback(pkg):
+        print(f"installing {pkg}")
+
+    if sys.argv[0].endswith('.py'):
+        tmpdir = Path(__import__("tempfile").gettempdir())
+        filename = tmpdir / sys.argv[0].rsplit('/',1)[-1]
+        await shell.exec( shell.wget(f"-O{filename}", sys.argv[0]) )
+        if os.path.isfile(filename):
+            print(sys.argv)
+            os.chdir(tmpdir)
+            if await shell.preload(filename, ui_callback):
+                print("*"*40)
+                await shell.source(filename)
+
+    embed.prompt()
+
+
+asyncio.run(custom_site())
+del custom_site
+
+
+# --></script></html>
+
