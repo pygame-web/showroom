@@ -54,13 +54,19 @@ async def preload_fetch(silent=False,debug=False):
             print("FS:", filename)
 
 
+# ../../prebuilt/assetc -api GLES resources resources_gles -platform linux
+
 FS("""
 .
 └── resources_compiled
     ├── core
     │   └── shader
     │       ├── font.fsb
-    │       └── font.vsb
+    │       ├── font.vsb
+    │       ├── imgui.fsb
+    │       ├── imgui_image.fsb
+    │       ├── imgui_image.vsb
+    │       └── imgui.vsb
     ├── font
     │   └── default.ttf
     └── shaders
@@ -69,25 +75,38 @@ FS("""
 """, "webgl")
 
 
-embed.webgl()
-
 print("===================================")
 
 import harfang as hg
+
+hg.InputInit()
+hg.WindowSystemInit()
+
+
+# initialize ImGui
+# hg.AddAssetsFolder('resources_compiled')
+
+imgui_prg = hg.LoadProgramFromAssets('resources_compiled/core/shader/imgui')
+imgui_img_prg = hg.LoadProgramFromAssets('resources_compiled/core/shader/imgui_image')
+
+
+embed.webgl()
+
+
+
+res_x, res_y = 1024, 600
+
+
+win = hg.RenderInit("Harfang - Draw Models no Pipeline", res_x, res_y, hg.RT_OpenGLES)
+print("===================================")
+
+hg.ImGuiInit(10, imgui_prg, imgui_img_prg)
+
 
 # Draw models without a pipeline
 async def main():
     global preload
 
-    hg.InputInit()
-    hg.WindowSystemInit()
-
-
-    res_x, res_y = 1024, 600
-
-
-    win = hg.RenderInit("Harfang - Draw Models no Pipeline", res_x, res_y, hg.RT_OpenGLES)
-    print("===================================")
 
     #return
 
@@ -108,30 +127,40 @@ async def main():
     # main loop
     angle = 0
 
-    if 0:
-        print("done")
-        return
 
-    while 1:  # not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
+    while not hg.ReadKeyboard().Key(hg.K_Escape): # and hg.IsWindowOpen(win):
         dt = hg.TickClock()
         angle = angle + hg.time_to_sec_f(dt)
+        if 1:
+            hg.ImGuiBeginFrame(res_x//2, res_y//2, hg.TickClock(), hg.ReadMouse(), hg.ReadKeyboard())
 
-        viewpoint = hg.TranslationMat4(hg.Vec3(0, 1, -3))
-        hg.SetViewPerspective(0, 0, 0, res_x, res_y, viewpoint)
+            if hg.ImGuiBegin('Window'):
+                hg.ImGuiText('Hello World!')
+            hg.ImGuiEnd()
 
-        hg.DrawModel(
-            0,
-            cube_mdl,
-            shader,
-            [],
-            [],
-            hg.TransformationMat4(hg.Vec3(0, 1, 0), hg.Vec3(angle, angle, angle)),
-        )
-        hg.DrawModel(
-            0, ground_mdl, shader, [], [], hg.TranslationMat4(hg.Vec3(0, 0, 0))
-        )
+            hg.SetView2D(0, 0, 0, res_x//2, res_y//2, -1, 1, hg.CF_Color | hg.CF_Depth, hg.Color.Red, 1, 0)
+            hg.ImGuiEndFrame(255)
+
+
+        if 1:
+            viewpoint = hg.TranslationMat4(hg.Vec3(0, 1, -3))
+            hg.SetViewPerspective(0, 0, 0, res_x, res_y, viewpoint)
+
+            hg.DrawModel(
+                0,
+                cube_mdl,
+                shader,
+                [],
+                [],
+                hg.TransformationMat4(hg.Vec3(0, 1, 0), hg.Vec3(angle, angle, angle)),
+            )
+            hg.DrawModel(
+                0, ground_mdl, shader, [], [], hg.TranslationMat4(hg.Vec3(0, 0, 0))
+            )
+
 
         hg.Frame()
+
         hg.UpdateWindow(win)
         await asyncio.sleep(0)
 
