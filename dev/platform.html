@@ -1,0 +1,28 @@
+
+
+
+
+
+
+
+
+<script type="module">
+  import * as ft from "./wasm-feature-detect.js";
+
+  async function generate() {
+    let acc = "";
+    for (const [name, detector] of Object.entries(ft)) {
+      const supported = await detector();
+      acc += `
+      <tr class="${supported ? "supported" : "not-supported"}">
+        <td class="marker">${supported ? "✔️" : "❌"}</td>
+        <td class="name">${name}</td>
+        </tr>
+        `;
+    }
+
+    const table = document.querySelector("#supporttable");
+    table.innerHTML = `<tbody>${acc}</tbody>`;
+  }
+  generate();
+</script>
