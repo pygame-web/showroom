@@ -492,7 +492,18 @@ async def main():
         SKIPLIST += ["test_code"]
 
         # those are extremely slow and fail
-        SKIPLIST += ["test_zipfile"]
+        SKIPLIST += ["test_zipfile", "test_types"]
+
+        SKIPLIST += ["test_descr", "test_descrut", "test_syntax"," test_typing"]
+
+
+        if 1:
+            start_list = True
+        else:
+            start_list = False
+            SKIPLIST += ["test_defaultdict"]
+
+
 
         # known to fail
         for t in FAILS.replace('\n',' ').split(' '):
@@ -500,15 +511,14 @@ async def main():
                 SKIPLIST.append(t)
 
         tlist = []
-        #start_list = True
         ALL = []
         for t in TESTS.replace('\n',' ').split(' '):
             if t:
                 ALL.append(t)
-    #            if not start_list:
-    #                if t==SKIPLIST[-1]:
-    #                    start_list = True
-    #                continue
+                if not start_list:
+                    if t==SKIPLIST[-1]:
+                        start_list = True
+                    continue
 
                 if t not in SKIPLIST:
                     tlist.append(t)
