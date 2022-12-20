@@ -619,21 +619,18 @@ ________________________
                 with open(file_name,"r") as code_file:
                     code = code_file.read()
                     if code.find('asyncio.run')<0:
-                        print("621: possibly synchronous code found")
+                        DBG("622: possibly synchronous code found")
                         maybe_sync = True
 
                     has_pygame =  code.find('display.flip(')>0 or code.find('display.update(')>0
 
                     if maybe_sync and has_pygame:
-                        print("627: possibly synchronous+pygame code found")
+                        DBG("628: possibly synchronous+pygame code found")
                         return False
                 return True
 
             if check_code(main):
-                print("632: running main and resuming EventTarget in a few seconds")
-
-                #aio.defer(execfile, (main,), {} )
-
+                DBG("633: running main and resuming EventTarget in a few seconds")
             else:
                 for base in ('pygame','pg'):
                     for func in ('flip','update'):
@@ -643,9 +640,10 @@ ________________________
                 #print(" -> won't run synchronous code with a pygame loop")
 
             await cls.preload_code(code)
-            DBG("646: TODO detect input/print to select repl debug")
+            DBG("643: TODO detect input/print to select repl debug")
+
             if TopLevel_async_handler.instance:
-                DBG("648: starting shell")
+                DBG("646: starting shell")
                 TopLevel_async_handler.instance.start_console(shell)
             else:
                 pdb("651: no async handler loader, starting a default async console")
@@ -1276,6 +1274,7 @@ else:
 
 # ======================================================
 def patch():
+    import platform
     # DeprecationWarning: Using or importing the ABCs from 'collections'
     # instead of from 'collections.abc' is deprecated since Python 3.3
     # and in 3.10 it will stop working

@@ -1,4 +1,4 @@
-<html><head><meta charset=utf-8></head><script src=/pygbag/0.6/pythons.js data-os=vtx,gui data-python=cpython3.11 type=module id=__main__ async defer>#<!--
+<html><head><meta charset=utf-8></head><script src=/pygbag/0.6/pythons.js data-os=vtx,fs,gui data-python=cpython3.11 type=module id=__main__ async defer>#<!--
 
 import asyncio
 from pathlib import Path
@@ -21,7 +21,7 @@ async def custom_site():
         if os.path.isfile(filename):
             print(sys.argv)
             os.chdir(tmpdir)
-            if await shell.preload(filename, ui_callback):
+            if await shell.preload_file(filename, callback=ui_callback):
                 print("*"*40)
                 await shell.source(filename)
 

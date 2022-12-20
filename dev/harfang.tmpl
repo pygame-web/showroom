@@ -127,10 +127,13 @@ async def custom_site():
     await TopLevel_async_handler.start_toplevel(platform.shell, console=window.python.config.debug)
 
 
-
     # now that apk is mounted we have access to font cache
-    # but we need to fill __file__ that is not yet set
+    # but we need to fill __file__/__name__ that are not yet set
     __import__(__name__).__file__ = main
+
+
+    def ui_callback(pkg):
+        print(f"installing {pkg}")
 
 
     # print("145: running main and resuming EventTarget in a few seconds")
