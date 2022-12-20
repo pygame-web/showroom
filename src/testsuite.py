@@ -343,6 +343,9 @@ if os.path.isfile(six):
 
 print('CPython',sys.version,'\n', file=sys.stderr)
 
+
+from platform import window
+
 # or test_platform will fail
 sys.modules.pop('platform', None)
 
@@ -393,12 +396,10 @@ print()
 
 
 
-import aio
-import platform
-
 async def main():
-    global RT, tlist, SKIPLIST, ALL, STDLIB
+    global RT, tlist, SKIPLIST, ALL, STDLIB, window
     global SLOW, PROBLEMATIC, MAYBE, OOM, FATAL, FAILS
+
 
     async def pv(track, prefix="", suffix="", decimals=1, length=70, fill="X", printEnd="\r"):
 
@@ -492,16 +493,16 @@ async def main():
         SKIPLIST += ["test_code"]
 
         # those are extremely slow and fail
-        SKIPLIST += ["test_zipfile", "test_types"]
+        SKIPLIST += ["test_zipfile", "test_types", "test_typing"]
 
-        SKIPLIST += ["test_descr", "test_descrut", "test_syntax"," test_typing"]
-
+        SKIPLIST += ["test_descr", "test_descrut", "test_dictviews", "test_syntax", "test_ucn", "test_userdict", "test_userlist"]
+        SKIPLIST += ["test_fileio", "test_xml_etree", "test_functools","test_glob"]
 
         if 1:
             start_list = True
         else:
             start_list = False
-            SKIPLIST += ["test_defaultdict"]
+            SKIPLIST += ["test_xml_dom_minicompat"]
 
 
 
