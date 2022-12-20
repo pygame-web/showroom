@@ -438,6 +438,7 @@ async def main():
         "path" : f"/assets => /usr/lib",
     }
 
+    import json
     track = window.MM.prepare("dev/org.python3.11.0.apk", json.dumps(cfg))
 
     # wait until zip mount + overlayfs is complete
