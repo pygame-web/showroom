@@ -498,6 +498,7 @@ async def main():
 
         SKIPLIST += ["test_descr", "test_descrut", "test_dictviews", "test_syntax", "test_ucn", "test_userdict", "test_userlist"]
         SKIPLIST += ["test_fileio", "test_xml_etree", "test_functools","test_glob"]
+        SKIPLIST += ["test_io","test_plistlib", "test_richcmp", "test_runpy"]
 
         if 1:
             start_list = True
