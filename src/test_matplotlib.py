@@ -42,7 +42,7 @@ async def main():
 
     fig.tight_layout()
 
-    await display(fig)
+    plt.show()
 
 asyncio.run(main())
 
