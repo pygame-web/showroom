@@ -1060,8 +1060,6 @@ if not aio.cross.simulator:
         def eval(self, source):
 
             for count, line in enumerate( source.split('\n') ):
-#                if count and count < 10:
-#                    print(str(count).zfill(3), self.buffer[-1] )
                 if not count:
                     if line.startswith('<'):
                         self.buffer.append(f'#{line}')
