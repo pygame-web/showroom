@@ -42,6 +42,8 @@ async def main():
 
     fig.tight_layout()
 
+    # this does call pygame.update()
+    # but not asyncio.sleep(0) so beware
     plt.show()
 
 asyncio.run(main())
