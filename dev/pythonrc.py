@@ -277,6 +277,7 @@ if ...: #defined("embed") and hasattr(embed, "readline"):
 
         @classmethod
         def pg_init(cls):
+            import pygame
             if pygame.display.get_init():
                 return pygame.display.get_surface()
             screen = pygame.display.set_mode([cls.screen_width, cls.screen_height])
@@ -749,7 +750,7 @@ ________________________
                     print(_)
                 return
             elif inspect.isgeneratorfunction(sub):
-                for _ in sub(*argv):
+                for _ in sub(**env):
                     print(_)
                 return
             elif inspect.iscoroutinefunction(sub):
@@ -1388,29 +1389,29 @@ patch();del patch
 
 async def display(obj, target=None, **kw):
     filename = shell.mktemp(".png")
+    target = kw.pop("target", None)
+    x = kw.pop("x",0)
+    y = kw.pop("y",0)
+    dpi = kw.setdefault("dpi", 72)
     if repr(type(obj)).find('matplotlib.figure.Figure')>0:
-        print("matplotlib figure")
+        print(f"matplotlib figure {platform.is_browser=}")
         if platform.is_browser:
             # Agg is not avail, save to svg only option.
             obj.canvas.draw()
-            tmp = "/tmp/plt.svg"
-            obj.savefig(tmp, format="svg", dpi=72)
-            # TODO SVG conversion
+            tmp = f"{filename}.svg"
+            obj.savefig(tmp, format="svg", **kw)
             await platform.jsiter(platform.window.svg.render(tmp, filename))
         else:
             # desktop matplotlib can save to any format
             obj.canvas.draw()
-            obj.savefig(filename, format="png", dpi=72)
+            obj.savefig(filename, format="png", **kw)
 
-    if target is None:
-        kw.setdefault("x",0)
-        kw.setdefault("y",0)
+    if target in [None,"pygame"]:
+        import pygame
         screen = shell.pg_init()
         screen.fill((0, 0, 0))
-        screen.blit(pygame.image.load(filename), (int(kw["x"]), int(kw["y"])))
+        screen.blit(pygame.image.load(filename), (x,y))
         pygame.display.update()
-
-    await asyncio.sleep(3)
 
 # ======================================================
 def ESC(*argv):
