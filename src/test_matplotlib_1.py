@@ -32,7 +32,7 @@ async def main():
         Z = np.cos(2 * np.pi * X + phi) * (1 - np.hypot(X, Y))
         # Plot the new wireframe and pause briefly before continuing.
         wframe = ax.plot_wireframe(X, Y, Z, rstride=2, cstride=2)
-        if __WASM__:
+        if 1: # __WASM__:
             await plt.pause(0)
         else:
             plt.pause(0.016)
