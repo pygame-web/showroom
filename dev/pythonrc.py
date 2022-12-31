@@ -1081,7 +1081,7 @@ if not aio.cross.simulator:
                 root = ast.parse(code, filename)
             except SyntaxError as e:
                 print("_"*40)
-                print(filename)
+                print("1004:",filename)
                 print("_"*40)
                 for count, line in enumerate( code.split('\n') ):
                     print(str(count).zfill(3), line )
@@ -1120,7 +1120,9 @@ if not aio.cross.simulator:
                         except (ModuleNotFoundError, ImportError):
                             pass
 
-                    required.append(mod)
+                    if not mod in required:
+                        required.append(mod)
+
             DBG(f"1020: import scan {filename=} {len(code)=} {required}")
             return required
 
@@ -1387,7 +1389,6 @@ patch();del patch
 
 
 # ======================================================
-
 
 async def display(obj, target=None, **kw):
     filename = shell.mktemp(".png")

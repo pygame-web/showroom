@@ -21,9 +21,7 @@ async def custom_site():
         if os.path.isfile(filename):
             print(sys.argv)
             os.chdir(tmpdir)
-            if await shell.preload_file(filename, callback=ui_callback):
-                print("*"*40)
-                await shell.source(filename)
+            await shell.source(filename)
 
     embed.prompt()
 
