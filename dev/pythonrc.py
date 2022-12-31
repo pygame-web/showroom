@@ -1381,6 +1381,8 @@ def patch():
     sys.modules["decimal"].Decimal = Decimal
 
 
+
+
 patch();del patch
 
 
@@ -1394,7 +1396,7 @@ async def display(obj, target=None, **kw):
     y = kw.pop("y",0)
     dpi = kw.setdefault("dpi", 72)
     if repr(type(obj)).find('matplotlib.figure.Figure')>0:
-        print(f"matplotlib figure {platform.is_browser=}")
+        #print(f"matplotlib figure {platform.is_browser=}")
         if platform.is_browser:
             # Agg is not avail, save to svg only option.
             obj.canvas.draw()
