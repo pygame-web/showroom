@@ -483,15 +483,12 @@ pfx=PyConfig['prefix']
 if os.path.isdir(pfx):
     sys.path.append(pfx)
     os.chdir(pfx)
-
 __file__ = "${pyrc_file}"
 if os.path.isfile(__file__):
     exec(open(__file__).read(), globals(), globals())
     import asyncio
     async def custom_site():
         await TopLevel_async_handler.start_toplevel(platform.shell, console=True)
-        def ui_callback(pkg):
-            print(f"installing {pkg}")
         tmpdir = Path(__import__("tempfile").gettempdir())
         os.chdir(tmpdir)
         __file__ = "${main_file}"
@@ -556,6 +553,7 @@ function feat_gui(debug_hidden) {
 
     if (!canvas) {
         config.user_canvas = config.user_canvas || 0 //??=
+        config.user_canvas_managed = config.user_canvas_managed || 0 //??=
         canvas = document.createElement("canvas")
         canvas.id = "canvas"
         canvas.style.position = "absolute"
@@ -568,7 +566,8 @@ console.warn("TODO: test 2D/3D reservation")
         //var ctx = canvas.getContext("2d")
     } else {
         // user managed canvas
-        config.user_canvas = config.user_canvas || 1
+        config.user_canvas = 1
+        config.user_canvas_managed = config.user_canvas_managed || 0 //??=
 console.warn("TODO: user defined canvas")
     }
 
@@ -657,7 +656,7 @@ console.warn("TODO: user defined canvas")
             canvas.style.left = "auto"
             canvas.style.bottom = "auto"
         } else {
-            // canvas is handled by program
+            // canvas position is handled by program
             if (vm.config.user_canvas)
                 return
 
@@ -678,7 +677,7 @@ console.warn("TODO: user defined canvas")
         }
 
         // canvas is handled by user program
-        if (vm.config.user_canvas)
+        if (vm.config.user_canvas_managed)
             return
 
         setTimeout(window_canvas_adjust, 100, gui_divider);
@@ -686,7 +685,8 @@ console.warn("TODO: user defined canvas")
     }
 
     function window_resize_event() {
-        if (!vm.config.user_canvas)
+        // don't interfere if program want to handle canvas placing/resizing
+        if (!vm.config.user_canvas_managed)
             window_resize(vm.config.gui_divider)
     }
 
