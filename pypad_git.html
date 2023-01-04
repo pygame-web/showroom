@@ -1,0 +1,194 @@
+<html><head><meta charset=utf-8></head><script src=/pygbag/0.7/pythons.js data-os=vtx,fs,gui data-python=cpython3.11 type=module id=__main__ async defer>#<!--
+
+import asyncio
+import tempfile
+
+tmpdir = Path(tempfile.gettempdir())
+
+if sys.argv[0].endswith('.py'):
+    __file__ = str( tmpdir / sys.argv[0].rsplit('/',1)[-1] )
+    await shell.exec( shell.wget(f"-O{__file__}", sys.argv[0]) )
+    if not Path(__file__).is_file():
+        print("404: ",sys.argv)
+    else:
+        window.editor.load_file(__file__)
+
+
+print("Hello IDE")
+
+
+
+""" # BEGIN -->
+</script>
+<script type=module>
+    function undef(e,o){
+        if (typeof o === 'undefined' || o === null)
+            o = window;
+
+        try {
+            e = o[e];
+        } catch (x) { return true }
+
+        if (typeof e === 'undefined' || e === null)
+            return true;
+        return false;
+    }
+
+    function defined(e,o){return !undef(e,o)}
+
+    function register(fn,fn_dn){
+        if ( undef(fn_dn) )
+            fn_dn = fn.name;
+        window[fn_dn]=fn;
+    }
+
+
+    function include(filename, filetype){
+        if (filetype===null ||typeof filetype === 'undefined')
+            filetype = 'js';
+            if (filename.endsWith('css'))
+                filetype = 'css';
+
+        if ( (filename.indexOf('.') === 0) || (filename.indexOf('/') === 0 ) ){
+            //absolute local server
+        } else {
+            if (filename.startsWith('http://') || filename.startsWith('https://')) {
+            //absolute remote
+            } else {
+                //corrected
+                filename = window.JSDIR + filename;
+            }
+        }
+
+        if (filetype=="js"){ //if filename is a external JavaScript file
+            var fileref=document.createElement('script')
+            fileref.setAttribute("type","text/javascript")
+            fileref.setAttribute("src", filename)
+            fileref.setAttribute('async',false);
+        }
+        else if (filetype=="css"){ //if filename is an external CSS file
+            var fileref=document.createElement("link")
+            fileref.setAttribute("rel", "stylesheet")
+            fileref.setAttribute("type", "text/css")
+            fileref.setAttribute("href", filename)
+        }   else {
+            console.log("#error can't include "+filename+' as ' +filetype);
+            return false;
+        }
+        // .py includes ??
+
+        if (typeof fileref!="undefined")
+            console.log("#included "+filename+' as ' +filetype);
+            document.getElementsByTagName("head")[0].appendChild(fileref)
+            fileref.async = false;
+            fileref.defer = false;
+    }
+
+    const delay = (ms, fn_solver) => new Promise(resolve => setTimeout(() => resolve(fn_solver()), ms));
+
+
+    function _until(fn_solver){
+        return async function fwrapper(){
+            var argv = Array.from(arguments)
+            function solve_me(){return  fn_solver.apply(window, argv ) }
+            while (!await delay(8, solve_me ) ) {}
+        }
+    }
+
+    register(register)
+    register(include)
+    register(undef)
+    register(defined)
+    register(_until)
+
+</script>
+
+
+<style>
+#editor {
+    width: 50%;
+    height: 70%;
+    top: 0;
+    left : 0;
+    z-index : 0;
+}
+
+.tr{
+    position:absolute;
+    top:5;
+    right:5;
+    z-index : 100;
+}
+
+.br {
+    z-index : 50;
+    position: fixed;
+    bottom: 5;
+    right: 5;
+}
+
+.bl {
+    z-index : 150;
+    position: fixed;
+    bottom: 5;
+    left: 5;
+}
+
+
+body {
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  // overflow-x: hidden; /* Hide horizontal scrollbar */
+}
+
+</style>
+
+
+<div id=__file__>__file__</div>
+<div id="editor" ></div>
+<div class=tr>
+    <canvas id=canvas class="emscripten" oncontextmenu="event.preventDefault()"
+WIDTH="640px"
+HEIGHT="360px"
+    tabindex=1></canvas>
+</div>
+
+<div id=terminal data-COLS=100 data-ROWS=30 class=br></div>
+
+
+<div id=stdout style="border-style:solid; height=50%" class=bl>
+
+    <button id=btn_snapshot>Take Picture</button>
+</div>
+
+<script type=module>
+
+    window.config = {
+        user_canvas : 1,
+        user_canvas_managed : 1
+    }
+
+    include("./pypad/iblize.min.js")
+    await _until(defined)("Iblize")
+
+    await _until(defined)("python")
+
+    window.editor = new Iblize("#editor", {
+        language: "python",
+        tabSize: 4,
+        theme : "iblize-light"
+    });
+
+    editor.load_file = async function (path) {
+        editor.setValue(await( new Blob([FS.readFile(path)], {type : "text/utf-8"}).text()))
+        __file__.innerHTML = path
+    }
+
+
+
+
+</script>
+
+
+<!--
+# END
+"""  # --> </html>
