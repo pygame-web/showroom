@@ -1,4 +1,4 @@
-<html><head><meta charset=utf-8></head><script src=/showroom/dev/pythons.js data-os=vtx,fs,gui data-python=cpython3.11 type=module id=__main__ async defer>#<!--
+<html><head><meta charset=utf-8></head><script src=dev/pythons.js data-os=vtx,fs,gui data-python=cpython3.11 type=module id=__main__ async defer>#<!--
 
 import asyncio
 import tempfile
@@ -107,7 +107,9 @@ print("Hello IDE")
 <style>
 #editor {
     width: 50%;
-    height: 80%
+    height: 70%;
+    top: 0;
+    left : 0;
     z-index : 0;
 }
 
@@ -124,6 +126,15 @@ print("Hello IDE")
     bottom: 5;
     right: 5;
 }
+
+.bl {
+    z-index : 150;
+    position: fixed;
+    bottom: 5;
+    left: 5;
+}
+
+
 body {
   overflow-y: hidden; /* Hide vertical scrollbar */
   // overflow-x: hidden; /* Hide horizontal scrollbar */
@@ -140,7 +151,14 @@ WIDTH="640px"
 HEIGHT="360px"
     tabindex=1></canvas>
 </div>
+
 <div id=terminal data-COLS=100 data-ROWS=30 class=br></div>
+
+
+<div id=stdout style="border-style:solid; height=50%" class=bl>
+
+    <button id=btn_snapshot>Take Picture</button>
+</div>
 
 <script type=module>
 
@@ -164,6 +182,9 @@ HEIGHT="360px"
         editor.setValue(await( new Blob([FS.readFile(path)], {type : "text/utf-8"}).text()))
         __file__.innerHTML = path
     }
+
+
+
 
 </script>
 
