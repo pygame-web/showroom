@@ -149,11 +149,11 @@ async def main():
             while not aio.loop.is_closed():
                 group = self.cubes
                 h, p, r = group.get_hpr()
-                d = .5
+                d = .2
                 group.setH(h + d)
                 group.setP(p + d)
                 group.setY(r + d)
-                await asyncio.sleep(self.frame_time)
+                await asyncio.sleep(0) #self.frame_time)
 
 
     MyApp.instance = MyApp()
