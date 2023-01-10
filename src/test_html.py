@@ -89,12 +89,14 @@ def clicked(*argv):
     print("button has be clicked")
 
 async def main():
-    html = HTML()
+    html = HTML("html")
 
     with html as printf:
         printf("Hello {world}")
-        printf('<button name=pushme onclick=py.clicked()>Say Hello {world}</button>')
-    #jsid("pushme").addEventListener("click","py.clicked")
+        printf('<button id=pushme onclick=py.clicked()>Say Hello {world}</button>')
+
+        #printf('<button id=pushme>Say Hello {world}</button>')
+    # todo use a router closure jsid("pushme").addEventListener("click", "py.clicked")
 
 
 
