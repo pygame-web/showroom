@@ -13,19 +13,18 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
 <hr>
 
 
-<canvas id=canvas width=640 height=360>
+<canvas id=canvas width=640 height=360 data-embed=editor.py>
 FS("""
 https://raw.githubusercontent.com/pygame-examples/pygame_examples/main/pgex
 ├── __init__.py
 ├── main.py
 └── button.py
-""", "examples/buttons", debug=False)
+""", "examples/buttons")
 sys.path.append("examples")
 
-async def main():
-    await preload_fetch(debug=True)
+
+async def run():
     import buttons
-asyncio.run(main())
 </canvas>
 
 
