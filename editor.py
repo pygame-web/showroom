@@ -123,6 +123,7 @@ async def main():
     TX = Editor(offset_X, offset_Y, textAreaWidth, textAreaHeight, screen)
     TX.set_line_numbers(True)  # optional
     TX.set_syntax_highlighting(True)  # optional
+    TX.set_colorscheme("bright")
 
     # ready to edit files
     await TX.on_load()
