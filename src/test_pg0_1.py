@@ -12,10 +12,10 @@ import random
 
 WIDTH = 800
 HEIGHT = 600
-TITLE = 'pong'
+TITLE = "pong"
 
 # a color used to draw things
-MAIN_COLOR = 'yellow'
+MAIN_COLOR = "yellow"
 
 # width and height of a player paddle
 PADDLE_WIDTH = 15
@@ -53,7 +53,7 @@ class Paddle(Rect):
         screen.draw.filled_rect(self, MAIN_COLOR)
 
 
-class TennisBall():
+class TennisBall:
     """
     Represents a tennis ball on the screen
     """
@@ -77,8 +77,7 @@ class TennisBall():
         screen.draw.filled_circle(self.pos, TENNIS_BALL_RADIUS, MAIN_COLOR)
 
 
-class Game():
-
+class Game:
     def __init__(self, player):
         self.active_player = player
         self.score_left = 0
@@ -88,9 +87,9 @@ class Game():
         self.computer_acting = False
 
         # position paddles in the middle of the screen
-        middle = HEIGHT/2 - PADDLE_HEIGHT/2
+        middle = HEIGHT / 2 - PADDLE_HEIGHT / 2
         self.left_paddle = Paddle(20, middle)
-        self.right_paddle = Paddle(WIDTH-40, middle)
+        self.right_paddle = Paddle(WIDTH - 40, middle)
 
         self.set_ball(self.ball_pos)
 
@@ -182,12 +181,7 @@ class Game():
 
         target_y = max(40, min(target_y, HEIGHT - 80))
 
-        animate(
-            self.left_paddle,
-            y=target_y,
-            duration=.50,
-            on_finished=self.computer_stop_acting
-        )
+        animate(self.left_paddle, y=target_y, duration=0.50, on_finished=self.computer_stop_acting)
 
     def computer_move_randomly(self):
         # move the paddle randomly during one second before launching the ball
@@ -201,12 +195,7 @@ class Game():
         else:
             on_finished = self.computer_launch
 
-        animate(
-            self.left_paddle,
-            y=target_y,
-            duration=duration,
-            on_finished=on_finished
-        )
+        animate(self.left_paddle, y=target_y, duration=duration, on_finished=on_finished)
 
     def computer_act(self):
         if self.in_progress:
@@ -225,41 +214,20 @@ class Game():
         screen.fill((64, 64, 64))
 
         # show the score for the left player
-        screen.draw.text(
-            'Computer: {}'.format(self.score_left),
-            color=MAIN_COLOR,
-            center=(WIDTH/4 - 20, 20),
-            fontsize=48
-        )
+        screen.draw.text("Computer: {}".format(self.score_left), color=MAIN_COLOR, center=(WIDTH / 4 - 20, 20), fontsize=48)
 
         # show the score for the right player
         screen.draw.text(
-            'Player: {}'.format(self.score_right),
-            color=MAIN_COLOR,
-            center=(WIDTH/2 + WIDTH/4 - 20, 20),
-            fontsize=48
+            "Player: {}".format(self.score_right), color=MAIN_COLOR, center=(WIDTH / 2 + WIDTH / 4 - 20, 20), fontsize=48
         )
 
         # a dividing line
-        screen.draw.line(
-            (WIDTH/2, 40),
-            (WIDTH/2, HEIGHT-40),
-            color=MAIN_COLOR)
+        screen.draw.line((WIDTH / 2, 40), (WIDTH / 2, HEIGHT - 40), color=MAIN_COLOR)
 
         if self.score_left == 11:
-            screen.draw.text(
-                'COMPUTER WINS!!!',
-                color=MAIN_COLOR,
-                center=(WIDTH/2, HEIGHT/2),
-                fontsize=96
-            )
+            screen.draw.text("COMPUTER WINS!!!", color=MAIN_COLOR, center=(WIDTH / 2, HEIGHT / 2), fontsize=96)
         elif self.score_right == 11:
-            screen.draw.text(
-                'PLAYER WINS!!!',
-                color=MAIN_COLOR,
-                center=(WIDTH/2, HEIGHT/2),
-                fontsize=96
-            )
+            screen.draw.text("PLAYER WINS!!!", color=MAIN_COLOR, center=(WIDTH / 2, HEIGHT / 2), fontsize=96)
         else:
             self.left_paddle.draw()
             self.right_paddle.draw()
@@ -301,4 +269,3 @@ def on_key_down(key):
 
         if not game.in_progress and game.active_player == RIGHT_PLAYER:
             game.in_progress = True
-
