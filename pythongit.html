@@ -1,16 +1,12 @@
 <html><head><meta charset=utf-8></head><script src=/pygbag/0.7/pythons.js data-os=vtx,fs,gui data-python=cpython3.11 type=module id=__main__ async defer>#<!--
-import sys, asyncio, platform
-
-async def ruc():
-    for i in range(3):
-        await asyncio.sleep(1)
-        print('.')
-    print('ruc done')
-
+import sys, asyncio, platform, embed
 
 print(f"{sys.argv=}")
-if not len(sys.argv):
-    platform.window.debug()
+if len(sys.argv) and not sys.argv[0]:
+    async def main():
+        platform.window.debug()
+        shell.interactive(prompt=True)
+    asyncio.run(main())
 
 # you can write python code here for a custom loader
 
