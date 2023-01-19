@@ -6,7 +6,7 @@ if len(sys.argv) and not sys.argv[0]:
     async def main():
         platform.window.debug()
         shell.interactive(prompt=True)
-        CSI("?1002h","?1006h")
+        # CSI("?1002h","?1006h")
 
     asyncio.run(main())
 

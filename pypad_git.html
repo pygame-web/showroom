@@ -1,22 +1,17 @@
 <html><head><meta charset=utf-8></head><script src=/pygbag/0.7/pythons.js data-os=vtx,fs,gui data-python=cpython3.11 type=module id=__main__ async defer>#<!--
 
 import asyncio
-import tempfile
 
-tmpdir = Path(tempfile.gettempdir())
-
-if sys.argv[0].endswith('.py'):
-    __file__ = str( tmpdir / sys.argv[0].rsplit('/',1)[-1] )
-    await shell.exec( shell.wget(f"-O{__file__}", sys.argv[0]) )
-    if not Path(__file__).is_file():
-        print("404: ",sys.argv)
-    else:
+async def editor_task():
+    __file__ = await import_site(sys.argv[0], run=False)
+    if __file__:
         window.editor.load_file(__file__)
+        await asyncio.sleep(0)
+        await import_site(__file__, run=True)
 
-
-print("Hello IDE")
-
-
+asyncio.loop.create_task( editor_task() )
+# prevent pythonrc to execute default and yield instead
+ENABLE_USER_SITE = True
 
 """ # BEGIN -->
 </script>
