@@ -10,6 +10,11 @@ readline.complete = function (line) {
 
 }
 
+function rawstdin(line) {
+    //console.log("RAW:", line )
+    python.rawstdin(line)
+}
+
 
 if (!window.Terminal) {
     var xterm_cdn
@@ -176,8 +181,12 @@ export class WasmTerminal {
                             //console.log("VT LEFT")
                             break;
 
+                        case 60:
+                            rawstdin(data)
+                            break;
+
                         default:
-                            console.log(__FILE__,"VT arrow ? "+data.charCodeAt(2))
+                            console.log(__FILE__,"VT unhandled ? "+data.charCodeAt(2))
                     }
                     break
                 default:

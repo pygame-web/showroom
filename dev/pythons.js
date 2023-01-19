@@ -31,6 +31,9 @@ if (window.config) {
    config = {}
 }
 
+if (document.characterSet.toLowerCase() !== "utf-8")
+    alert("Host page encoding must be set to UTF-8 with tag :  meta charset=utf-8")
+
 window.addEventListener("error", function (e) {
    alert("Error occurred: " + e.error.message);
    return false;
@@ -193,15 +196,11 @@ window.cross_dl = async function cross_dl(url, flags) {
     console.log("cross_dl len=", response.headers.get("Content-Length") )
     console.log("cross_dl.error", response.error )
     if (response.body) {
-        console.log("cross_dl.text", await response.text() )
-        /*
-        const reader = response.body.getReader();
-        const text = await reader.read();
-        console.log("cross_dl.text", text )
-        */
+        return await response.text()
     } else {
         console.error("cross_dl: no body")
     }
+    return ""
 }
 
 
@@ -443,6 +442,8 @@ const vm = {
         readline : function(line) {
             const ud = { "type" : "stdin", "data" : line }
             if (window.worker) {
+                //if (line.search(chr(0x1b)))
+                  //  console.log("446: non-printable", line)
                 window.worker.postMessage({ target: 'custom', userData: ud });
             } else {
                 this.postMessage(ud);
@@ -470,12 +471,28 @@ const vm = {
 }
 
 
-function run_pyrc(content) {
+async function run_pyrc(content) {
     const pyrc_file = "/data/data/org.python/assets/pythonrc.py"
     const main_file = "/data/data/org.python/assets/main.py"
-// TODO: concat blocks
-    vm.FS.writeFile(main_file, vm.script.blocks[0] )
+
     vm.FS.writeFile(pyrc_file, content )
+
+// embedded canvas
+    if (vm.PyConfig.frozen) {
+        if ( canvas.dataset.path ) {
+            vm.PyConfig.frozen_path = canvas.dataset.src
+        } else {
+            vm.PyConfig.frozen_path = location.href.rsplit("/",1)  // current doc url as base
+        }
+        var frozencode = canvas.innerHTML
+        if (canvas.dataset.embed) {
+            vm.PyConfig.frozen_handler = canvas.dataset.embed
+        }
+        FS.writeFile(vm.PyConfig.frozen, frozencode)
+    } else {
+// TODO: concat blocks
+        vm.FS.writeFile(main_file, vm.script.blocks[0] )
+    }
 
     python.PyRun_SimpleString(`#!site
 PyConfig = json.loads("""${JSON.stringify(python.PyConfig)}""")
@@ -485,50 +502,27 @@ pfx=PyConfig['prefix']
 if os.path.isdir(pfx):
     sys.path.append(pfx)
     os.chdir(pfx)
-__file__ = "${pyrc_file}"
-if os.path.isfile(__file__):
-    exec(open(__file__).read(), globals(), globals())
+__pythonrc__ = "${pyrc_file}"
+if os.path.isfile(__pythonrc__):
+
+    exec(open(__pythonrc__).read(), globals(), globals())
     import asyncio
-    async def custom_site():
-        await TopLevel_async_handler.start_toplevel(platform.shell, console=True)
-        tmpdir = Path(__import__("tempfile").gettempdir())
-        os.chdir(tmpdir)
-        __file__ = "${main_file}"
-        TopLevel_async_handler.muted = True
-        await shell.source(__file__)
-        if sys.argv[0].endswith('.py'):
-            __file__ = str( tmpdir / sys.argv[0].rsplit('/',1)[-1] )
-            await shell.exec( shell.wget(f"-O{__file__}", sys.argv[0]) )
-            if not Path(__file__).is_file():
-                print("404: ",sys.argv)
-            else:
-                await shell.source(__file__)
-    asyncio.run(custom_site())
-    del custom_site
+    asyncio.run(import_site("${main_file}"))
+    del import_site
+else:
+    print(f"510: invalid {__pythonrc__=}")
 del pfx, verbose
 #
 `)
 }
 
 
-
-/*
-if os.path.isfile(fn):
-    exec(open(fn).read(), globals(), globals())
-    if verbose:
-        print("* site.py done *")
-    def async_exec(filename):
-        exec(open(filename).read(), globals(), globals())
-        import asyncio
-        async def custom_site():
-            aio.create_task(platform.EventTarget.process())
-        asyncio.run( custom_site() )
-    async_exec("/data/data/org.python/assets/main.py")
-else:
-    print(fn,"not found")
-*/
-
-
+function store_file(url, local) {
+    fetch(url, {})
+        .then( response => checkStatus(response) && response.arrayBuffer() )
+        .then( buffer => vm.FS.writeFile(local, new Uint8Array(buffer)) )
+        .catch(x => console.error(x))
+}
 async function custom_postrun() {
     console.warn("VM.postrun Begin")
     const pyrc_url = vm.config.cdn + "pythonrc.py"
@@ -540,9 +534,14 @@ async function custom_postrun() {
         .then( response => checkStatus(response) && response.arrayBuffer() )
         .then( buffer => run_pyrc(new Uint8Array(buffer)) )
         .catch(x => console.error(x))
+/*
+    store_file(
+        "https://pygame-web.github.io/archives/repo/repodata.json",
+        "/data/data/org.python/repodata.json"
+    )
+*/
     console.warn("VM.postrun End")
 }
-
 
 
 // ===================== DOM features ====================
@@ -561,6 +560,7 @@ function feat_gui(debug_hidden) {
         canvas.style.position = "absolute"
         canvas.style.top = "0px"
         canvas.style.right = "0px"
+        canvas.tabindex = 0
         document.body.appendChild(canvas)
 console.warn("TODO: test 2D/3D reservation")
 
@@ -695,6 +695,7 @@ console.warn("TODO: user defined canvas")
     window.addEventListener('resize', window_resize_event);
     window.window_resize = window_resize
 
+    return canvas
 }
 
 
@@ -767,7 +768,6 @@ async function feat_fs(debug_hidden) {
         dlg_multifile.setAttribute("multiple",true)
         dlg_multifile.hidden = debug_hidden
         document.body.appendChild(dlg_multifile)
-        //br()
     }
     dlg_multifile.addEventListener("change", transfer_uploads );
 
@@ -790,7 +790,6 @@ async function feat_vt(debug_hidden) {
         stdio.hidden = debug_hidden
         stdio.setAttribute("tabIndex", 1)
         document.body.appendChild(stdio)
-        //br()
     }
 
     const { Terminal, helper, handlevt } = await import("./vt.js")
@@ -817,7 +816,6 @@ async function feat_vtx(debug_hidden) {
         terminal.style.zIndex = 0
         terminal.setAttribute("tabIndex", 1)
         document.body.appendChild(terminal)
-        //br()
     }
 
     const { WasmTerminal } = await import("./vtx.js")
@@ -1202,6 +1200,11 @@ MM.stop = function stop(trackid) {
 MM.pause = function pause(trackid) {
     console.log("MM.pause", trackid, MM[trackid] )
     MM[trackid].media.pause()
+}
+
+MM.unpause = function unpause(trackid) {
+    console.log("MM.unpause", trackid, MM[trackid] )
+    MM[trackid].media.play()
 }
 
 MM.set_volume = function set_volume(trackid, vol) {
@@ -1630,7 +1633,7 @@ async function onload() {
         debug_user = false
     }
 
-    const debug_dev = vm.PyConfig.orig_argv.includes("-X dev") || vm.PyConfig.orig_argv.includes("-d")
+    const debug_dev = vm.PyConfig.orig_argv.includes("-X dev") || vm.PyConfig.orig_argv.includes("-i")
     const debug_mobile = nuadm && ( debug_user || debug_dev )
     if ( debug_user || debug_dev || debug_mobile ) {
         debug_hidden = false;
@@ -1653,11 +1656,6 @@ async function onload() {
         console.warn("======= IFRAME =========")
     }
 
-
-    function br(){
-        document.body.appendChild( document.createElement('br') )
-    }
-
     feat_lifecycle()
 
     // container for html output
@@ -1671,17 +1669,25 @@ async function onload() {
     var has_vt = false
 
     for (const feature of vm.config.features) {
+        if (feature.startsWith("embed")) {
+
+            vm.config.user_canvas_managed = 1
+
+            const canvas = feat_gui(true)
+            if ( canvas.innerHTML.length > 20 ) {
+                vm.PyConfig.frozen = "/tmp/to_embed.py"
+            }
+            // only canvas when embedding, stdxxx go to console.
+            break
+        }
 
         if (feature.startsWith("snd")) {
             feat_snd(debug_hidden)
         }
 
-
-
         if (feature.startsWith("gui")) {
             feat_gui(debug_hidden)
         }
-
 
         // file upload widget
 
@@ -1740,8 +1746,8 @@ async function onload() {
     if (window.window_resize)
         window_resize(vm.config.gui_divider)
 
-
 // console.log("cleanup while loading wasm", "has_parent?", is_iframe(), "Parent:", window.parent)
+
     feat_snd = feat_gui = feat_fs = feat_vt = feat_vtx = feat_stdout = feat_lifecycle = onload = null
 
     if ( is_iframe() ) {

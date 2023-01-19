@@ -3,7 +3,7 @@
 print("""
 Loading {{cookiecutter.title}} from {{cookiecutter.archive}}.apk
     Pygbag Version : {{cookiecutter.version}}
-    Template Version : 0.6.0
+    Template Version : 0.6.6
     Python  : {{cookiecutter.PYBUILD}}
     CDN URL : {{cookiecutter.cdn}}
     Screen  : {{cookiecutter.width}}x{{cookiecutter.height}}
@@ -148,7 +148,7 @@ async def custom_site():
 
     # now that apk is mounted we have access to font cache
     # but we need to fill __file__ that is not yet set
-    __import__(__name__).__file__ = main
+    __import__(__name__).__file__ = str(main)
 
 
     # now make a prompt
@@ -163,9 +163,6 @@ async def custom_site():
         pg_bar(track.len)
         screen.blit(prompt, ( marginx+ ux(80), marginy - uy(10) ) )
         compose()
-
-    await shell.preload_file(main, callback=ui_callback)
-
 
     # test/wait if user media interaction required
     if not platform.window.MM.UME:
@@ -186,7 +183,7 @@ async def custom_site():
     screen.fill( (0,0,0,0) )
     pygame.display.flip()
 
-    await shell.source(main)
+    await shell.runpy(main, callback=ui_callback)
 
 
 
@@ -239,6 +236,7 @@ config = {
     xtermjs : "{{cookiecutter.xtermjs}}" ,
     _sdl2 : "canvas",
     user_canvas : 1,
+    user_canvas_managed : 0,
     ume_block : {{cookiecutter.ume_block}},
     can_close : {{cookiecutter.can_close}},
     archive : "{{cookiecutter.archive}}",
@@ -254,7 +252,9 @@ config = {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="height=device-height, initial-scale=1.0">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
 
     <link rel="prefetch" href="{{cookiecutter.cdn}}pythonrc.py">
     <link rel="prefetch" href="{{cookiecutter.cdn}}vt/xterm.js">
