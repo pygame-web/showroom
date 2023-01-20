@@ -24,7 +24,7 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(async function () {
         const cachedResponse = await (await caches.open('pygbag0.6.0')).match(event.request);
         if (cachedResponse) {
-            console.log("CACHED", event.request");
+            console.log("CACHED", event.request);
             return cachedResponse;
         }
         const networkResponse = await fetch(event.request);
