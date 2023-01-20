@@ -14,6 +14,14 @@ from nurses_2.widgets.text_widget import TextWidget
 from nurses_2.widgets.grid_layout import GridLayout, Orientation
 from nurses_2.widgets.toggle_button import ToggleButton, ToggleState
 
+try:
+    import termios
+    termios.set_raw_mode()
+except:
+    pass
+
+
+
 class MyApp(App):
     async def on_start(self):
         label = TextWidget(size=(1, 50))
