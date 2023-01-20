@@ -11,10 +11,10 @@ self.addEventListener('install', (event) => {
             `${base_dir}/vt/xterm-addon.image.js`,
             `${base_dir}/vt/xterm.css`,
             `${base_dir}/vt/xterm.js`,
-            `${base_dir}/python3.11/pythons.js`,
-            `${base_dir}/python3.11/main.data`,
-            `${base_dir}/python3.11/main.js`,
-            `${base_dir}/python3.11/main.wasm`,
+            `${base_dir}/pythons.js`,
+            `${base_dir}/python311/main.data`,
+            `${base_dir}/python311/main.js`,
+            `${base_dir}/python311/main.wasm`,
             ''
         ]);
     }());
