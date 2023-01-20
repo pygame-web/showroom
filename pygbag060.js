@@ -1,6 +1,5 @@
-const base_dir = "￼https://pygame-web.github.io/archives/0.6"￼
-
 self.addEventListener('install', (event) => {
+    const base_dir = "https://pygame-web.github.io/archives/0.6";
     console.log("installing service worker");
     event.waitUntil(async function () {
         const cache = await caches.open('pygbag0.6.0');
