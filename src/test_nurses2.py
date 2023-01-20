@@ -3,8 +3,14 @@ import termios
 import tty
 import numpy
 import cv2
-import nurses_2
 
+try:
+    import termios
+    termios.set_raw_mode()
+except:
+    pass
+
+import nurses_2
 
 from nurses_2.app import App
 from nurses_2.widgets.button import Button
@@ -14,11 +20,13 @@ from nurses_2.widgets.text_widget import TextWidget
 from nurses_2.widgets.grid_layout import GridLayout, Orientation
 from nurses_2.widgets.toggle_button import ToggleButton, ToggleState
 
-try:
-    import termios
-    termios.set_raw_mode()
-except:
-    pass
+
+from nurses_2.colors import DEFAULT_COLOR_THEME
+from nurses_2.widgets.textbox import Textbox
+from nurses_2.widgets.text_pad import TextPad
+from nurses_2.widgets.text_widget import TextWidget
+from nurses_2.widgets.widget import Widget
+
 
 
 
@@ -124,6 +132,29 @@ class MyApp(App):
         self.add_widget(Button(label="File", callback=toggle_root_menu, pos=(1, 0), size=(1, 6)))
 
 
+        def enter_callback(textbox):
+            textbox.text = ""
 
+        # Note that `enter_callback` expects a callable with the textbox as the only argument.
+        textbox = Textbox(pos=(1, 1), size=(1, 31), enter_callback=enter_callback, max_chars=50)
+
+        color_pair = DEFAULT_COLOR_THEME.primary_color_pair
+
+        border = TextWidget(pos=(1, 0), size=(3, 33), default_color_pair=color_pair)
+        border.add_border()
+        border.add_widget(textbox)
+
+        label = TextWidget(pos_hint=(None, .5), anchor="top_center", size=(1, 7), default_color_pair=color_pair)
+        label.add_text("Textbox")
+
+        container = Widget(
+            size=(4, 33),
+            pos_hint=(None, .5),
+            anchor="top_center",
+            background_color_pair=textbox.background_color_pair,
+        )
+        container.add_widgets(label, border)
+
+        self.add_widget(container)
 
 MyApp(title="Menu Example").run()
