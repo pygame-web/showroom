@@ -24,6 +24,21 @@ const FETCH_FLAGS = {
 }
 
 
+window.get_terminal_cols = function () {
+    return Number( ( terminal && terminal.dataset.cols) || 132)
+}
+
+window.get_terminal_console = function () {
+    var cdefault = 0
+    if (vm && vm.config.debug)
+        cdefault = 10
+    return Number( (terminal && terminal.dataset.console) || cdefault )
+}
+
+window.get_terminal_lines = function () {
+    return Number( (terminal && terminal.dataset.lines) || 42) + get_terminal_console()
+}
+
 
 if (window.config) {
    config = window.config
@@ -504,11 +519,9 @@ if os.path.isdir(pfx):
     os.chdir(pfx)
 __pythonrc__ = "${pyrc_file}"
 if os.path.isfile(__pythonrc__):
-
     exec(open(__pythonrc__).read(), globals(), globals())
     import asyncio
     asyncio.run(import_site("${main_file}"))
-    del import_site
 else:
     print(f"510: invalid {__pythonrc__=}")
 del pfx, verbose
@@ -794,7 +807,7 @@ async function feat_vt(debug_hidden) {
 
     const { Terminal, helper, handlevt } = await import("./vt.js")
 
-    vm.vt.xterm = new Terminal("stdio", 132,25)
+    vm.vt.xterm = new Terminal("stdio", get_terminal_cols(), get_terminal_lines())
     vm.vt.xterm.set_vm_handler(vm, null, null)
 
     vm.vt.xterm.open()
@@ -820,7 +833,7 @@ async function feat_vtx(debug_hidden) {
 
     const { WasmTerminal } = await import("./vtx.js")
 
-    vm.vt = new WasmTerminal("terminal", terminal.dataset.cols || 132, terminal.dataset.rows || 42, [
+    vm.vt = new WasmTerminal("terminal", get_terminal_cols(), get_terminal_lines(), [
             { url : (config.cdn || "./") + "xtermjsixel/xterm-addon-image-worker.js", sixelSupport:true}
     ] )
 }
@@ -1442,6 +1455,56 @@ if (navigator.connection) {
     }
 }
 
+window.io = {}
+// https://mpy-usb.zoic.org/serial.js
+window.io.open_serial = function * () {
+    var ports = []
+    const filters = [
+      { 'vendorId' : 0x0403, 'productId' : 0x6001}, // FT232
+      { 'vendorId' : 0x067B, 'productId' : 0x2303}, // prolific from Kyuchumimo#3941
+      { 'vendorId' : 0x239A }, // Adafruit boards
+      { 'vendorId' : 0x2e8a, 'productId': 0x0006 }, // Raspberry Pi
+      { 'vendorId' : 0x2e8a, 'productId': 0x0005 }, // Raspberry PiCo
+      { 'vendorId' : 0xcafe }, // TinyUSB example
+      { 'vendorId' : 0x1209, 'productId': 0xADDA }, // MicroPython boards
+    ];
+
+    navigator.usb.requestDevice({ 'filters': filters }).then(
+        device => window.io.serial = device
+    );
+    while (!window.io.serial)
+        yield 0
+
+    const port = window.io.serial
+    port.open().then( () => {
+        console.log("serial port is opened")
+        // set receiver
+        port.data = ""
+        port.read = function * () {
+            port.transferIn(0, 64).then( packet => {
+                console.log(packet.data)
+                port.data += packet.data
+          }, error => {
+            console.error(error);
+          });
+
+        }
+        if (port.configuration === null) {
+            return port.selectConfiguration(1);
+        }
+    }).then( () => {
+        console.log("select config")
+    })
+
+
+    while (!port.read)
+        yield 0
+
+    yield port
+}
+
+
+
 
 
 //TODO: battery
@@ -1449,9 +1512,6 @@ if (navigator.connection) {
 
 //TODO: camera+audio cap
     //https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
-
-// https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API
-    //https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy/camera
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Accelerometer
 
@@ -2007,32 +2067,9 @@ function auto_start(cfg) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+window.set_raw_mode = function (param) {
+    window.RAW_MODE = param || 0
+}
 
 
 

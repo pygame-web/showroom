@@ -11,6 +11,8 @@ import time
 PYCONFIG_PKG_INDEXES_DEV = ["http://localhost:<port>/archives/repo/"]
 PYCONFIG_PKG_INDEXES = ["https://pygame-web.github.io/archives/repo/"]
 
+ENABLE_USER_SITE = False
+
 # the sim does not preload assets and cannot access currentline
 # unless using https://github.com/pmp-p/aioprompt/blob/master/aioprompt/__init__.py
 
@@ -280,6 +282,24 @@ if 1:  # defined("embed") and hasattr(embed, "readline"):
                 return pygame.display.get_surface()
             screen = pygame.display.set_mode([cls.screen_width, cls.screen_height])
             return screen
+
+        @classmethod
+        def find(cls, *argv):
+            from pathlib import Path
+            if not len(argv):
+                argv=[os.getcwd()]
+            for root in argv:
+                root = Path(root)
+                for current, dirnames, filenames in os.walk(root):
+                    dirname = root.joinpath(Path(current))
+                    for file in filenames:
+                        yield str(dirname / file)
+
+        @classmethod
+        def grep(cls, match, *argv):
+            for arg in argv:
+                if arg.find(match)>0:
+                    yield arg
 
         @classmethod
         def clear(cls, *argv, **kw):
@@ -677,8 +697,11 @@ ________________________
                         code = code.replace(block, f"{block};await asyncio.sleep(0)")
 
             # fix cwd to match a run of main.py from its folder
-            __import__("__main__").__file__ = str(main)
-            cls.HOME = Path(main).parent
+            realpath = str(main)
+            if realpath[0] not in './':
+                realpath =  str(Path.cwd() / main)
+            __import__("__main__").__file__ = str(realpath)
+            cls.HOME = Path(realpath).parent
             os.chdir(cls.HOME)
 
             await cls.preload_code(code, **kw)
@@ -1031,6 +1054,8 @@ if not aio.cross.simulator:
     from pathlib import Path
 
     class TopLevel_async_handler(aio.toplevel.AsyncInteractiveConsole):
+        # be re entrant
+        import_lock = []
 
         HTML_MARK = '""" # BEGIN -->'
 
@@ -1170,6 +1195,7 @@ if not aio.cross.simulator:
             unseen = False
             for mod in mods:
                 for dep in cls.repos[0]["packages"].get(mod, {}).get("depends", []):
+
                     if mod in sys.modules:
                         continue
 
@@ -1187,6 +1213,10 @@ if not aio.cross.simulator:
 
                     if (not dep in wants) and (not dep in cls.ignore):
                         wants.append(dep)
+            # always get numpy first
+            if "numpy" in wants:
+                wants.remove("numpy")
+                wants.insert(0,"numpy")
             return wants
 
         # TODO: re order repo on failures
@@ -1252,6 +1282,7 @@ if not aio.cross.simulator:
 
         @classmethod
         async def async_imports(cls, callback, *wanted, **kw):
+
             def default_cb(pkg, error=None):
                 if error:
                     pdb(msg)
@@ -1272,16 +1303,18 @@ if not aio.cross.simulator:
                 await cls.async_get_pkg("pygame.base", None, None)
                 __import__("pygame")
 
+
             # FIXME: numpy must be loaded first for some modules.
+            # FIXME: THIS IS RE-ENTRANT IN SOME CASES
             if "numpy" in all:
-                callback("numpy")
-                try:
-                    await cls.async_get_pkg("numpy", None, None)
-                    __import__("numpy")
-                    all.remove("numpy")
-                except (IOError, zipfile.BadZipFile):
-                    pdb("914: cannot load numpy")
-                    return
+                if not "numpy" in sys.modules:
+                    callback("numpy")
+                    try:
+                        await cls.async_get_pkg("numpy", None, None)
+                        __import__("numpy")
+                    except (IOError, zipfile.BadZipFile):
+                        pdb("1305: cannot load numpy")
+                all.remove("numpy")
 
             for req in all:
                 if req == "python-dateutil":
@@ -1374,6 +1407,7 @@ except:
 
 # ======================================================
 def patch():
+    global COLS, LINES, CONSOLE
     import platform
 
     # DeprecationWarning: Using or importing the ABCs from 'collections'
@@ -1390,6 +1424,13 @@ def patch():
 
     #
     import os
+    COLS = platform.window.get_terminal_cols()
+    CONSOLE = platform.window.get_terminal_console()
+    LINES = platform.window.get_terminal_lines() - CONSOLE
+
+    os.environ['COLS'] = str(COLS)
+    os.environ['LINES'] = str(LINES)
+
     def patch_os_get_terminal_size():
         cols = os.environ.get('COLS', 80)
         lines = os.environ.get('LINES', 25)
@@ -1404,12 +1445,32 @@ def patch():
     # fake termios module for some wheel imports
     termios = type(sys)("termios")
     termios.block2 = [b'\x03', b'\x1c', b'\x7f', b'\x15', b'\x04', b'\x00', b'\x01', b'\x00', b'\x11', b'\x13', b'\x1a', b'\x00', b'\x12', b'\x0f', b'\x17', b'\x16', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00']
-    def patch_termios(*argv):
+    def patch_termios_getattr(*argv):
         return [17664, 5, 191, 35387, 15, 15, termios.block2 ]
 
+    def patch_termios_set_raw_mode():
+        #assume first set is raw mode
+        embed.warn(f"Term phy COLS : {int(platform.window.get_terminal_cols())}")
+        embed.warn(f"Term phy LINES : {int(platform.window.get_terminal_lines())}")
+        embed.warn(f"Term logical : {patch_os_get_terminal_size()}" )
+        # set console scrolling zone
+        embed.warn(f"Scroll zone start at {LINES=}")
+        CSI(f"{LINES+1};{LINES+CONSOLE}r",f"{LINES+2};1H>>> ")
+        platform.window.set_raw_mode(1)
 
-    termios.tcgetattr = patch_termios
-    termios.tcsetattr = patch_termios
+    def patch_termios_setattr(*argv):
+        if not termios.state:
+            patch_termios_set_raw_mode()
+        else:
+            embed.warn("RESETTING TERMINAL")
+
+        termios.state += 1
+        pass
+
+    termios.set_raw_mode = patch_termios_set_raw_mode
+    termios.state = 0
+    termios.tcgetattr = patch_termios_getattr
+    termios.tcsetattr = patch_termios_setattr
     termios.TCSANOW = 0x5402
     termios.TCSAFLUSH = 0x5410
     termios.ECHO = 8
@@ -1577,58 +1638,129 @@ import aio.recycle
 
 #
 
+LOCK = False
 
-async def import_site(__file__):
+async def import_site(__file__, run=True):
+    global ENABLE_USER_SITE, LOCK
+    if LOCK:
+        print("1616: import_site IS NOT RE ENTRANT")
+        return
+
+    LOCK = True
+    from pathlib import Path
     embed = False
-    source = getattr(PyConfig, "frozen", "")
-    if source and Path(source).is_file():
-        source_path = getattr(PyConfig, "frozen_path", "")
-        handler = getattr(PyConfig, "frozen_handler", "")
-        print("1514: embed path", source_path,"will embed", source, "handled by", handler)
-        local = "/tmp/embed.py"
-        with open(source, "r") as src:
-            with open(local, "w") as file:
-                file.write("import sys, pygame;from aio.fetch import FS\n")
-                file.write( src.read() )
-                # default handler is run()
-                if not handler:
-                    file.write("""
-async def main():
-    import aio.fetch
-    await aio.fetch.preload_fetch()
-    await run()
-asyncio.run(main())
-""")
-                else:
-                    async with fopen(handler) as handle:
-                        file.write("\n")
-                        file.write(handle.read())
-        embed = True
-    else:
-        local = None
-        source = sys.argv[0]
+    hint = "main.py"
 
-    await TopLevel_async_handler.start_toplevel(platform.shell, console=True)
-    tmpdir = Path(__import__("tempfile").gettempdir())
-    os.chdir(tmpdir)
+    try:
+        # always start async handler or we could not do imports.
+        await TopLevel_async_handler.start_toplevel(platform.shell, console=True)
 
-    if Path(__file__).is_file():
-        print("1545: running", __file__)
-        TopLevel_async_handler.muted = True
-        await shell.source(__file__)
-    else:
-        print("1548: {__file__} not found")
-
-    if local is None:
-        if source.endswith(".py"):
-            local = str(tmpdir / source.rsplit("/", 1)[-1])
-            await shell.exec(shell.wget(f"-O{local}", source))
+        if Path(__file__).is_file():
+            DBG(f"1606: running {__file__=}")
+            TopLevel_async_handler.muted = True
+            await shell.source(__file__)
+            # allow to set ENABLE_USER_SITE
+            await asyncio.sleep(0)
+            if ENABLE_USER_SITE:
+                DBG(f"1635: {__file__=} done, giving hand to user_site")
+                return __file__
+            else:
+                DBG(f"1638: {__file__=} done : now trying remote sources")
         else:
-            # maybe base64 or frozen code in html.
-            ...
+            DBG(f"1640: {__file__=} NOT FOUND : now trying remote sources")
 
-    if local:
-        if not Path(local).is_file():
+        # where to retrieve
+        import tempfile
+        tmpdir = Path(tempfile.gettempdir())
+
+        source = getattr(PyConfig, "frozen", "")
+        if source:
+            if Path(source).is_file():
+                source_path = getattr(PyConfig, "frozen_path", "")
+                handler = getattr(PyConfig, "frozen_handler", "")
+                DBG("1514: embed path", source_path,"will embed", source, "handled by", handler)
+                local = tmpdir / "embed.py"
+                with open(source, "r") as src:
+                    with open(local, "w") as file:
+                        file.write("import sys, pygame;from aio.fetch import FS\n")
+                        file.write( src.read() )
+                        # default handler is run()
+                        if not handler:
+                            file.write("""
+    async def main():
+        import aio.fetch
+        await aio.fetch.preload_fetch()
+        await run()
+    asyncio.run(main())
+    """)
+                        else:
+                            async with fopen(handler) as handle:
+                                file.write("\n")
+                                file.write(handle.read())
+                embed = True
+            else:
+                print(f"1639: invalid embed {source=}")
+                return None
+            # file has been retrieved stored in local
+        else:
+            local = None
+            # no embed, try sys.argv[0] first, but main.py can only  be a hint.
+            # or maybe select an archive
+            is_py = sys.argv[0].endswith('.py')
+            if sys.argv[0] == 'main.py' or not is_py:
+                source = PyConfig.orig_argv[-1]
+                if is_py:
+                    hint = sys.argv[0]
+            else:
+                source = sys.argv[0]
+
+        if local is None:
+            ext = str(source).rsplit('.')[-1].lower()
+
+            if ext == "py":
+                local = tmpdir / source.rsplit("/", 1)[-1]
+                await shell.exec(shell.wget(f"-O{local}", source))
+
+#TODO: test tar.bz2 lzma tar.xz
+            elif ext in ('zip','gz','tar', 'apk','jar'):
+                DBG(f"1664: found archive source {source=}")
+                #download and unpack into tmpdir
+                fname = tmpdir / source.rsplit('/')[-1]
+
+                if ext in ("apk","jar"):
+                    fname = fname + ".zip"
+
+                async with fopen(source,"rb") as zipdata:
+                    with open(fname, "wb") as file:
+                        file.write( zipdata.read() )
+                import shutil
+                shutil.unpack_archive(fname, tmpdir)
+                os.unlink(fname)
+
+                # locate for an entry point after decompression
+                hint = "/" + hint.strip('/')
+                for file in shell.find(tmpdir):
+                    if file.find(hint)>0:
+                        local =  tmpdir / file
+                        break
+                DBG("1725: import_site: found ", local )
+            else:
+                # maybe base64 or frozen code in html.
+                ...
+
+        if local and local.is_file():
+            pdir = str(local.parent)
+            os.chdir(pdir)
+# TODO: check orig_argv for isolation parameters
+            if not pdir in sys.path:
+                sys.path.insert(0,pdir)
+            if run:
+                await shell.runpy(local)
+            return str(local)
+        else:
+            # show why and drop to prompt
             print(f"404: embed={source} or {sys.argv=}")
-        else:
-            await shell.runpy(local)
+            shell.interactive(prompt=True)
+            return None
+    finally:
+        LOCK=False

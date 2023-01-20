@@ -71,7 +71,7 @@ async def main():
     audio.pause(0)
 
 
-    print(f"Turning data {len(sound_chunks)=}into a pygame.mixer.Sound")
+    print(f"Turning data {len(sound_chunks)=} into a pygame.mixer.Sound")
     sound = pygame.mixer.Sound(buffer=b"".join(sound_chunks))
 
     print("playing back recorded sound")
