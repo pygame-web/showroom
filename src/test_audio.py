@@ -68,16 +68,18 @@ async def main():
     print(f"recording with '{names[0]}'")
     await asyncio.sleep(5)
 
+    audio.pause(0)
 
-    if 1:
 
-        print("Turning data into a pygame.mixer.Sound")
-        sound = pygame.mixer.Sound(buffer=b"".join(sound_chunks))
+    print(f"Turning data {len(sound_chunks)=}into a pygame.mixer.Sound")
+    sound = pygame.mixer.Sound(buffer=b"".join(sound_chunks))
 
-        print("playing back recorded sound")
-        sound.play()
+    print("playing back recorded sound")
+    sound.play()
 
-    await asyncio.sleep(5)
+    await asyncio.sleep(10)
+    print("done")
+
     pygame.quit()
 
 asyncio.run(main())
