@@ -3,11 +3,12 @@
 import asyncio
 
 async def editor_task():
-    __file__ = await import_site(sys.argv[0], run=False)
+    __file__ = await import_site(PyConfig.orig_argv[-1], run=False)
     if __file__:
         window.editor.load_file(__file__)
         await asyncio.sleep(0)
         await import_site(__file__, run=True)
+        shell.interactive()
 
 asyncio.loop.create_task( editor_task() )
 # prevent pythonrc to execute default and yield instead
@@ -147,7 +148,7 @@ HEIGHT="360px"
     tabindex=1></canvas>
 </div>
 
-<div id=terminal data-COLS=100 data-ROWS=30 class=br></div>
+<div id=terminal data-COLS=80 data-LINES=25 data-CONSOLE=10 class=br></div>
 
 
 <div id=stdout style="border-style:solid; height=50%" class=bl>
