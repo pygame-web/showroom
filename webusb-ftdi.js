@@ -683,19 +683,30 @@ class WebUSBSerialPort {
 		    .then(() => {
 
 		    	let baud = 115200; //921600;
+                if (window.NOT_FTDI) {
+                    console.warn("NOT_FTDI:controlTransferOut")
+                    this.device.controlTransferOut({
+				        requestType: 'vendor',
+				        recipient: "device",
+				        request: 0x22,
+				        value: 0x00,
+				        index: this.interfaceNumber
+				    });
+                } else {
+		        	console.log("controlTransfer out now for " + this.interfaceNumber)
+		        	console.log("req: " + this.#FTDI_SIO_SET_BAUD_RATE)
+		        	console.log("val: " + this.getBaudDivisor(baud) + '(' + baud + ')')
+		        	console.log("ind: " + this.getBaudBase())
 
-/*		    	console.log("controlTransfer out now for " + this.interfaceNumber)
-		    	console.log("req: " + this.#FTDI_SIO_SET_BAUD_RATE)
-		    	console.log("val: " + this.getBaudDivisor(baud) + '(' + baud + ')')
-		    	console.log("ind: " + this.getBaudBase())*/
+			        this.device.controlTransferOut({
+			            requestType: 'vendor',
+			            recipient: "device",
+			            request: this.#FTDI_SIO_SET_BAUD_RATE,
+			            value: this.getBaudDivisor(baud), // divisor_value
+			            index: this.getBaudBase() // divisor_index
+			        });
 
-				this.device.controlTransferOut({
-				    requestType: 'vendor',
-				    recipient: "device",
-				    request: this.#FTDI_SIO_SET_BAUD_RATE,
-				    value: this.getBaudDivisor(baud), // divisor_value
-				    index: this.getBaudBase() // divisor_index
-				});
+                }
 			})
 			.then(() => {
 
@@ -840,18 +851,30 @@ class WebUSBSerialDevice {
 			// you can replace these with any device that has
 			// an ftdi chip.
 			deviceFilters: [
-                { 'vendorId' : 0x0403, 'productId' : 0x6000 },
-                { 'vendorId' : 0x0403, 'productId' : 0x6001 },
-                { 'vendorId' : 0x0403, 'productId' : 0x6010 },
-                { 'vendorId' : 0x0403, 'productId' : 0x6011 },
-                { 'vendorId' : 0x0403, 'productId' : 0x6014 },
-                { 'vendorId' : 0x067B, 'productId' : 0x2303}, // prolific from Kyuchumimo#3941
-                { 'vendorId' : 0x1A86, 'productId' : 0x7523}, // CH340
-                { 'vendorId' : 0x239A }, // Adafruit boards
-                { 'vendorId' : 0x2e8a, 'productId': 0x0006 }, // Raspberry Pi
-                { 'vendorId' : 0x2e8a, 'productId': 0x0005 }, // Raspberry PiCo
-                { 'vendorId' : 0xcafe }, // TinyUSB example
-                { 'vendorId' : 0x1209, 'productId': 0xADDA }, // MicroPython boards
+                { 'vendorId': 0x2341, 'productId': 0x8036 }, // Arduino Leonardo
+                { 'vendorId': 0x2341, 'productId': 0x8037 }, // Arduino Micro
+                { 'vendorId': 0x2341, 'productId': 0x804d }, // Arduino/Genuino Zero
+                { 'vendorId': 0x2341, 'productId': 0x804e }, // Arduino/Genuino MKR1000
+                { 'vendorId': 0x2341, 'productId': 0x804f }, // Arduino MKRZERO
+                { 'vendorId': 0x2341, 'productId': 0x8050 }, // Arduino MKR FOX 1200
+                { 'vendorId': 0x2341, 'productId': 0x8052 }, // Arduino MKR GSM 1400
+                { 'vendorId': 0x2341, 'productId': 0x8053 }, // Arduino MKR WAN 1300
+                { 'vendorId': 0x2341, 'productId': 0x8054 }, // Arduino MKR WiFi 1010
+                { 'vendorId': 0x2341, 'productId': 0x8055 }, // Arduino MKR NB 1500
+                { 'vendorId': 0x2341, 'productId': 0x8056 }, // Arduino MKR Vidor 4000
+                { 'vendorId': 0x2341, 'productId': 0x8057 }, // Arduino NANO 33 IoT
+                { 'vendorId': 0x0403, 'productId': 0x6000 }, // FTDI
+                { 'vendorId': 0x0403, 'productId': 0x6001 },
+                { 'vendorId': 0x0403, 'productId': 0x6010 },
+                { 'vendorId': 0x0403, 'productId': 0x6011 },
+                { 'vendorId': 0x0403, 'productId': 0x6014 },
+                { 'vendorId': 0x067B, 'productId': 0x2303}, // prolific from Kyuchumimo#3941
+                { 'vendorId': 0x1A86, 'productId': 0x7523}, // CH340
+                { 'vendorId': 0x239A }, // Adafruit boards
+                { 'vendorId': 0x2e8a, 'productId': 0x0006 }, // Raspberry Pi
+                { 'vendorId': 0x2e8a, 'productId': 0x0005 }, // Raspberry PiCo
+                { 'vendorId': 0xcafe }, // TinyUSB example
+                { 'vendorId': 0x1209, 'productId': 0xADDA }, // MicroPython boards
 			]
 		}
 
