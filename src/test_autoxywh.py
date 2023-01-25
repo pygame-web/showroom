@@ -39,20 +39,28 @@ def uy(*argv):
         acc += u(HEIGHT, REFY, v)
     return acc
 
+__import__("builtins").const = lambda x:x
+
 
 async def main():
 
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-    pad = 15  # relative to reference (here 1980) !
+    # use fake const keyword so "compiler" can apply litteral without evaluating
+    # just parsing code.
 
-    padx = ux(pad) # report to 1024
-    pady = uy(pad) # report to 600
+    # note that keyword also exists in micropython/circuitpython etc ...
+    # where it is also optimized this way
+
+    pad = const(15)  # relative to reference (here 1980) !
+
+    padx = const(ux(pad)) # report to 1024
+    pady = const(uy(pad)) # report to 600
 
 
     screen.fill("aquamarine4")
 
-    #                           padx, pady,  width 50% -padx,  height 33% - pady
+    #                    padx, pady,  width 50% -padx,  height 33% - pady
     button = Button(screen, padx, pady, ux(0.050) - padx, uy(0.033) - pady, text="Row 1_C1")
     button = Button(screen, ux(.050) + padx, pady, ux(.040) -padx, uy(.033)-pady, text="Row 1_C2")
 
