@@ -17,6 +17,10 @@ https://wicg.github.io/webhid/
 https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API
 https://googlechrome.github.io/samples/web-bluetooth/device-info-async-await.html?allDevices=true
 
+extra chips
+https://github.com/felHR85/UsbSerial/tree/master/usbserial/src/main/java/com/felhr/usbserial
+https://github.com/mik3y/usb-serial-for-android/tree/master/usbSerialForAndroid/src/main/java/com/hoho/android/usbserial/driver
+
 """
 
 
