@@ -54,19 +54,23 @@ async def step_absolute(board):
     await asyncio.sleep(.2)
 
     # set the max speed and acceleration
-    await board.stepper_set_max_speed(motor, 400)
-    await board.stepper_set_acceleration(motor, 800)
+    await board.stepper_set_max_speed(motor, 100)
+    await board.stepper_set_acceleration(motor, 400)
 
     # set the absolute position in steps
-    await board.stepper_move_to(motor, -2000)
+
 
     # run the motor
-    print('Starting motor...')
-    await board.stepper_run(motor, completion_callback=the_callback)
-    await asyncio.sleep(.2)
-    await board.stepper_is_running(motor, callback=running_callback)
-    await asyncio.sleep(1)
-    await board.stepper_stop(motor)
+
+    for way in (1,-1,1,-1,1,-1):
+        print('Starting motor...')
+        await board.stepper_move_to(motor, way * 50)
+        await board.stepper_run(motor, completion_callback=the_callback)
+        await asyncio.sleep(.2)
+        await board.stepper_is_running(motor, callback=running_callback)
+        await asyncio.sleep(3)
+        await board.stepper_stop(motor)
+        await asyncio.sleep(2)
 
 
 async def blink(board, pin):
@@ -81,13 +85,13 @@ async def blink(board, pin):
     await board.set_pin_mode_digital_output(pin)
 
     # toggle the pin 4 times and exit
-    for x in range(4):
+    for x in range(2):
         print('ON')
         await board.digital_write(pin, 0)
-        await asyncio.sleep(1)
+        await asyncio.sleep(.5)
         print('OFF')
         await board.digital_write(pin, 1)
-        await asyncio.sleep(1)
+        await asyncio.sleep(.5)
 
 
 # get the event loop
