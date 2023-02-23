@@ -7,39 +7,33 @@ import platform
 
 import pygame.vidcap as camera
 
-from PIL import Image
+#from PIL import Image
+
+if pygame.display.get_init():
+    screen = pygame.display.get_surface()
+else:
+    screen = pygame.display.set_mode([1024, 1024]).subsurface( (100,100,900,900) )
+
 
 async def main():
-    global cam
-    cam = camera.Camera( camera.list_cameras()[0], (320,200), 0 )
+    global cam, screen
+
+    cam = camera.Camera( camera.list_cameras()[0], (1280,720), 0 )
+
     await cam.start()
 
-    # cam.get_raw()
-
-    screen = shell.pg_init()
-
-
-    await asyncio.sleep( 1 )
 
     while True:
-        #await cam.get_image()
-        try:
-            if not os.path.isfile("/dev/video0.bmp"):
-                im = Image.open("/dev/video0")
-                im.save("/dev/video0.bmp")
-            else:
-                surf = pygame.image.load_basic("/dev/video0.bmp")
-                screen.blit(surf, (1, 1))
+        if await cam.query_image():
+            try:
+                screen.blit( cam.get_image(), (0, 0))
                 pygame.display.update()
-                os.unlink("/dev/video0.bmp")
-                del surf
 
-        except Exception as e:
-            print('frame dropped',e)
-            sys.print_exception(e)
-            break
+            except Exception as e:
+                print('frame dropped',e)
+                sys.print_exception(e)
+                break
         await asyncio.sleep(0)
-
 
 asyncio.run(main())
 

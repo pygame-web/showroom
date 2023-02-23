@@ -1,7 +1,6 @@
 <html><head><meta charset=utf-8></head><script src=/pygbag/0.7/pythons.js data-os=vtx,fs,gui data-python=cpython3.11 type=module id=__main__ async defer>#<!--
 import sys, asyncio, platform, embed
 
-print(f"{sys.argv=}")
 if len(sys.argv) and not sys.argv[0]:
     async def main():
         platform.window.debug()
@@ -9,6 +8,8 @@ if len(sys.argv) and not sys.argv[0]:
         # CSI("?1002h","?1006h")
 
     asyncio.run(main())
+else:
+    print(f"Running {sys.argv=} before REPL")
 
 # you can write python code here for a custom loader
 
