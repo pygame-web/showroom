@@ -1,3 +1,5 @@
+
+import asyncio
 import wcwidth
 import termios
 import tty
@@ -29,7 +31,6 @@ from nurses_2.widgets.widget import Widget
 
 
 
-
 class MyApp(App):
     async def on_start(self):
         label = TextWidget(size=(1, 50))
@@ -42,12 +43,12 @@ class MyApp(App):
 
         def button_callback(i):
             def callback():
-                display.add_text(f"Button {i + 1} pressed!".ljust(20))
+                display.add_str(f"Button {i + 1} pressed!".ljust(20))
             return callback
 
         def toggle_button_callback(i):
             def callback(state):
-                display.add_text(f"Button {i + 1} {'un' if state is ToggleState.OFF else ''}toggled!".ljust(20))
+                display.add_str(f"Button {i + 1} {'un' if state is ToggleState.OFF else ''}toggled!".ljust(20))
             return callback
 
         grid_layout = GridLayout(
@@ -55,10 +56,10 @@ class MyApp(App):
             grid_columns=3,
             pos=(7, 7),
             orientation=Orientation.TB_LR,
-            top_padding=1,
-            bottom_padding=1,
-            left_padding=1,
-            right_padding=1,
+            padding_top=1,
+            padding_bottom=1,
+            padding_left=1,
+            padding_right=1,
             horizontal_spacing=1,
         )
 
@@ -94,12 +95,12 @@ class MyApp(App):
 
         def add_text(text):
             def inner():
-                label.add_text(f"{text:<50}"[:50])
+                label.add_str(f"{text:<50}"[:50], truncate_str=True)
             return inner
 
         def add_text_toggle(text):
             def inner(toggle_state):
-                label.add_text(f"{f'{text} {toggle_state}':<50}"[:50])
+                label.add_str(f"{f'{text} {toggle_state}':<50}"[:50], truncate_str=True)
             return inner
 
         # These "keybinds" aren't implemented.
@@ -138,14 +139,14 @@ class MyApp(App):
         # Note that `enter_callback` expects a callable with the textbox as the only argument.
         textbox = Textbox(pos=(1, 1), size=(1, 31), enter_callback=enter_callback, max_chars=50)
 
-        color_pair = DEFAULT_COLOR_THEME.primary_color_pair
+        color_pair = DEFAULT_COLOR_THEME.primary
 
         border = TextWidget(pos=(1, 0), size=(3, 33), default_color_pair=color_pair)
         border.add_border()
         border.add_widget(textbox)
 
         label = TextWidget(pos_hint=(None, .5), anchor="top_center", size=(1, 7), default_color_pair=color_pair)
-        label.add_text("Textbox")
+        label.add_str("Textbox")
 
         container = Widget(
             size=(4, 33),
@@ -157,4 +158,9 @@ class MyApp(App):
 
         self.add_widget(container)
 
-MyApp(title="Menu Example").run()
+async def main():
+    await MyApp(title="Menu Example")._run_async()
+
+
+asyncio.run( main() )
+
