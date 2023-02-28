@@ -32,7 +32,7 @@ async def main():
     global localized1, localized2
 
 
-    await asyncio.display(0)
+    await asyncio.sleep(0)
 
 
     pygame.font.init()
