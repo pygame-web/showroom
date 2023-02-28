@@ -30,8 +30,14 @@ from bidi.algorithm import get_display as bidi
 
 async def main():
     global localized1, localized2
+
+
+    await asyncio.display(0)
+
+
     pygame.font.init()
     print( pygame.font.get_sdl_ttf_version() )
+
 
 
     fnt = "fonts/Amiri-Regular.ttf"

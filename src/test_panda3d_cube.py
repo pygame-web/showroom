@@ -154,8 +154,7 @@ async def main():
 
     MyApp.instance.build()
 
-    asyncio.get_running_loop().create_task( MyApp.instance.async_loop() )
-
+    await MyApp.instance.async_loop()
 
 
 asyncio.run(main())
