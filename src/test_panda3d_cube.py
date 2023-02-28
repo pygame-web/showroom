@@ -1,3 +1,5 @@
+#!python
+
 import sys
 import asyncio
 import panda3d
@@ -76,19 +78,17 @@ class MyApp(ShowBase):
 
     async def async_loop(self):
 
-
-        while not aio.loop.is_closed():
+        while not asyncio.get_running_loop().is_closed():
             #print(".")
             try:
                 direct.task.TaskManagerGlobal.taskMgr.step()
-                #embed.step()
-                #await aio.asleep(self.frame_time)
             except SystemExit:
                 print('87: Panda3D stopped',file= __import__('sys').stderr)
                 break
             # go to host
             await asyncio.sleep(0)
 
+        print(self.async_loop,"exiting")
 
     def async_run(self):
         self.__class__.instance = self
@@ -120,11 +120,12 @@ class MyApp(ShowBase):
 
         self.cubes = cubes
 
-        aio.loop.create_task( self.update() )
-    # cube spinner
+        asyncio.get_running_loop().create_task( self.update() )
 
+
+    # cube spinner
     async def update(self, dt=0):
-        while not aio.loop.is_closed():
+        while not asyncio.get_running_loop().is_closed():
             group = self.cubes
             h, p, r = group.get_hpr()
             d = .2
@@ -132,6 +133,7 @@ class MyApp(ShowBase):
             group.setP(p + d)
             group.setY(r + d)
             await asyncio.sleep(0) #self.frame_time)
+        print(self.update,"exiting")
 
 
 
@@ -152,7 +154,7 @@ async def main():
 
     MyApp.instance.build()
 
-    aio.loop.create_task( MyApp.instance.async_loop() )
+    asyncio.get_running_loop().create_task( MyApp.instance.async_loop() )
 
 
 
