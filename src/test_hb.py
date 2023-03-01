@@ -48,10 +48,14 @@ async def main():
 
     await asyncio.sleep(1)
 
+    if not sys.argv[-1].endswith('.py'):
+        fnt = sys.argv[-1]
+    else:
+        fnt =  "Amiri-Regular"
 
-    fnt = "fonts/FreeMonoBold.ttf"
     print(fnt)
-    font = pygame.font.Font(fnt, 64)
+
+    font = pygame.font.Font(f"fonts/{fnt}.ttf", 64)
 
     print("setting script")
 
@@ -71,6 +75,8 @@ async def main():
     text2 = font.render( bidi(localized2),  True, green, blue)
 
 
+    text3 = font.render( fnt ,  True, green, blue)
+
     # create a rectangular object for the
     # text surface object
     textRect1 = text1.get_rect()
@@ -78,6 +84,9 @@ async def main():
 
     textRect2 = text2.get_rect()
     textRect2.center = (X // 2, Y // 2)
+
+    textRect3 = text3.get_rect()
+    textRect3.center = (X // 2, int(Y / 1.2) )
 
     # infinite loop
     while True:
@@ -91,6 +100,7 @@ async def main():
         # at the center coordinate.
         screen.blit(text1, textRect1)
         screen.blit(text2, textRect2)
+        screen.blit(text3, textRect3)
 
         # iterate over the list of Event objects
         # that was returned by pygame.event.get() method.
