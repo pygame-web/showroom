@@ -31,19 +31,29 @@ from bidi.algorithm import get_display as bidi
 async def main():
     global localized1, localized2
 
+    await asyncio.sleep(0)
+
+    print(" \npygame.font.init")
 
     await asyncio.sleep(0)
 
-
     pygame.font.init()
-    print( pygame.font.get_sdl_ttf_version() )
 
+    await asyncio.sleep(0)
+
+    print("get_sdl_ttf_version :", pygame.font.get_sdl_ttf_version() )
+
+
+    await asyncio.sleep(1)
 
 
     fnt = "fonts/Amiri-Regular.ttf"
     print(fnt)
     font = pygame.font.Font(fnt, 64)
 
+    print("setting script")
+
+    await asyncio.sleep(0)
 
     font.set_script("Arab")
 
