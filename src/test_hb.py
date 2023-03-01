@@ -8,6 +8,8 @@ if sys.platform in ('emscripten','wasi',):
     aio.fetch.FS("""
 .
 ├── Amiri-Regular.ttf
+├── FreeMono.ttf
+├── FreeSerif.ttf
 """, "fonts")
 
 DX=DY=100
@@ -47,7 +49,7 @@ async def main():
     await asyncio.sleep(1)
 
 
-    fnt = "fonts/Amiri-Regular.ttf"
+    fnt = "fonts/FreeMonoBold.ttf"
     print(fnt)
     font = pygame.font.Font(fnt, 64)
 
