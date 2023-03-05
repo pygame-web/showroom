@@ -1,16 +1,21 @@
 
+
+import pygbag
+import aio
+import aio.fetch
+
 import sys
+import os
 import asyncio
 import pygame
 
-if sys.platform in ('emscripten','wasi',):
-    import aio.fetch
-    aio.fetch.FS("""
+
+aio.fetch.FS("""
 .
+/showroom/fonts ~ fonts
 ├── Amiri-Regular.ttf
-├── FreeMono.ttf
-├── FreeSerif.ttf
-""", "fonts")
+""")
+
 
 DX=DY=100
 X = 924
@@ -33,7 +38,10 @@ from bidi.algorithm import get_display as bidi
 async def main():
     global localized1, localized2
 
-    await asyncio.sleep(0)
+    import tempfile
+    await aio.fetch.preload()
+
+
 
     print(" \npygame.font.init")
 
@@ -63,13 +71,16 @@ async def main():
 
     font.set_script("Arab")
 
+    # RTL + latin
     localized1 =  "علي"
     localized1 += " : "
     localized1 += "ALI"
 
     text1 = font.render( bidi(localized1),  True, green, blue)
 
-    localized2 = "ALI translate to "
+
+    # LTR latin + Arabic
+    localized2 = "ALI translates to "
     localized2 +=  "علي"
 
     text2 = font.render( bidi(localized2),  True, green, blue)
@@ -87,6 +98,8 @@ async def main():
 
     textRect3 = text3.get_rect()
     textRect3.center = (X // 2, int(Y / 1.2) )
+
+    clock = pygame.time.Clock()
 
     # infinite loop
     while True:
@@ -115,6 +128,7 @@ async def main():
             # Draws the surface object to the screen.
 
         pygame.display.update()
+        clock.tick(60)
         await asyncio.sleep(0)
 
 
@@ -128,5 +142,6 @@ async def main():
 
 
 if __name__ == "__main__":
+    print(asyncio)
     asyncio.run(main())
 
