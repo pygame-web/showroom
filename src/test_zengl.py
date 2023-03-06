@@ -15,9 +15,11 @@ display.set_colorkey((0.5, 0.5, 0.5))
 
 
 
+#import glcontext_emscripten as eglcontext
+
+
 import glcontext
 import glcontext.egl
-
 eglcontext = glcontext.egl.create_context()
 
 
@@ -69,12 +71,18 @@ async def main():
         vertex_count=3,
     )
 
-
     image.clear_value = (1.0, 1.0, 1.0, 1.0)
+
+
+    #ctx.new_frame()
 
     image.clear()
 
     triangle.render()
+
+    image.blit()
+
+    #ctx.end_frame()
 
 # https://webglfundamentals.org/webgl/lessons/webgl-2d-drawimage.html
 
