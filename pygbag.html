@@ -1,0 +1,16 @@
+<html><head><meta charset=utf-8></head><script src=/pygbag/0.7/pythons.js data-os=vtx,fs,gui data-python=cpython3.11 type=module id=__main__ async defer>#<!--
+import sys, asyncio, platform, embed
+
+if len(sys.argv) and not sys.argv[0]:
+    async def main():
+        platform.window.debug()
+        shell.interactive(prompt=True)
+        # CSI("?1002h","?1006h")
+
+    asyncio.run(main())
+else:
+    print(f"{sys.argv=}")
+
+# you can write python code here for a custom loader
+
+# --></script></html>
