@@ -15,7 +15,7 @@
 
         .topright {
             position: absolute;
-            top: 90px;
+            top: 80px;
             right: 0px;
             resize: none;
             overflow: visible;
@@ -64,24 +64,26 @@
 
     </style>
 <br>
-
+<!-- thanks to https://fsymbols.com/generators/carty/ -->
     <div class="logo-container">
     <a href="#">
     <div class="logo" style="font-size:60%;">
-&nbsp;&nbsp;██████╗░██╗░░░██╗░██████╗░░█████╗░███╗░░░███╗███████╗&nbsp;&nbsp;&nbsp;&nbsp;░██████╗██╗░░██╗░█████╗░░██╗░░░░░░░██╗██████╗░░█████╗░░█████╗░███╗░░░███╗
-&nbsp;&nbsp;██╔══██╗╚██╗░██╔╝██╔════╝░██╔══██╗████╗░████║██╔════╝&nbsp;&nbsp;&nbsp;&nbsp;██╔════╝██║░░██║██╔══██╗░██║░░██╗░░██║██╔══██╗██╔══██╗██╔══██╗████╗░████║
-&nbsp;&nbsp;██████╔╝░╚████╔╝░██║░░██╗░███████║██╔████╔██║█████╗░░&nbsp;&nbsp;&nbsp;&nbsp;╚█████╗░███████║██║░░██║░╚██╗████╗██╔╝██████╔╝██║░░██║██║░░██║██╔████╔██║
-&nbsp;&nbsp;██╔═══╝░░░╚██╔╝░░██║░░╚██╗██╔══██║██║╚██╔╝██║██╔══╝░░&nbsp;&nbsp;&nbsp;&nbsp;░╚═══██╗██╔══██║██║░░██║░░████╔═████║░██╔══██╗██║░░██║██║░░██║██║╚██╔╝██║
-&nbsp;&nbsp;██║░░░░░░░░██║░░░╚██████╔╝██║░░██║██║░╚═╝░██║███████╗&nbsp;&nbsp;&nbsp;&nbsp;██████╔╝██║░░██║╚█████╔╝░░╚██╔╝░╚██╔╝░██║░░██║╚█████╔╝╚█████╔╝██║░╚═╝░██║
-&nbsp;&nbsp;╚═╝░░░░░░░░╚═╝░░░░╚═════╝░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝&nbsp;&nbsp;&nbsp;&nbsp;╚═════╝░╚═╝░░╚═╝░╚════╝░░░░╚═╝░░░╚═╝░░╚═╝░░╚═╝░╚════╝░░╚════╝░╚═╝░░░░░╚═╝
+&nbsp;&nbsp;██████╗░██╗░░░██╗░██████╗░░█████╗░███╗░░░███╗███████╗░░░░░░░█████╗░███████╗&nbsp;&nbsp;&nbsp;&nbsp;░██████╗██╗░░██╗░█████╗░░██╗░░░░░░░██╗██████╗░░█████╗░░█████╗░███╗░░░███╗
+&nbsp;&nbsp;██╔══██╗╚██╗░██╔╝██╔════╝░██╔══██╗████╗░████║██╔════╝░░░░░░██╔══██╗██╔════╝&nbsp;&nbsp;&nbsp;&nbsp;██╔════╝██║░░██║██╔══██╗░██║░░██╗░░██║██╔══██╗██╔══██╗██╔══██╗████╗░████║
+&nbsp;&nbsp;██████╔╝░╚████╔╝░██║░░██╗░███████║██╔████╔██║█████╗░░█████╗██║░░╚═╝█████╗░░&nbsp;&nbsp;&nbsp;&nbsp;╚█████╗░███████║██║░░██║░╚██╗████╗██╔╝██████╔╝██║░░██║██║░░██║██╔████╔██║
+&nbsp;&nbsp;██╔═══╝░░░╚██╔╝░░██║░░╚██╗██╔══██║██║╚██╔╝██║██╔══╝░░╚════╝██║░░██╗██╔══╝░░&nbsp;&nbsp;&nbsp;&nbsp;░╚═══██╗██╔══██║██║░░██║░░████╔═████║░██╔══██╗██║░░██║██║░░██║██║╚██╔╝██║
+&nbsp;&nbsp;██║░░░░░░░░██║░░░╚██████╔╝██║░░██║██║░╚═╝░██║███████╗░░░░░░╚█████╔╝███████╗&nbsp;&nbsp;&nbsp;&nbsp;██████╔╝██║░░██║╚█████╔╝░░╚██╔╝░╚██╔╝░██║░░██║╚█████╔╝╚█████╔╝██║░╚═╝░██║
+&nbsp;&nbsp;╚═╝░░░░░░░░╚═╝░░░░╚═════╝░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝░░░░░░░╚════╝░╚══════╝&nbsp;&nbsp;&nbsp;&nbsp;╚═════╝░╚═╝░░╚═╝░╚════╝░░░░╚═╝░░░╚═╝░░╚═╝░░╚═╝░╚════╝░░╚════╝░╚═╝░░░░░╚═╝
     </div>
     </a>
     </div>
 
-
 </header>
 
 <script>
+
+const IFRAME="iframe"
+
 function nav(url) {
     console.log("FRAME", url)
     iframe.location=url
@@ -89,38 +91,41 @@ function nav(url) {
     blanker.hidden = true
 }
 
+function pad(url) {
+    console.log(url)
+    document.getElementById(IFRAME).src = "/showroom/pypad_git.html?#src/"+url
+}
+
 </script>
 
 <body>
 
 
-<div class="dosmenu dosmenu--cyan dosmenu--shadow" style="left:10px;top:10px;width:280px;">
+<div class="dosmenu dosmenu--cyan dosmenu--shadow" style="left:8px;top:0px;width:270px;">
 	<div class="dosmenu-inner">
 Run Games in Browser !
 	</div>
 </div>
 
-    <div class="dosmenu dosmenu--green dosmenu--shadow" style="left:10px;width:280px;">
+    <div class="dosmenu dosmenu--green dosmenu--shadow" style="left:8px;top:-10px;width:270px;">
         <div class="dosmenu-inner">
-            <h2>High end</h2>
+            <div id=slot1>
+            <h2>Testing</h2>
             <ul class="bullets">
-                <li><a href="#" onclick=console.log("game1")>Game #1</a></li>
-                <li><a href="#" onclick=console.log("game2")>Game #2</a></li>
-                <li><a href="#" onclick=console.log("game3")>Game #3</a></li>
+                <li><a href="#" onclick=pad("test_hello.py")>Hello.py</a></li>
             </ul>
+            </div>
 
-            <h2>Mid end</h2>
+            <h2>Desktop Games (kbd+mouse)</h2>
             <ul class="bullets">
                 <li><a href="#" onclick=console.log("game1")>Game #1</a></li>
                 <li><a href="#" onclick=console.log("game2")>Game #2</a></li>
                 <li><a href="#" onclick=console.log("game3")>Game #3</a></li>
 			</ul>
 
-            <h2>Low end</h2>
+            <h2>Mobile Games (touchscreens)</h2>
             <ul class="bullets">
-                <li><a href="#" onclick=console.log("game1")>Game #1</a></li>
-                <li><a href="#" onclick=console.log("game2")>Game #2</a></li>
-                <li><a href="#" onclick=console.log("game3")>Game #3</a></li>
+                <li><a href="pygame-scripts/org.pygame.touchpong.html" target="iframe">Mobile touchpong</a></li>
 			</ul>
 
             <h2>pygame scripts</h2>
@@ -130,10 +135,15 @@ Run Games in Browser !
                 <li><a href="#" onclick=console.log("game3")>Game #3</a></li>
 			</ul>
 
-
-            <h2>Links</h2>
+<br />
+            <h2>Documentation</h2>
             <ul class="bullets">
                 <li><a href="#" onclick="nav('https://pyga.me')">pygame-ce</a></li>
+                <li><a href="#" onclick="nav('https://pygame-web.github.io')">pygbag wiki</a></li>
+			</ul>
+<br />
+            <h2>Get inspiration</h2>
+            <ul class="bullets">
                 <li><a href="#" onclick="nav('https://dosgames.com')">dosgames.com</a></li>
 			</ul>
 

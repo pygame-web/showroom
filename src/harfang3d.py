@@ -84,14 +84,13 @@ hg.WindowSystemInit()
 
 
 # initialize ImGui
-# hg.AddAssetsFolder('resources_compiled')
 
-imgui_prg = hg.LoadProgramFromAssets('resources_compiled/core/shader/imgui')
-imgui_img_prg = hg.LoadProgramFromAssets('resources_compiled/core/shader/imgui_image')
+if 0:
+    # hg.AddAssetsFolder('resources_compiled')
+    imgui_prg = hg.LoadProgramFromAssets('resources_compiled/core/shader/imgui')
+    imgui_img_prg = hg.LoadProgramFromAssets('resources_compiled/core/shader/imgui_image')
 
-
-embed.webgl()
-
+    embed.webgl()
 
 
 res_x, res_y = 1024, 600
@@ -100,7 +99,7 @@ res_x, res_y = 1024, 600
 win = hg.RenderInit("Harfang - Draw Models no Pipeline", res_x, res_y, hg.RT_OpenGLES)
 print("===================================")
 
-hg.ImGuiInit(10, imgui_prg, imgui_img_prg)
+#hg.ImGuiInit(10, imgui_prg, imgui_img_prg)
 
 
 # Draw models without a pipeline
@@ -131,7 +130,7 @@ async def main():
     while not hg.ReadKeyboard().Key(hg.K_Escape): # and hg.IsWindowOpen(win):
         dt = hg.TickClock()
         angle = angle + hg.time_to_sec_f(dt)
-        if 1:
+        if 0:
             hg.ImGuiBeginFrame(res_x//2, res_y//2, hg.TickClock(), hg.ReadMouse(), hg.ReadKeyboard())
 
             if hg.ImGuiBegin('Window'):
