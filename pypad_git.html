@@ -12,7 +12,8 @@ async def editor_task():
 
 asyncio.loop.create_task( editor_task() )
 # prevent pythonrc to execute default and yield instead
-ENABLE_USER_SITE = True
+# ENABLE_USER_SITE = True
+PYConfig.user_site_directory = 1
 
 
 """ # BEGIN -->
@@ -21,15 +22,7 @@ window.NOT_FTDI = false
 
 </script>
 
-
-
-
 <script src="webusb-ftdi.js"></script>
-
-
-
-
-
 
 <script type=module>
     function undef(e,o){
