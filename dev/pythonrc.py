@@ -1381,8 +1381,10 @@ if not aio.cross.simulator:
         async def async_repos(cls):
             abitag = f"cp{sys.version_info.major}{sys.version_info.minor}"
             apitag = __import__('sysconfig').get_config_var('HOST_GNU_TYPE')
+            apitag = apitag.replace('-','_')
+
             for repo in PyConfig.pkg_indexes:
-                async with platform.fopen(f"{repo}index.json", "r") as index:
+                async with platform.fopen(f"{repo}index-bi.json", "r") as index:
                     try:
                         data = index.read()
                         if isinstance(data, bytes):
