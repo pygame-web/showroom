@@ -60,12 +60,21 @@ class Editor(TextEditor):
         self.run = False
 
         # get pending files
-        fileset = await aio.fetch.preload_fetch()
+        try:
+            # <0.8 backward compat
+            fileset = await aio.fetch.preload_fetch()
+        except:
+            fileset = await aio.fetch.preload()
+
         mappings = {"RUN": "RUN"}
         labels = []
-        cpath = (cpath or os.path.commonpath(fileset)).rstrip("/") + "/"
+        if len(fileset):
+            cpath = (cpath or os.path.commonpath(fileset)).rstrip("/") + "/"
+
         for filename in fileset:
-            lbl = str(filename).replace(cpath, "")
+            lbl = str(filename)
+            if cpath:
+                lbl = lbl.replace(cpath, "")
             mappings[lbl] = filename
             labels.append(lbl)
 
