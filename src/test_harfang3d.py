@@ -47,7 +47,7 @@ import asyncio
 import harfang as hg
 hg.InputInit()
 hg.WindowSystemInit()
-res_x, res_y = 1024, 1024
+res_x, res_y = 512, 512
 # Draw models without a pipeline
 async def hg3d_test():
     platform.window.transfer.hidden = true
