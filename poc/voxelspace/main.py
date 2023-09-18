@@ -43,8 +43,8 @@ from typing import Final
 
 
 
-SCREEN_WIDTH: Final = 320
-SCREEN_HEIGHT: Final = 200
+SCREEN_WIDTH: Final = 640
+SCREEN_HEIGHT: Final = 360
 BACK_COLOR = (153, 204, 255)
 
 pygame.init()
@@ -141,7 +141,7 @@ class Terrain:
             for i in range(SCREEN_WIDTH):
                 samp_x : int = int(left_x) % 1024
 
-# https://www.pygame.org/docs/ref/pixelarray.html
+# TODO: maybe  https://pyga.me/docs/ref/pixelarray.html
                 hcolor : int = SCREEN_HEIGHT - hmap.get_at([samp_x, samp_y]).r
 
                 height : int = int(  (hcolor * scale) + cam.horizon)
