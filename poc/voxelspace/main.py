@@ -13,8 +13,8 @@ import pygbag.aio as asyncio
 # requires-python = ">=3.11"
 #
 # dependencies = [
-#  "pygame",
 #  "numpy",
+#  "pygame",
 # ]
 # ///
 
