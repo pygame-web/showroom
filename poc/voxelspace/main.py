@@ -4,12 +4,27 @@
 
 import pygbag.aio as asyncio
 
+# /// pyproject
+# [project]
+# name = "name"
+# version = "version"
+# description = "description"
+# readme = {file = "README.txt", content-type = "text/markdown"}
+# requires-python = ">=3.11"
+#
+# dependencies = [
+#  "pygame",
+#  "numpy",
+# ]
+# ///
+
 from aio.fetch import FS
 FS("""
 poc/voxelspace/maps ~/maps
 ├── C1W.png
 └── D1.png
 """, silent=False, debug=True)
+
 
 
 
