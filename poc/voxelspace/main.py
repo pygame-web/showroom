@@ -28,8 +28,8 @@ from typing import Final
 
 
 
-SCREEN_WIDTH: Final = 800
-SCREEN_HEIGHT: Final = 400
+SCREEN_WIDTH: Final = 320
+SCREEN_HEIGHT: Final = 200
 BACK_COLOR = (153, 204, 255)
 
 pygame.init()
@@ -124,7 +124,6 @@ class Terrain:
             samp_y : int = int(left_y) % 1024
 
             for i in range(SCREEN_WIDTH):
-                #continue
                 samp_x : int = int(left_x) % 1024
 
 # https://www.pygame.org/docs/ref/pixelarray.html
@@ -145,19 +144,28 @@ class Terrain:
 async def main():
     global cam, terrain
 
+
     cam = Camera()
     terrain = Terrain()
     next_tick : float = time.time() + 1
-    fps : int = 0
+    frames : int = 0
+    render_pass : int = 0
     while 1:
-        fps = fps + 1
+        frames = frames + 1
+        render_pass = render_pass + 1
         terrain.render()
         pygame.display.flip()
         await asyncio.sleep(0)
         t : float = time.time()
         if t >= next_tick:
-            print("fps", fps / 5)
-            fps = 0
+            fps = frames / 5
+            print("fps", fps)
+            if render_pass>15:
+                if fps<5:
+                    print('too slow : sleeping for 1 sec')
+                    await asyncio.sleep(1)
+
+            frames = 0
             next_tick = t + 5
 
 
