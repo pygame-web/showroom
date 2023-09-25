@@ -10,7 +10,7 @@ import select
 
 print(" *socktest* ")
 
-import io,socket
+import io, socket
 import aio
 
 
@@ -31,6 +31,7 @@ async def aio_sock_open(sock, host, port):
                 return sock
             sys.print_exception(e)
 
+
 class aio_sock:
     def __init__(self, url, mode, tmout):
         host, port = url.rsplit(":", 1)
@@ -41,7 +42,7 @@ class aio_sock:
                 pdb(f"switching to {self.port}+20000 as websocket")
                 self.port += 20000
             else:
-                _, host = host.split('://', 1)
+                _, host = host.split("://", 1)
 
         self.host = host
 
@@ -94,7 +95,6 @@ class aio_sock:
         pass
 
 
-
 async def irc_handler(sock):
     buf = []
 
@@ -133,7 +133,7 @@ async def main():
     nick = "pygamer_" + str(time.time())[-5:].replace(".", "")
     d = {"nick": nick, "channel": "#sav"}
 
-    #async with aio.open("wss://pmp-p.ddns.net/wss/6667:443", "a+", 5) as sock:
+    # async with aio.open("wss://pmp-p.ddns.net/wss/6667:443", "a+", 5) as sock:
     async with aio_sock("://pmp-p.ddns.net/wss/6667:443", "a+", 5) as sock:
         sock.print("""CAP LS\r\nNICK {nick}\r\nUSER {nick} {nick} localhost :wsocket\r\nJOIN {channel}""".format(**d))
         sock.print("PRIVMSG #sav :Salut à vous !")

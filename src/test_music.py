@@ -6,9 +6,10 @@ import aio.fetch
 
 aio.fetch.FS("""
 https://github.com/pygame-web/showroom/tree/main
+sfx ~ sfx
 ├── click.ogg
 └── game_music.ogg
-""","sfx")
+""")
 
 
 settings = {"loaded":False, "paused":False}
@@ -54,7 +55,7 @@ def mk_button(font:pygame.font.Font, text:str, col="black", bg_col="cyan") -> py
     return surf
 
 async def main():
-    await aio.fetch.preload_fetch()
+    #await aio.fetch.preload_fetch()
     pygame.init()
     W, H = 640, 360
     screen = pygame.display.set_mode((W, H), pygame.SCALED)
