@@ -76,27 +76,6 @@ class MyApp(ShowBase):
     instance = None
     frame_time = 1.0 / 5
 
-    async def async_loop(self):
-
-        while not asyncio.get_running_loop().is_closed():
-            #print(".")
-            try:
-                direct.task.TaskManagerGlobal.taskMgr.step()
-            except SystemExit:
-                print('87: Panda3D stopped',file= __import__('sys').stderr)
-                break
-            # go to host
-            await asyncio.sleep(0)
-
-        print(self.async_loop,"exiting")
-
-    def async_run(self):
-        self.__class__.instance = self
-        run(self.async_loop)
-
-    # patch the sync run which would prevent to enter interactive mode
-    run = async_run
-
     # add some colored cubes
 
     def build(self):
@@ -137,25 +116,13 @@ class MyApp(ShowBase):
 
 
 
-async def main():
-#    p3d.loadPrcFileData("", "load-display pandagles2")
-#    p3d.loadPrcFileData("", "win-origin -2 -2")
-    p3d.loadPrcFileData("", "win-size 1024 600")
-    p3d.loadPrcFileData("", "support-threads #f")
-    p3d.loadPrcFileData("", "textures-power-2 down")
-    p3d.loadPrcFileData("", "textures-square down")
-#    p3d.loadPrcFileData("", "show-frame-rate-meter #t")
+MyApp.instance = MyApp()
+#MyApp.instance.disable_mouse()
+#direct.task.TaskManagerGlobal.taskMgr.step()
+#direct.task.TaskManagerGlobal.taskMgr.step()
 
+MyApp.instance.build()
 
-    MyApp.instance = MyApp()
-    MyApp.instance.disable_mouse()
-    direct.task.TaskManagerGlobal.taskMgr.step()
-    direct.task.TaskManagerGlobal.taskMgr.step()
+MyApp.instance.run()
 
-    MyApp.instance.build()
-
-    await MyApp.instance.async_loop()
-
-
-asyncio.run(main())
 
