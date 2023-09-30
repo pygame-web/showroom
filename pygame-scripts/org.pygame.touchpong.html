@@ -45,16 +45,13 @@ big_right_time = 0
 score_time = 0
 
 audio = True
-running = True
 
 
 def step():
-    global running, score_time, ball, ball_speed, big_left_time, big_right_time
+    global score_time, ball, ball_speed, big_left_time, big_right_time
     global big_ball_time, p1score, p2score, last_scorer, clock, screen
     global audio
 
-    if not running:
-        return
 
     if audio:
         if os.path.isfile("Eisenfunk - Pong.ogg"):
@@ -85,7 +82,7 @@ def step():
             p2fingers.remove(event.finger_id)
 
     for event in pygame.event.get(pygame.QUIT, pump=False):
-        running = False
+        return False
 
     for event in pygame.event.get():
         st = repr(event)
@@ -108,6 +105,11 @@ def step():
             print(st)
 
     keys = pygame.key.get_pressed()
+
+
+    # quit on escape
+    if keys[pygame.K_ESCAPE]:
+        return False
 
     if score_time > 0:
         score_time -= 1
@@ -219,12 +221,13 @@ def step():
     clock.tick(30)
 
     pygame.display.flip()
+    return True
 
 
 async def main():
-    while True:
-        step()
+    while step():
         await asyncio.sleep(0)
+    pygame.quit()
 
 
 asyncio.run(main())
