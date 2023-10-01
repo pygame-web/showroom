@@ -57,6 +57,9 @@
             visibility: inherit;
         }
 
+        #iframe {
+            padding-top: 40px;
+        }
         div.emscripten { text-align: center; }
         div.emscripten_border { border: 1px solid black; }
         /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
@@ -168,7 +171,7 @@ Run Games in Browser !
     <canvas class="emscripten" id="canvas"
 width="1px"
 height="1px"
-style="width: 100%; height=100%"
+    style="width: 100%; height: 100%"
     oncontextmenu="event.preventDefault()" tabindex=1>
     </canvas>
 
@@ -197,9 +200,9 @@ allow-top-navigation-by-user-activation 	Allows the iframe content to navigate i
     <iframe id="iframe" class="topright" name="iframe"
             sandbox="allow-same-origin allow-top-navigation allow-scripts allow-pointer-lock allow-modals"
             allow="autoplay; fullscreen *; geolocation; microphone; camera; midi; xr-spatial-tracking; gyroscope; accelerometer;"
-frameborder="0"
-width="80%"
-height="100%"
+            frameborder="0"
+            width="80%"
+            height="80%"
             src="empty.html"
             msallowfullscreen="true"
             scrolling="yes"
