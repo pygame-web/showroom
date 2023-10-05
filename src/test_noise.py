@@ -21,6 +21,7 @@ from noise import pnoise2, snoise2
 
 import random
 
+pxsize = 255
 
 async def main():
     f = open("out.pgm", "wt")
