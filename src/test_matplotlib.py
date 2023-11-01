@@ -1,9 +1,36 @@
+#!python3
+# /// pyproject
+# [project]
+# name = "test_matplotlib"
+# version = "version"
+# description = "description"
+# readme = {file = "README.txt", content-type = "text/markdown"}
+# requires-python = ">=3.11"
+#
+# dependencies = [
+#    "pygbag",
+#    "cycler",
+#    "kiwisolver",
+#    "numpy",
+#    "packaging",
+#    "PIL",
+#    "pyparsing",
+#    "dateutil",
+#    "pytz",
+#    "six",
+#    "matplotlib",
+#    "pygame-ce",
+#    "python-i18n",
+#    "pygame-gui",
+# ]
+# ///
+
+import pygbag.aio as asyncio
+
 import sys
 import os
-import asyncio
 import platform
 import pygame
-
 
 import matplotlib
 import matplotlib.pyplot as plt
