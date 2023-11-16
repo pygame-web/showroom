@@ -1,4 +1,4 @@
-<html lang="en-us"><script src="https://pygame-web.github.io/pygbag/0.0/pythons.js" type=module id="site" data-python="cpython3.11" data-os="vtx,fs,snd,gui" async defer>#<!--
+<html lang="en-us"><script src="https://pygame-web.github.io/archives/0.8/pythons.js" type=module id="site" data-python="cpython3.11" data-os="vtx,fs,snd,gui" async defer>#<!--
 
 print("""
 Loading testual from testual.apk
@@ -93,6 +93,7 @@ async def custom_site():
 
 
     # preloader will change dir and prepend it to sys.path
+    # but do not run main.py yet.
     platform.run_main(PyConfig, loaderhome= appdir / "assets", loadermain=None)
 
 
@@ -101,14 +102,15 @@ async def custom_site():
     while embed.counter()<0:
         await asyncio.sleep(.1)
 
-    main = appdir / "assets" / "main.py"
+    main = Path(appdir / "assets" / "main.py")
+
+    # now that apk is mounted we have access to font cache
+    # but we need to fill __file__ that is not yet set
+    __import__(__name__).__file__ = main.as_posix()
+
 
     # test/wait user media interaction
     if not platform.window.MM.UME:
-
-        # now that apk is mounted we have access to font cache
-        # but we need to fill __file__ that is not yet set
-        __import__(__name__).__file__ = main
 
         # now make a prompt
         print("Ready to start !")
@@ -119,22 +121,25 @@ async def custom_site():
         while not platform.window.MM.UME:
             await asyncio.sleep(.1)
 
+    print("mobile.html: top level")
+
     # start async top level machinery if not started and add a console in any case if requested.
     await TopLevel_async_handler.start_toplevel(platform.shell, console=window.python.config.debug)
 
-    # now that apk is mounted we have access to font cache
-    # but we need to fill __file__/__name__ that are not yet set
-    __import__(__name__).__file__ = main
-
-
     def ui_callback(pkg):
         print(f"installing {pkg}")
+
+    while not main.is_file():
+        print("mobile.html: wait main (race condition)")
+        await asyncio.sleep(.1)
+
+    print("mobile.html: running main")
 
     await shell.source(main, callback=ui_callback)
 
     # if you don't reach that step
     # your main.py has an infinite sync loop somewhere !
-    print("noctxl.html: ready")
+    print("mobile.html: ready")
 
     shell.interactive()
 
@@ -200,11 +205,9 @@ config = {
     <title>testual</title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="height=device-height, initial-scale=1.0">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes"/>
-
+    <meta name="viewport" content="minimal-ui, width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1, user-scalable=no"">
 
     <link rel="icon" type="image/png" href="favicon.png" sizes="16x16">
 
@@ -294,7 +297,7 @@ config = {
 */
     </script>
 
-    <script src="https://pygame-web.github.io/archives/0.8//browserfs.min.js"></script>
+
 
 </head>
 
@@ -426,6 +429,12 @@ frameborder="1"
     function frame_online(url) {
         window.frames["iframe"].location = url;
     }
+
+    // Hides mobile browser's address bar when page is done loading.
+    window.addEventListener('load', function(e) {
+        setTimeout(function() { window.scrollTo({left:0, top:1080, behaviour :"instant"}) }, 1);
+    }, false);
+
 
     </script>
 
