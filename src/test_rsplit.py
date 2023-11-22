@@ -51,11 +51,12 @@ window.rsplit2 = function(sep, maxsplit) {
 """)
 
 
-FAIL = 0
+FAIL1 = 0
+FAIL2 = 0
 
 
 def checkequal(want, src, fn, sep = None, maxsplit = -1):
-    global FAIL
+    global FAIL1, FAIL2
     test = src.rsplit(sep,maxsplit)
     if want != test:
         print(f"ERROR {want=} {test=} for",opts)
@@ -74,7 +75,7 @@ def checkequal(want, src, fn, sep = None, maxsplit = -1):
         if not head:
             header()
         print(f'ERROR 1 {want=} {test=} for "{src}".rsplit({sep=},{maxsplit=})')
-        FAIL+=1
+        FAIL1+=1
 
 
     window.strsrc  = src
@@ -84,6 +85,7 @@ def checkequal(want, src, fn, sep = None, maxsplit = -1):
             header()
         print(f'ERROR 2 {want=} {test=} for "{src}".rsplit({sep=},{maxsplit=})')
         print()
+        FAIL2+=1
 
 
 
@@ -158,7 +160,8 @@ async def main():
         self.checkraises(ValueError, 'hello', 'rsplit', '')
         self.checkraises(ValueError, 'hello', 'rsplit', '', 0)
 
-    print("rsplit final failed", FAIL)
+    print("rsplit1 (pygbag) failed", FAIL1)
+    print("rsplit2 failed", FAIL2)
 
 asyncio.run(main())
 
