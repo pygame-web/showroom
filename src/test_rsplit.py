@@ -58,22 +58,26 @@ def checkequal(want, src, fn, *opts,**kw):
         try:
             sep, maxsplit = kw['sep'],kw['maxsplit']
         except:
-            print(f'skipping "{src}".rsplit({opts})', kw)
+            print(f'skipping "{src}".rsplit{opts}', kw)
             print()
             return
+
+    print("_"*40)
+    print(f'testing "{src}".rsplit{opts}', kw)
 
 
     window.strsrc  = src
     test = list( map(str, window.rsplit1(sep,maxsplit) ))
     if want != test:
-        print(f'ERROR 1 {want=} {test=} for "{src}".rsplit({opts})', kw)
+        print(f'ERROR 1 {want=} {test=} for "{src}".rsplit{opts}', kw)
 
 
     window.strsrc  = src
     test = list( map(str, window.rsplit2(sep,maxsplit) ))
     if want != test:
-            print(f'ERROR 2 {want=} {test=} for "{src}".rsplit({opts})', kw)
+            print(f'ERROR 2 {want=} {test=} for "{src}".rsplit{opts}', kw)
 
+    print()
     print()
 
 
