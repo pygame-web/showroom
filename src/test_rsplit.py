@@ -43,34 +43,17 @@ window.rsplit2 = function(sep, maxsplit) {
 
 
 
-def checkequal(want, src, fn, *opts,**kw):
-    test = src.rsplit(*opts,**kw)
+def checkequal(want, src, fn, sep = None, maxsplit = -1):
+    test = src.rsplit(sep,maxsplit)
     if want != test:
         print(f"ERROR {want=} {test=} for",opts)
-
-
-    if not len(opts):
-        opts = ( kw.get('sep'," "), kw.get('maxsplit', -1) )
-
-    if len(opts)==1:
-        opts = (opts[0], kw.get('maxsplit', -1) )
-
-    try:
-        sep, maxsplit = opts
-    except:
-        try:
-            sep, maxsplit = kw['sep'],kw['maxsplit']
-        except:
-            print(f'skipping "{src}".rsplit{opts}', kw)
-            print()
-            return
 
     head = False
     def header():
         nonlocal head
         print()
         print("_"*40)
-        print(f'testing "{src}".rsplit{opts}', kw)
+        print(f'testing "{src}".rsplit({sep=},{maxsplit=})')
         head = True
 
     window.strsrc  = src
@@ -78,7 +61,7 @@ def checkequal(want, src, fn, *opts,**kw):
     if want != test:
         if not head:
             header()
-        print(f'ERROR 1 {want=} {test=} for "{src}".rsplit{opts}', kw)
+        print(f'ERROR 1 {want=} {test=} for "{src}".rsplit({sep=},{maxsplit=})')
 
 
     window.strsrc  = src
@@ -86,7 +69,7 @@ def checkequal(want, src, fn, *opts,**kw):
     if want != test:
         if not head:
             header()
-        print(f'ERROR 2 {want=} {test=} for "{src}".rsplit{opts}', kw)
+        print(f'ERROR 2 {want=} {test=} for "{src}".rsplit({sep=},{maxsplit=})')
         print()
 
 
