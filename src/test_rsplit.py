@@ -5,17 +5,25 @@ self = __import__(__name__)
 window.eval("""
 window.rsplit1 = function (sep, maxsplit) {
     var result = []
+    var src = window.strsrc
+    var nullsep = false
     console.log("rsplit1:", sep, maxsplit)
-    if ( (sep === undefined) || (sep === null)  || (!sep) ) {
+    if ( (sep === undefined) || (sep === null) ) {
         sep = " "
+        nullsep = true
+        src = src.replaceAll(sep+sep,sep)
+        src = src.replaceAll(sep+sep,sep)
     }
 
+    if (nullsep && !src)
+        return []
+
     if (maxsplit === 0  )
-        return [window.strsrc]
+        return [src]
 
     maxsplit = maxsplit || -1
 
-    var data = window.strsrc.split(sep)
+    var data = src.split(sep)
 
 
     if (!maxsplit || (maxsplit<0) || (data.length==maxsplit+1) )
@@ -43,8 +51,11 @@ window.rsplit2 = function(sep, maxsplit) {
 """)
 
 
+FAIL = 0
+
 
 def checkequal(want, src, fn, sep = None, maxsplit = -1):
+    global FAIL
     test = src.rsplit(sep,maxsplit)
     if want != test:
         print(f"ERROR {want=} {test=} for",opts)
@@ -63,6 +74,7 @@ def checkequal(want, src, fn, sep = None, maxsplit = -1):
         if not head:
             header()
         print(f'ERROR 1 {want=} {test=} for "{src}".rsplit({sep=},{maxsplit=})')
+        FAIL+=1
 
 
     window.strsrc  = src
@@ -145,6 +157,8 @@ async def main():
         # null case
         self.checkraises(ValueError, 'hello', 'rsplit', '')
         self.checkraises(ValueError, 'hello', 'rsplit', '', 0)
+
+    print("rsplit final failed", FAIL)
 
 asyncio.run(main())
 
