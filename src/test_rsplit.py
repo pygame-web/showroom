@@ -5,7 +5,8 @@ self = __import__(__name__)
 window.eval("""
 window.rsplit1 = function (sep, maxsplit) {
     var result = []
-    if ( (sep === undefined) || (!sep) ) {
+    console.log("rsplit1:", sep, maxsplit)
+    if ( (sep === undefined) || (sep === null)  || (!sep) ) {
         sep = " "
     }
 
