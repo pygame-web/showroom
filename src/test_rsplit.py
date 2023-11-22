@@ -7,13 +7,12 @@ window.rsplit1 = function (sep, maxsplit) {
     var result = []
     if ( (sep === undefined) || (!sep) ) {
         sep = " "
-        maxsplit = maxsplit || 0
     }
-
-    maxsplit = maxsplit || 0
 
     if (maxsplit === 0  )
         return [window.strsrc]
+
+    maxsplit = maxsplit || -1
 
     var data = window.strsrc.split(sep)
 
@@ -49,8 +48,12 @@ def checkequal(want, src, fn, *opts,**kw):
     if want != test:
         print(f"ERROR {want=} {test=} for",opts)
 
+
+    if not len(opts):
+        opts = ( kw.get('sep'," "), kw.get('maxsplit', -1) )
+
     if len(opts)==1:
-        opts = (opts[0], kw.get('maxsplit',0) )
+        opts = (opts[0], kw.get('maxsplit', -1) )
 
     try:
         sep, maxsplit = opts
@@ -62,23 +65,30 @@ def checkequal(want, src, fn, *opts,**kw):
             print()
             return
 
-    print("_"*40)
-    print(f'testing "{src}".rsplit{opts}', kw)
-
+    head = False
+    def header():
+        nonlocal head
+        print()
+        print("_"*40)
+        print(f'testing "{src}".rsplit{opts}', kw)
+        head = True
 
     window.strsrc  = src
     test = list( map(str, window.rsplit1(sep,maxsplit) ))
     if want != test:
+        if not head:
+            header()
         print(f'ERROR 1 {want=} {test=} for "{src}".rsplit{opts}', kw)
 
 
     window.strsrc  = src
     test = list( map(str, window.rsplit2(sep,maxsplit) ))
     if want != test:
-            print(f'ERROR 2 {want=} {test=} for "{src}".rsplit{opts}', kw)
+        if not head:
+            header()
+        print(f'ERROR 2 {want=} {test=} for "{src}".rsplit{opts}', kw)
+        print()
 
-    print()
-    print()
 
 
 async def main():
