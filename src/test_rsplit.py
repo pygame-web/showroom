@@ -49,7 +49,7 @@ def checkequal(want, src, fn, *opts,**kw):
     if want != test:
         print(f"ERROR {want=} {test=} for",opts)
 
-    if len(opts)=="1":
+    if len(opts)==1:
         opts = (opts[0], kw.get('maxsplit',0) )
 
     try:
