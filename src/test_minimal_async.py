@@ -5,12 +5,11 @@ pygame.init()
 
 # set up the window
 screen_width, screen_height = 640, 480
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("blank")
 
 # main game loop
 async def main():
-    await asyncio.sleep(0)
-    screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption("blank")
 
     while True:
         # handle events
@@ -20,7 +19,7 @@ async def main():
                 exit()
 
         # clear the screen
-        screen.fill((0, 0, 0))
+        screen.fill((0, 128, 0))
 
         # update the screen
         pygame.display.update()
