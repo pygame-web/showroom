@@ -10,24 +10,28 @@ import pygame, os
 #
 # dependencies = [
 #     "pygame-ce",
+#     "pygame.base",
 # ]
 # ///
 
 
 import platform
 
-import pygame.vidcap as camera
 
-#from PIL import Image
 
-if pygame.display.get_init():
-    screen = pygame.display.get_surface()
-else:
-    screen = pygame.display.set_mode([1024, 1024]).subsurface( (100,100,900,900) )
+pygame.init()
 
 
 async def main():
     global cam, screen
+
+    import pygame.vidcap as camera
+
+    if pygame.display.get_init():
+        screen = pygame.display.get_surface()
+    else:
+        screen = pygame.display.set_mode([1024, 1024]).subsurface( (100,100,900,900) )
+
     FRAMES = 0
     DROPS = 0
     cam = camera.Camera( camera.list_cameras()[0], (640, 480), 0 )
