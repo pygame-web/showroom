@@ -1,6 +1,21 @@
 
 
-import pygbag
+# /// pyproject
+# [project]
+# name = "name"
+# version = "version"
+# description = "description"
+# readme = {file = "README.txt", content-type = "text/markdown"}
+# requires-python = ">=3.11"
+#
+# dependencies = [
+#     "pygame.base",
+#     "bidi",
+# ]
+# ///
+
+import pygbag.aio as asyncio
+
 import aio
 import aio.fetch
 
@@ -12,7 +27,7 @@ import pygame
 
 aio.fetch.FS("""
 .
-/showroom/fonts ~ fonts
+fonts ~ fonts
 ├── Amiri-Regular.ttf
 """)
 
