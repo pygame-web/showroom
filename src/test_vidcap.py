@@ -30,6 +30,9 @@ async def main():
     if pygame.display.get_init():
         screen = pygame.display.get_surface()
     else:
+        screen = None
+
+    if screen is None:
         screen = pygame.display.set_mode([1024, 1024]).subsurface( (100,100,900,900) )
 
     FRAMES = 0
