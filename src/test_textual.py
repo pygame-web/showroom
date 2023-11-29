@@ -19,19 +19,24 @@
 #    "mdit-py-plugins",
 #    "uc-micro-py",
 #    "rich",
+#    "pyperclip",
+#    "textual",
 # ]
 # ///
 
 
 
 import asyncio, threading
-import os
 import re
 import shutil
 import time
 
+import os
+os.environ["FORCE_COLOR"] = "1"
+
 from functools import partial
 from pathlib import Path
+
 
 import textual
 
@@ -1632,7 +1637,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     app = Noteri(args.path)
-
 
     loop = asyncio.get_event_loop()
     try:
