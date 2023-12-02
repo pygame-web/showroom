@@ -10,6 +10,7 @@ import platform
 # requires-python = ">=3.11"
 #
 # dependencies = [
+#    "typing_extensions",
 #    "pypng",
 #    "qrcode",
 # ]
