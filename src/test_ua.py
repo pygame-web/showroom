@@ -13,6 +13,7 @@ import platform
 #    "typing_extensions",
 #    "pypng",
 #    "qrcode",
+#    "qrcode_term",
 # ]
 # ///
 
