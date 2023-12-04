@@ -32,7 +32,7 @@ async def main():
                 await asyncio.sleep(0.1)
             await asyncio.sleep(1.5)
     else:
-        for angle in [-90,90]*10:
+        for angle in [360-90,90]*10:
             channel = sound.play()
             channel.set_source_location(angle, 100)
             await asyncio.sleep(1.2)
