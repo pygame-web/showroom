@@ -1,4 +1,18 @@
 
+# /// pyproject
+# [project]
+# name = "name"
+# version = "version"
+# description = "description"
+# readme = {file = "README.txt", content-type = "text/markdown"}
+# requires-python = ">=3.11"
+#
+# dependencies = [
+#     "pygame-ce",
+# ]
+# ///
+
+
 import pygbag.aio as asyncio
 import aio.fetch
 
