@@ -1,5 +1,19 @@
 #!python
 
+# /// pyproject
+# [project]
+# name = "pgp3d"
+# version = "2023"
+# description = "embed pygame in Panda3D webgl surface"
+# readme = {file = "README.txt", content-type = "text/markdown"}
+# requires-python = ">=3.11"
+#
+# dependencies = [
+#  "panda3d",
+# ]
+# ///
+
+
 import sys
 import asyncio
 import panda3d
