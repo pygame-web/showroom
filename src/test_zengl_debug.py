@@ -141,7 +141,7 @@ VS="""
 
             v_vertex = positions[gl_VertexID];
 
-            float r = time * 0.5 + PI - float(gl_InstanceID) * PI * 2.0 / 7.0;
+            float r = time * 0.5 + pi - float(gl_InstanceID) * PI * 2.0 / 7.0;
             mat3 rotation = mat3(cos(r), 0.0, sin(r), 0.0, 1.0, 0.0, -sin(r), 0.0, cos(r));
 
             gl_Position = mvp * vec4(rotation * v_vertex, 1.0);
