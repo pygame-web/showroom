@@ -1,18 +1,19 @@
 
-
 # /// pyproject
 # [project]
-# name = "name"
-# version = "version"
-# description = "description"
+# name = "pgp3d"
+# version = "2023"
+# description = "embed pygame in Panda3D webgl surface"
 # readme = {file = "README.txt", content-type = "text/markdown"}
 # requires-python = ">=3.11"
 #
 # dependencies = [
-#     "pygame.base",
-#     "bidi",
+#  "pygame-ce",
+#  "six",
+#  "bidi",
 # ]
 # ///
+
 
 import pygbag.aio as asyncio
 
