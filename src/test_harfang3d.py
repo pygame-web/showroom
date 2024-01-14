@@ -40,6 +40,19 @@ fs_decode(
 )
 del fs_decode, PYGBAG_FS
 
+# /// pyproject
+# [project]
+# name = "pgp3d"
+# version = "2023"
+# description = "embed pygame in Panda3D webgl surface"
+# readme = {file = "README.txt", content-type = "text/markdown"}
+# requires-python = ">=3.11"
+#
+# dependencies = [
+#  "harfang",
+# ]
+# ///
+
 import sys
 import platform
 import asyncio
