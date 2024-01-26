@@ -19,17 +19,45 @@ import termios
 import tty
 import select
 import os
+import time
 
 import platform
 
-if sys.platform in ('emscripten','wasi'):
+# fixme should be auto
+if __import__("os").uname().machine.startswith("wasm"):
+    import aio.gthread as threading
+
     # vsync, host handled => good
     platform_delay = 0
+
 else:
+    # native case
+
+    import asyncio as aio
+    aio.exit = False
+    aio.frame = 1.0/60
+    aio.sync = False
+
+    # because threading target= does not handle generators
+    def synchronized(f):
+        def run(*argv,**kw):
+            global Native
+            gen = f(*argv,**kw)
+            while True:
+                deadline = time.time()+aio.frame
+                if next(gen) is StopIteration:
+                    return
+                alarm = deadline - time.time()
+                if alarm>0:
+                    time.sleep(alarm)
+        return run
+
     # 60 Hz, asyncio timers => wrong.
     platform_delay = 0.016
 
 
+# note that on wasm those are green threads and need to yield.
+import threading
 
 def os_write(data: str) -> None:
     sys.__stdout__.write(data)
@@ -122,12 +150,35 @@ class Toolkit:
 
 
 async def main():
+    global loop
+
     loop = asyncio.get_running_loop()
     tk = Toolkit()
     tk.__enter__()
 
+    # because stdlib threads cannot handle generators :/
+    @synchronized
+    def clock():
+        global loop
+        nonlocal tk
+        while not loop.is_closed():
+            ESC("7")
+            goto_xy(50,20)
+            t = "%02d:%02d:%02d" % time.localtime()[3:6]
+            tk.write(t)
+            # erase to eol
+            CSI("K")
+            ESC("8")
+            yield 1
+
+
     # clear screen
     CSI("2J")
+
+    thr=threading.Thread(target=clock, args=[])
+    thr.start()
+
+
     while not loop.is_closed():
         await asyncio.sleep(platform_delay)
         stdinput = tk.input()
