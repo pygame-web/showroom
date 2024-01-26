@@ -126,6 +126,8 @@ async def main():
     tk = Toolkit()
     tk.__enter__()
 
+    # clear screen
+    CSI("2J")
     while not loop.is_closed():
         await asyncio.sleep(platform_delay)
         stdinput = tk.input()
