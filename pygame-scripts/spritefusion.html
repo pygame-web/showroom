@@ -123,7 +123,7 @@ class Game:
             self.map_layer = pyscroll.orthographic.BufferedRenderer(map_data, screen.get_size())
 
         # create a font and pre-render some text to be displayed over the map
-        f = pygame.font.Font(pygame.font.get_default_font(), 8)
+        f = pygame.font.Font(pygame.font.get_default_font(), 10)
         t = ["scroll demo.", "arrow keys to move"]
 
         # save the rendered text
@@ -241,7 +241,8 @@ class Game:
         self.running = True
         fps = 60.0
         fps_log = collections.deque(maxlen=20)
-
+        import platform
+        platform.window.canvas.style.imageRendering = "pixelated"
         while self.running:
             # somewhat smoother way to get fps and limit the framerate
             clock.tick(fps * 2)
