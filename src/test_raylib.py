@@ -66,6 +66,8 @@ async def main():
 
     InitWindow(screenWidth, screenHeight, b"raylib [textures] example - bunnymark")
 
+    import platform
+    platform.window.window_resize()
     # // Load bunny texture
     texBunny = LoadTexture(b"resources/wabbit_alpha.png")
 
