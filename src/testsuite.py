@@ -330,7 +330,7 @@ test_winreg test_winsound test_with test_wsgiref test_xdrlib
 test_xml_dom_minicompat test_xml_etree test_xml_etree_c
 test_xmlrpc test_xmlrpc_net test_xxlimited test_xxtestfuzz
 test_yield_from test_zipapp test_zipfile test_zipfile64
-test_zipimport test_zipimport_support test_zlib test_zoneinfo
+test_zipimport test_zipimport_support test_zlib test_zoneinfo test_timer
 """
 
 #============================================================================
