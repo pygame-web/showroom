@@ -15,7 +15,6 @@ THREADS = {}
 
 def patch_set_timer(event: Union[int, pygame.event.Event], millis: int, loops: int = 0):
     """Patches the pygame.time.set_timer function to use gthreads"""
-    print("In patch_set_timer")
     dlay = float(millis) / 1000
     cevent = pygame.event.Event(event)
     event_loop = asyncio.get_event_loop()
@@ -107,15 +106,69 @@ async def test_cancel_patched_timer(start):
     return patched_timer_val
 
 
+async def test_repeated_original_timer(start):
+    print("Test repeating original timer after 10 secs...")
+    timer_event = pygame.USEREVENT + 2
+    pygame.time.set_timer(timer_event, 1000)
+    timer_val = 0
+    while True:
+        if pygame.time.get_ticks() - start > 10_000:
+            break
+        # event loop
+        for event in pygame.event.get():
+            if event.type == timer_event:
+                timer_val += 1
+                if timer_val == 2:
+                    pygame.time.set_timer(timer_event, 2000)
+                print(timer_val)
+
+        await asyncio.sleep(0)
+    return timer_val
+
+
+async def test_repeated_patched_timer(start):
+    print("Test repeating patched timer after 10 secs...")
+    timer_event = pygame.USEREVENT + 3
+    patch_set_timer(timer_event, 1000)
+    timer_val = 0
+    while True:
+        if pygame.time.get_ticks() - start > 10_000:
+            break
+        # event loop
+        for event in pygame.event.get():
+            if event.type == timer_event:
+                timer_val += 1
+                if timer_val == 2:
+                    patch_set_timer(timer_event, 2000)
+                print(timer_val)
+
+        await asyncio.sleep(0)
+    return timer_val
+
+
 async def main():
+    print("===> CANCEL TEST 1: Original vs Patched Timer")
+    # Original timer creates multiple duplicate timers with delay of 0
     start = pygame.time.get_ticks()
     org_timer_val = await test_cancel_original_timer(start)
-    print(f"RETURN VAL: {org_timer_val}")
     assert org_timer_val == -1
 
+    # Patched timer cancels the timer correctly
     start = pygame.time.get_ticks()
     patch_timer_val = await test_cancel_patched_timer(start)
     assert patch_timer_val == 3
+
+    print("===> REPEAT TEST 2: Original vs Patched Timer")
+    # Original timer will create a duplicate timer instead of
+    # canceling the current one
+    start = pygame.time.get_ticks()
+    org_timer_val = await test_repeated_original_timer(start)
+    assert org_timer_val > 10
+
+    # Patched timer replaces the existing one
+    start = pygame.time.get_ticks()
+    patch_timer_val = await test_repeated_patched_timer(start)
+    assert patch_timer_val < 10
 
 
 if __name__ == "__main__":
