@@ -3,6 +3,8 @@ import pygame
 from typing import Union
 import uuid
 
+pygame.init()
+
 # do no change import order for *thread*
 # patching threading.Thread
 import aio.gthread
