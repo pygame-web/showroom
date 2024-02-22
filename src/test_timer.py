@@ -99,6 +99,8 @@ async def test_cancel_original_timer(start):
             )
 
         await asyncio.sleep(0)
+    pygame.event.set_blocked(timer_event)
+    pygame.event.clear()
     return timer_val
 
 
@@ -117,6 +119,8 @@ async def test_cancel_patched_timer(start):
             )
 
         await asyncio.sleep(0)
+    pygame.event.set_blocked(patched_timer_event)
+    pygame.event.clear()
     return patched_timer_val
 
 
@@ -137,6 +141,8 @@ async def test_repeated_original_timer(start):
                 print(timer_val)
 
         await asyncio.sleep(0)
+    pygame.event.set_blocked(timer_event)
+    pygame.event.clear()
     return timer_val
 
 
@@ -157,6 +163,8 @@ async def test_repeated_patched_timer(start):
                 print(timer_val)
 
         await asyncio.sleep(0)
+    pygame.event.set_blocked(timer_event)
+    pygame.event.clear()
     return timer_val
 
 
@@ -175,6 +183,8 @@ async def test_fixed_iterations_patched_timer(start, num_iter):
                 print(timer_val)
 
         await asyncio.sleep(0)
+    pygame.event.set_blocked(timer_event)
+    pygame.event.clear()
     return timer_val
 
 
@@ -194,6 +204,8 @@ async def test_event_object_param_patched_timer(start, num_iter):
                 print(timer_val)
 
         await asyncio.sleep(0)
+    pygame.event.set_blocked(timer_event)
+    pygame.event.clear()
     return timer_val
 
 
