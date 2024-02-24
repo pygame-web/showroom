@@ -1,18 +1,22 @@
-<html><head><meta charset=utf-8></head><script src=/pygbag/0.0/pythons.js data-os=vtx,fs,gui data-python=python3.11 type=module id=__main__ async defer>#<!--
+<html><head><meta charset=utf-8></head><script src=/pygbag/0.0/pythons.js data-os=vtx,fs,gui data-LINES=25 data-COLUMNS=80 data-python=cpython3.12 type=module id=__main__ async defer>#<!--
 
 import asyncio
 
+# prevent pythonrc to execute default and yield instead
+PyConfig.user_site_directory = 1
+
 async def editor_task():
-    __file__ = await import_site(PyConfig.orig_argv[-1], run=False)
+    __file__ = await import_site(sys.argv[0], run=False)
+    print("Editor got source file : ", __file__)
+
     if __file__:
         window.editor.load_file(__file__)
         await asyncio.sleep(0)
         await import_site(__file__, run=True)
         shell.interactive()
 
+print("running editor_task")
 asyncio.loop.create_task( editor_task() )
-# prevent pythonrc to execute default and yield instead
-PyConfig.user_site_directory = 1
 
 
 """ # BEGIN -->
@@ -116,6 +120,12 @@ window.NOT_FTDI = false
     z-index : 0;
 }
 
+#terminal {
+    height: 50%;
+    bottom: 5;
+    right: 5;
+}
+
 .tr{
     position:absolute;
     top:5;
@@ -147,7 +157,7 @@ body {
 
 
 <div id=__file__>__file__</div>
-<div id="editor" ></div>
+<div id=editor></div>
 <div class=tr>
     <canvas id=canvas class="emscripten" oncontextmenu="event.preventDefault()"
 WIDTH="640px"
@@ -155,7 +165,7 @@ HEIGHT="360px"
     tabindex=1></canvas>
 </div>
 
-<div id=terminal data-COLS=80 data-LINES=25 data-CONSOLE=10 class=br></div>
+<div id=terminal data-COLUMNS=80 data-LINES=25 data-CONSOLE=-2 class=br></div>
 
 
 <div id=stdout style="border-style:solid; height=50%" class=bl>
@@ -184,8 +194,6 @@ HEIGHT="360px"
         editor.setValue(await( new Blob([FS.readFile(path)], {type : "text/utf-8"}).text()))
         __file__.innerHTML = path
     }
-
-
 
 
 </script>
