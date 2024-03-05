@@ -1,19 +1,13 @@
 #!python3
-# /// pyproject
-# [project]
-# name = "test_matplotlib"
-# version = "version"
-# description = "description"
-# readme = {file = "README.txt", content-type = "text/markdown"}
-# requires-python = ">=3.11"
-#
+
+# /// script
 # dependencies = [
 #    "pygbag",
 #    "cycler",
 #    "kiwisolver",
 #    "numpy",
 #    "packaging",
-#    "PIL",
+#    "Pillow",
 #    "pyparsing",
 #    "dateutil",
 #    "pytz",
@@ -27,6 +21,8 @@
 
 import pygbag.aio as asyncio
 
+import numpy as np
+
 import sys
 import os
 import platform
@@ -35,15 +31,12 @@ import pygame
 import matplotlib
 import matplotlib.pyplot as plt
 
-import numpy as np
+
+pygame.init()
 
 
 async def main():
-
-    #screen = pygame.display.set_mode((1024, 600))
     screen = pygame.display.set_mode((854, 480))
-    #screen = pygame.display.set_mode((680, 400))
-    #screen = pygame.display.set_mode((640, 360))
 
     # Fixing random state for reproducibility
     np.random.seed(1)

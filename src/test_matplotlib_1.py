@@ -1,7 +1,28 @@
+#!python3
+
+# /// script
+# dependencies = [
+#    "cycler",
+#    "kiwisolver",
+#    "numpy",
+#    "packaging",
+#    "Pillow",
+#    "pyparsing",
+#    "dateutil",
+#    "pytz",
+#    "six",
+#    "matplotlib",
+#    "pygame-ce",
+# ]
+# ///
+
+
 import asyncio
 import pygame
 import os
 import matplotlib.pyplot as plt
+
+
 
 
 async def main():
