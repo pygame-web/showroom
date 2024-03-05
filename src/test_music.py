@@ -47,12 +47,26 @@ def unpause():
 def mk_button(font:pygame.font.Font, text:str, col="black", bg_col="cyan") -> pygame.Surface:
 
     w, h = font.size(text)
-    surf = pygame.Surface((w+10, h+10))
+    surf = pygame.Surface((int(w+10), int(h+10)))
     surf.fill(bg_col)
     text_surf = font.render(text, True, col)
     surf.blit(text_surf, (5, 5))
 
     return surf
+
+
+def vol_min():
+    pygame.mixer.music.set_volume(0.1)
+    return f"vol set to {pygame.mixer.music.get_volume()}"
+
+def vol_avg():
+    pygame.mixer.music.set_volume(0.4)
+    return f"vol set to {pygame.mixer.music.get_volume()}"
+
+def vol_max():
+    pygame.mixer.music.set_volume(0.99)
+    return f"vol set to {pygame.mixer.music.get_volume()}"
+
 
 async def main():
     #await aio.fetch.preload_fetch()
@@ -62,6 +76,9 @@ async def main():
     font = pygame.font.SysFont("impact", 32)
     buttons = [
         ((W/4, H/6*2), mk_button(font, "load"), load),
+        ((W/4*1.5, H/6*2), mk_button(font, "vmin"), vol_min),
+        ((W/4*2.0, H/6*2), mk_button(font, "vavg"), vol_avg),
+        ((W/4*2.5, H/6*2), mk_button(font, "vmax"), vol_max),
         ((W/4*3, H/6*2), mk_button(font, "unload"), unload),
         ((W/4, H/6*3), mk_button(font, "pause"), pause),
         ((W/4*3, H/6*3), mk_button(font, "unpause"), unpause),
