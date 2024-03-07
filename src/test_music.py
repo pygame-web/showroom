@@ -2,9 +2,11 @@
 
 import pygame
 import asyncio
-import aio.fetch
+import sys
+if sys.platform in ('emscripten','wasm'):
+    import aio.fetch
 
-aio.fetch.FS("""
+    aio.fetch.FS("""
 https://github.com/pygame-web/showroom/tree/main
 sfx ~ sfx
 ├── click.ogg
@@ -69,7 +71,7 @@ def vol_max():
 
 
 async def main():
-    #await aio.fetch.preload_fetch()
+
     pygame.init()
     W, H = 640, 360
     screen = pygame.display.set_mode((W, H), pygame.SCALED)

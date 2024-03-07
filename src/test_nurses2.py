@@ -1,9 +1,21 @@
 
+# /// script
+# dependencies = [
+#  "numpy",
+#  "nurses_2",
+#  "cwcwidth",
+#  "cv2",
+# ]
+# ///
+
+
+import numpy
 import asyncio
 import wcwidth
 import termios
 import tty
-import numpy
+
+print("=========================")
 import cv2
 
 try:

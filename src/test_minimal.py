@@ -1,3 +1,13 @@
+import sys
+try:
+    import pygame
+except:
+    print("===========================")
+    if sys.platform in ('emscripten','wasi'):
+        print('clearing')
+        embed.PyErr_Clear()
+        print('done')
+
 import pygame
 
 pygame.init()
@@ -9,14 +19,8 @@ pygame.display.set_caption("blank")
 
 # main game loop
 while True:
-    # handle events
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
-
     # clear the screen
-    screen.fill((0, 0, 0))
+    screen.fill((0, 128, 0))
 
     # update the screen
     pygame.display.update()

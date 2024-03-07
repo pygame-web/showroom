@@ -1,24 +1,14 @@
 import pygbag.aio as asyncio
 
-# /// pyproject
-# [project]
-# name = "name"
-# version = "2023"
-# description = "description"
-# readme = {file = "README.txt", content-type = "text/markdown"}
-# requires-python = ">=3.11"
-#
+# /// script
 # dependencies = [
-#  "pygame",
+#  "pygame-ce",
 #  "noise",
 # ]
 # ///
 
-
 import pygame
-
-from noise import pnoise2, snoise2
-
+import noise
 import random
 
 pxsize = 255
@@ -34,7 +24,7 @@ async def main():
     f.write("P2\n256 256\n255\n")
     for y in range(256):
         for x in range(256):
-            pixval = int(snoise2(x / freq, y / freq, octaves) * 127.0 + 128.0)
+            pixval = int(noise.snoise2(x / freq, y / freq, octaves) * 127.0 + 128.0)
             if pixval > pxsize:
                 pixval = pxsize
             f.write("%s\n" % pixval )
@@ -46,6 +36,7 @@ async def main():
     shell.interactive(prompt=True)
 
     await asyncio.sleep(.5)
+
 
     shell.display("out.pgm")
 

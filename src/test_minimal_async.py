@@ -5,7 +5,15 @@ pygame.init()
 
 # set up the window
 screen_width, screen_height = 640, 480
-screen = pygame.display.set_mode((screen_width, screen_height))
+
+if pygame.display.get_init():
+    screen = pygame.display.get_surface()
+else:
+    pygame.display.init()
+    screen = None
+
+if screen is None:
+    screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("blank")
 
 # main game loop

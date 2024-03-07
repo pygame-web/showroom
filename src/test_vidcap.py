@@ -1,6 +1,6 @@
 import pygame, os
 
-# /// pyproject
+# /// script
 # [project]
 # name = "name"
 # version = "version"

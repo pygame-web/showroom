@@ -1,13 +1,6 @@
 #!python
 
-# /// pyproject
-# [project]
-# name = "pgp3d"
-# version = "2023"
-# description = "embed pygame in Panda3D webgl surface"
-# readme = {file = "README.txt", content-type = "text/markdown"}
-# requires-python = ">=3.11"
-#
+# /// script
 # dependencies = [
 #  "panda3d",
 # ]
@@ -20,7 +13,6 @@ import panda3d
 
 import panda3d.core as p3d
 import panda3d.direct
-
 
 
 import math
@@ -137,6 +129,19 @@ MyApp.instance = MyApp()
 
 MyApp.instance.build()
 
+print("="*60)
+
+for sub in ('physics','fx','egg','bullet','interrogatedb'):
+    try:
+        __import__("panda3d.{sub}")
+    except:
+        print(f"failed to import panda3d.{sub}")
+
+print("="*60)
+
+
+for elem in dir(panda3d):
+    print(elem)
 MyApp.instance.run()
 
 

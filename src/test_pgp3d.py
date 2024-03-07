@@ -9,7 +9,7 @@
 # requires-python = ">=3.11"
 #
 # dependencies = [
-#  "pygame",
+#  "pygame-ce",
 #  "panda3d",
 # ]
 # ///

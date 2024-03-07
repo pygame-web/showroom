@@ -1,5 +1,5 @@
 
-# /// pyproject
+# /// script
 # [project]
 # name = "test_pygame"
 # version = "version"
