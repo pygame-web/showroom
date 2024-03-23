@@ -1,6 +1,6 @@
 
 
-# /// pyproject
+# /// script
 # [project]
 # name = "zengl-pyscript-test"
 # version = "2024"
