@@ -1,5 +1,15 @@
+
+# /// script
+# dependencies = [
+#  "pygame-ce",
+#  "pygame-widgets",
+# ]
+# ///
+
+
 import asyncio
 import pygame
+
 
 import pygame_widgets
 from pygame_widgets.button import ButtonArray

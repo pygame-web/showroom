@@ -1,18 +1,10 @@
 #!python3
 
-# /// pyproject
-# [project]
-# name = "test_pygame"
-# version = "version"
-# description = "description"
-# readme = {file = "README.txt", content-type = "text/markdown"}
-# requires-python = ">=3.11"
-#
+# /// script
 # dependencies = [
-#    "pygame.base",
+#    "pygame-ce",
 # ]
 # ///
-
 
 import sys
 import math
