@@ -1,0 +1,83 @@
+<html><head><meta charset="utf-8"></head><script src="/archives/0.4/pythons.js" type=module id="__main__" data-src="gui" async defer>#<!--
+import asyncio
+
+
+async def main():
+    from platform import window, document
+
+    class RImport:
+        def __init__(self, url: str):
+            pass
+
+        async def _import(self, name: str):
+            print("await for", name)
+            while not window.defined(name):
+                await asyncio.sleep(0)
+            print('found', name)
+            return window[name]
+
+    def _from(url):
+        if url.lower().endswith(".js"):
+            window.jsimport(url)
+        else:
+            print("N/I", url)
+        return RImport("url")
+
+    def new(oclass, *argv, **kw):
+        from embed_browser import Reflect, Array
+        if kw:
+            import json
+            kw = window.JSON.parse(json.dumps(kw))
+            return Reflect.construct(oclass, Array(kw))
+        return Reflect.construct(oclass, Array(*argv))
+
+
+    platform._from = _from
+
+    await platform._from(
+        "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.js"
+    )._import("THREE")
+
+    THREE = window.THREE
+
+    container = document.querySelector("#body")
+
+    scene = new(THREE.Scene)
+
+
+    scene.background = new(THREE.Color,"black")
+
+    fov = 35
+    aspect = container.clientWidth / (container.clientHeight or 600)
+    near = 0.1
+    far = 100
+
+    camera = new(THREE.PerspectiveCamera, fov, aspect, near, far )
+
+    print("camera", camera)
+
+    camera.position.set(0, 0, 10)
+
+    renderer = new(THREE.WebGLRenderer)
+    renderer.setSize(container.clientWidth, container.clientHeight)
+    renderer.setPixelRatio(window.devicePixelRatio)
+
+    geometry = new(THREE.BoxGeometry)
+    material = new(THREE.MeshBasicMaterial, color ="#00ff00")
+    cube = new(THREE.Mesh, geometry, material)
+    scene.add(cube)
+
+    renderer.render(scene, camera)
+
+    container.append(renderer.domElement)
+
+    while True:
+        cube.rotation.x += 0.01
+        cube.rotation.y += 0.01
+        renderer.render(scene, camera)
+        await asyncio.sleep(0)
+
+
+asyncio.run(main())
+
+# --></script><body id=body></body></html>
