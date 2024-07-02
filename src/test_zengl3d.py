@@ -4,7 +4,6 @@
 # [project]
 # name = "zengl-test"
 # version = "2023"
-# description = "embed pygame in Panda3D webgl surface"
 # readme = {file = "README.txt", content-type = "text/markdown"}
 # requires-python = ">=3.11"
 #
