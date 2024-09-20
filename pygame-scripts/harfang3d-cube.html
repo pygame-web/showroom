@@ -1,0 +1,130 @@
+<html><head><meta charset="utf-8"></head><script src="https://pygame-web.github.io/archives/0.9/pythons.js" data-python="cpython3.12" data-os="fs,vtx,gui" type=module id="__main__" async defer>#<!--
+PYGBAG_FS = 3
+__import__("os").chdir(__import__("tempfile").gettempdir())
+
+# /// pyproject
+# [project]
+# name = "pgp3d"
+# version = "2023"
+# description = "embed pygame in Panda3D webgl surface"
+# readme = {file = "README.txt", content-type = "text/markdown"}
+# requires-python = ">=3.11"
+#
+# dependencies = [
+#  "harfang",
+# ]
+# ///
+
+
+def fs_decode(fsname, o248):
+    from pathlib import Path
+
+    filename = Path.cwd() / fsname
+    if not filename.is_file():
+        filename.parent.mkdir(parents=True, exist_ok=True)
+        print("FS:", filename)
+        with open(fsname, "wb") as fs:
+            for input in o248.split("\n"):
+                if not input:
+                    continue
+                fs.write(bytes([ord(c) - 248 for c in input]))
+
+
+fs_decode(
+    "resources_compiled/shaders/mdl.fsb",
+    """
+ľŋŀăŭǬşƣøøøøøøǉùøøŨŪŝśšūšŧŦĘŠšşŠŨĘūřťŨŤŝŪĪļĹŪŪřűĳĂŨŪŝśšūšŧŦĘŠšşŠŨĘšŦŬĳĂŨŪŝśšūšŧ
+ŦĘŠšşŠŨĘŞŤŧřŬĳĂŧŭŬĘŮŝśĬĘŚşŞŰŗľŪřşĻŧŤŧŪĳĂšŦĘŮŝśīĘŮņŧŪťřŤĳĂŮŧšŜĘťřšŦĘĠġĂųĂĘĘŮŝśīĘ
+ŬťŨŮřŪŗĩĳĂĘĘŬťŨŮřŪŗĩĘĵĘŦŧŪťřŤšŲŝĠŮņŧŪťřŤġĳĂĘĘŚşŞŰŗľŪřşĻŧŤŧŪĘĵĘťšŦĘĠĠĠŮŝśĬĠĂĘĘĘĘ
+ťřŰĘĠĨĦĨĤĘĥĠŜŧŬĘĠŬťŨŮřŪŗĩĤĘŮŝśīĠĨĦįĪįīıĪıĤĘĨĦĭİĩıĩĬĬĤĘĨĦīĮīĮıĮĭġġġġĂĘĘġĘģĘĂĘĘĘĘ
+ĠťřŰĘĠĨĦĨĤĘĥĠŜŧŬĘĠŬťŨŮřŪŗĩĤĘŮŝśīĠĥĨĦįĪįīıĪıĤĘĥĨĦĭİĩıĩĬĬĤĘĥĨĦīĮīĮıĮĭġġġġĘĢĘŮŝśĬĠ
+ĨĦīįĭĤĘĨĦĬĪĭĤĘĨĦĭĤĘĨĦĭġġĂĘĘġĘģĘŮŝśĬĠĨĦĩĤĘĨĦĩĤĘĨĦĪĤĘĩĦĨġġĤĘŮŝśĬĠĩĦĨĤĘĩĦĨĤĘĩĦĨĤĘĩ
+ĦĨġġĳĂŵĂĂø""",
+)
+
+fs_decode(
+    "resources_compiled/shaders/mdl.vsb",
+    """
+ŎŋŀăøøøøŭǬşƣúøÿŭŗťŧŜŝŤüĘøøĘøøøøøćŭŗťŧŜŝŤŎšŝůňŪŧŢüùøøùøøøøøǓùøøŨŪŝśšūšŧŦĘŠšşŠŨĘū
+řťŨŤŝŪĪļĹŪŪřűĳĂŨŪŝśšūšŧŦĘŠšşŠŨĘšŦŬĳĂŨŪŝśšūšŧŦĘŠšşŠŨĘŞŤŧřŬĳĂšŦĘŠšşŠŨĘŮŝśīĘřŗŦŧŪť
+řŤĳĂšŦĘŠšşŠŨĘŮŝśīĘřŗŨŧūšŬšŧŦĳĂŧŭŬĘŠšşŠŨĘŮŝśīĘŮņŧŪťřŤĳĂŭŦšŞŧŪťĘťřŬĬĘŭŗťŧŜŝŤœīĪŕĳ
+ĂŭŦšŞŧŪťĘŠšşŠŨĘťřŬĬĘŭŗťŧŜŝŤŎšŝůňŪŧŢĳĂŮŧšŜĘťřšŦĘĠġĂųĂĘĘŠšşŠŨĘŮŝśĬĘŬťŨŮřŪŗĩĳĂĘĘŬť
+ŨŮřŪŗĩĦůĘĵĘĨĦĨĳĂĘĘŬťŨŮřŪŗĩĦŰűŲĘĵĘĠĠřŗŦŧŪťřŤĘĢĘĪĦĨġĘĥĘĩĦĨġĳĂĘĘŮņŧŪťřŤĘĵĘĠŭŗťŧŜŝŤ
+œĨŕĘĢĘŬťŨŮřŪŗĩġĦŰűŲĳĂĘĘŠšşŠŨĘŮŝśĬĘŬťŨŮřŪŗĪĳĂĘĘŬťŨŮřŪŗĪĦůĘĵĘĩĦĨĳĂĘĘŬťŨŮřŪŗĪĦŰűŲĘ
+ĵĘřŗŨŧūšŬšŧŦĳĂĘĘşŤŗňŧūšŬšŧŦĘĵĘĠŭŗťŧŜŝŤŎšŝůňŪŧŢĘĢĘŬťŨŮřŪŗĪġĳĂŵĂĂ""",
+)
+
+del fs_decode, PYGBAG_FS
+
+
+import sys
+import platform
+import asyncio
+
+# import pygame
+
+import harfang as hg
+
+hg.InputInit()
+hg.WindowSystemInit()
+
+res_x, res_y = 1024, 1024
+
+print("===================================")
+win = hg.RenderInit("Harfang - Draw Models no Pipeline", res_x, res_y, hg.RT_OpenGLES)
+print("===================================")
+
+
+# Draw models without a pipeline
+async def main():
+
+    platform.window.python.is_ready = True
+    await shell.exec( shell.debug )
+
+
+    # vertex layout and models
+    vtx_layout = hg.VertexLayoutPosFloatNormUInt8()
+
+    cube_mdl = hg.CreateCubeModel(vtx_layout, 1, 1, 1)
+    ground_mdl = hg.CreatePlaneModel(vtx_layout, 5, 5, 1, 1)
+
+    shader = hg.LoadProgramFromFile("resources_compiled/shaders/mdl")
+
+    # main loop
+    angle = 0
+
+    while 1:  # not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
+        dt = hg.TickClock()
+        angle = angle + hg.time_to_sec_f(dt)
+
+        viewpoint = hg.TranslationMat4(hg.Vec3(0, 1, -3))
+        hg.SetViewPerspective(0, 0, 0, res_x, res_y, viewpoint)
+
+        hg.DrawModel(
+            0,
+            cube_mdl,
+            shader,
+            [],
+            [],
+            hg.TransformationMat4(hg.Vec3(0, 1, 0), hg.Vec3(angle, angle, angle)),
+        )
+        hg.DrawModel(
+            0, ground_mdl, shader, [], [], hg.TranslationMat4(hg.Vec3(0, 0, 0))
+        )
+
+        hg.Frame()
+        hg.UpdateWindow(win)
+        await asyncio.sleep(0)
+
+    hg.RenderShutdown()
+
+
+async def custom_site():
+    await main()
+
+
+asyncio.run(custom_site())
+del custom_site
+
+
+# --></script></html>
