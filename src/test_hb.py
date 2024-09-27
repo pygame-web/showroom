@@ -1,12 +1,6 @@
 
 # /// pyproject
 # [project]
-# name = "pgp3d"
-# version = "2023"
-# description = "embed pygame in Panda3D webgl surface"
-# readme = {file = "README.txt", content-type = "text/markdown"}
-# requires-python = ">=3.11"
-#
 # dependencies = [
 #  "pygame-ce",
 #  "six",
@@ -56,7 +50,6 @@ async def main():
 
     import tempfile
     await aio.fetch.preload()
-
 
 
     print(" \npygame.font.init")
