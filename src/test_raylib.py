@@ -40,7 +40,10 @@ import random
 
 async def main():
 
-    MAX_BUNNIES      =  500000
+    try:
+        MAX_BUNNIES = int(sys.argv[-1])
+    except:
+        MAX_BUNNIES      =  10000
 
     # This is the maximum amount of elements (quads) per batch
     # NOTE: This value is defined in [rlgl] module and can be changed there
@@ -80,24 +83,21 @@ async def main():
     SetTargetFPS(60);               # Set our game to run at 60 frames-per-second
     #//--------------------------------------------------------------------------------------
 
+    await asyncio.sleep(0)
+    for i in range(0, MAX_BUNNIES):
+        bunnies[bunniesCount].position_x = 100
+        bunnies[bunniesCount].position_y = 100
+        bunnies[bunniesCount].speed_x = random.randint(-250, 250)/60.0
+        bunnies[bunniesCount].speed_y = random.randint(-250, 250)/60.0
+        bunnies[bunniesCount].color_r = random.randint(50,240)
+        bunnies[bunniesCount].color_g = random.randint(80, 240)
+        bunnies[bunniesCount].color_b = random.randint(100, 240)
+        bunnies[bunniesCount].color_a = 255
+        bunniesCount+=1
+
+
     #// Main game loop
     while not WindowShouldClose():    #// Detect window close button or ESC key
-        #// Update
-        #//----------------------------------------------------------------------------------
-        if IsMouseButtonDown(MOUSE_BUTTON_LEFT):
-            #// Create more bunnies
-            for i in range(0, 100):
-                if bunniesCount < MAX_BUNNIES:
-                    bunnies[bunniesCount].position_x = GetMousePosition().x
-                    bunnies[bunniesCount].position_y = GetMousePosition().y
-                    bunnies[bunniesCount].speed_x = random.randint(-250, 250)/60.0
-                    bunnies[bunniesCount].speed_y = random.randint(-250, 250)/60.0
-                    bunnies[bunniesCount].color_r = random.randint(50,240)
-                    bunnies[bunniesCount].color_g = random.randint(80, 240)
-                    bunnies[bunniesCount].color_b = random.randint(100, 240)
-                    bunnies[bunniesCount].color_a = 255
-                    bunniesCount+=1
-
 
         # // Update bunnies
         for i in range(0, bunniesCount):
