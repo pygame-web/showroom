@@ -2258,9 +2258,12 @@ try:
 except:
     software = False
 
-if wasm:
+if 'pyodide' in os.environ.get('HOME',''):
+    sdl3.frametime = 0.016
+elif wasm:
     sdl3.frametime = 0
 else:
+    # todo get vsync.
     sdl3.frametime = 0.016
 
 
