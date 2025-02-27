@@ -2226,10 +2226,10 @@ wasm=sys.platform in ('emscripten','wasi')
 if wasm:
     import platform
 
-if 0:
-    WIDTH = 1024
-    HEIGHT = 600
+WIDTH = 512
+HEIGHT = 300
 
+if 0:
     if wasm:
         platform.window.canvas.width = WIDTH
         platform.window.canvas.height = HEIGHT
@@ -2284,7 +2284,7 @@ async def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
         print(f"failed to initialize library: {sdl3.SDL_GetError().decode().lower()}.")
         return -1
 
-    window = sdl3.SDL_CreateWindow("Aermoss".encode(), 1024, 600, sdl3.SDL_WINDOW_TRANSPARENT, sdl3.SDL_WINDOW_RESIZABLE)
+    window = sdl3.SDL_CreateWindow("Aermoss".encode(), WIDTH, HEIGHT, sdl3.SDL_WINDOW_TRANSPARENT, sdl3.SDL_WINDOW_RESIZABLE)
 
 
 
