@@ -1,12 +1,6 @@
 
 
-# /// pyproject
-# [project]
-# name = "zengl-test"
-# version = "2023"
-# readme = {file = "README.txt", content-type = "text/markdown"}
-# requires-python = ">=3.11"
-#
+# /// script
 # dependencies = [
 #  "pygame-ce",
 #  "zengl",
@@ -15,14 +9,16 @@
 
 import asyncio
 import struct
+import zengl
+zengl.init()
+ctx = zengl.context()
+import _zengl
 
 import pygame
-import zengl
+pygame.init()
+pygame.display.set_mode( (800, 800), flags=pygame.OPENGL | pygame.DOUBLEBUF)
 
-pygame.display.set_mode((800, 800), flags=pygame.OPENGL | pygame.DOUBLEBUF)
-zengl.init()
 
-ctx = zengl.context()
 
 """
 def compile_error(shader: bytes, shader_type: int, log: bytes):
@@ -32,7 +28,6 @@ def compile_error(shader: bytes, shader_type: int, log: bytes):
 
 """
 
-import _zengl
 
 def compile_error_debug(shader: bytes, shader_type: int, log: bytes):
     name = {0x8B31: "Vertex Shader", 0x8B30: "Fragment Shader"}[shader_type]
@@ -68,6 +63,8 @@ size = pygame.display.get_window_size()
 image = ctx.image(size, "rgba8unorm", samples=4)
 depth = ctx.image(size, "depth24plus", samples=4)
 output = ctx.image(size, "rgba8unorm")
+
+#print(image,depth,output)
 
 FS="""
         #version 300 es
@@ -174,6 +171,7 @@ def render(timestamp=0.0):
 
 
 async def main():
+
     timestamp = 0.0
     while True:
         timestamp += 1000.0 / 60.0
