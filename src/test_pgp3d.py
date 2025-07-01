@@ -1,12 +1,6 @@
 # https://github.com/Schwarzbaer/panda_examples/blob/master/buffer_protocol/pygame_to_panda3d.py
 
-# /// pyproject
-# [project]
-# name = "pgp3d"
-# version = "2023"
-# description = "embed pygame in Panda3D webgl surface"
-# readme = {file = "README.txt", content-type = "text/markdown"}
-# requires-python = ">=3.11"
+# /// script
 #
 # dependencies = [
 #  "pygame-ce",
