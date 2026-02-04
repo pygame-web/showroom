@@ -108,6 +108,8 @@ fs_decode('tiles.png','''
 # fmt:on
 del fs_decode
 
+# https://hackmd.io/@E44abSruTB6H51YFxxOomQ/SkNSL9kQ1e
+
 
 # /// script
 # dependencies = [
@@ -116,15 +118,18 @@ del fs_decode
 # ///
 
 
+
+
 import asyncio
 import pygame
 
+pygame.init()
 
 async def main():
-
-    pygame.display.set_caption("simple animation")
-
     screen = pygame.display.set_mode((1024, 600))
+
+
+    # pygame.display.set_caption("simple animation")
 
     anim_tiles = pygame.image.load("tiles.png")
     anim_frames = 2
@@ -168,9 +173,6 @@ async def main():
 
         pygame.display.update()
         await asyncio.sleep(0.016)
-
-
-
 
 asyncio.run(main())
 

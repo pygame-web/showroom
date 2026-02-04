@@ -11,7 +11,7 @@ import sys
 import asyncio
 import panda3d
 
-import panda3d.core as p3d
+import panda3d.core
 import panda3d.direct
 
 

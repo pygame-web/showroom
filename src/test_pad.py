@@ -50,9 +50,6 @@ async def main():
         # Possible joystick events: JOYAXISMOTION, JOYBALLMOTION, JOYBUTTONDOWN,
         # JOYBUTTONUP, JOYHATMOTION, JOYDEVICEADDED, JOYDEVICEREMOVED
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                done = True  # Flag that we are done so we exit this loop.
-
             if event.type == pygame.JOYBUTTONDOWN:
                 print("Joystick button pressed.")
                 if event.button == 0:
@@ -64,20 +61,22 @@ async def main():
                             )
                         )
 
-            if event.type == pygame.JOYBUTTONUP:
+            elif event.type == pygame.JOYBUTTONUP:
                 print("Joystick button released.")
 
             # Handle hotplugging
-            if event.type == pygame.JOYDEVICEADDED:
+            elif event.type == pygame.JOYDEVICEADDED:
                 # This event will be generated when the program starts for every
                 # joystick, filling up the list without needing to create them manually.
                 joy = pygame.joystick.Joystick(event.device_index)
                 joysticks[joy.get_instance_id()] = joy
                 print("Joystick {} connected".format(joy.get_instance_id()))
 
-            if event.type == pygame.JOYDEVICEREMOVED:
+            elif event.type == pygame.JOYDEVICEREMOVED:
                 del joysticks[event.instance_id]
                 print("Joystick {} disconnected".format(event.instance_id))
+            elif event.type == pygame.QUIT:
+                done = True  # Flag that we are done so we exit this loop.
 
         # Drawing step
         # First, clear the screen to white. Don't put other drawing commands

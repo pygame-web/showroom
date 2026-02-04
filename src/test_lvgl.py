@@ -69,14 +69,21 @@ async def main():
 
     diff = 0
 
+
+    await asyncio.sleep(0)
+    platform.window.window_resize()
+
+
+
     while True:
+        await asyncio.sleep(0)
         stop = time.time()
         diff = int((stop * 1000) - (start * 1000))
         if diff >= 1:
             start = stop
             lv.tick_inc(diff)
             lv.task_handler()
-        await asyncio.sleep(0)
+
 
 asyncio.run(main())
 

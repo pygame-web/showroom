@@ -9,6 +9,12 @@
 # ///
 
 
+# bidi and embedded
+# https://github.com/lvgl/lvgl/issues/899
+
+# diacritic print("\u0628\u0650\u0651")
+
+
 import aio.fetch
 
 aio.fetch.FS("""

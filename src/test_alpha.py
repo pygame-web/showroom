@@ -16,6 +16,17 @@ import pygame
 pygame.init()
 
 async def main():
+    print("""
+
+
+
+    MOVE MOUSE OVER CANVAS
+
+
+
+
+    """)
+
     screen = pygame.display.set_mode((800, 600))
     clock = pygame.time.Clock()
     BLUE = pygame.Color('dodgerblue4')
@@ -27,7 +38,7 @@ async def main():
             pygame.draw.rect(background, BLUE, (x, y, 20, 20), 1)
 
     # This dark gray surface will be blitted above the background surface.
-    surface = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
+    surface = pygame.Surface(screen.get_size()).convert_alpha()
     surface.fill(pygame.Color('gray11'))
 
     done = False
