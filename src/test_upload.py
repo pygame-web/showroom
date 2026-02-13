@@ -1,13 +1,6 @@
 import platform
 
-# /// pyproject
-# [project]
-# name = "name"
-# version = "version"
-# description = "description"
-# readme = {file = "README.txt", content-type = "text/markdown"}
-# requires-python = ">=3.11"
-#
+# /// script
 # dependencies = [
 #     "pygame-ce",
 # ]
