@@ -1,4 +1,4 @@
-<html><head><meta charset=utf-8></head><script src=/cdn/0.9.3/pythons.js data-os=vtx,fs,gui data-python=cpython3.12 data-COLS=80 data-LINES=20 data-CONSOLE=5 type=module id=__main__ async defer>#<!--
+<html><head><meta charset=utf-8></head><script src=/cdn/0.9.3/pythons.js data-os=vtx,fs,gui data-python=cpython3.12 type=module id=__main__ async defer>#<!--
 
 import asyncio
 import tempfile
@@ -120,8 +120,9 @@ if sys.argv[0].endswith('.py'):
 .br {
     z-index : 50;
     position: fixed;
-    bottom: 5;
-    right: 5;
+    right: 8;
+    width: 50%;
+    height: 50%;
 }
 
 .bl {
@@ -149,7 +150,7 @@ HEIGHT="360px"
     tabindex=1></canvas>
 </div>
 
-<div id=terminal data-COLS=100 data-ROWS=30 class=br></div>
+<div id=terminal data-COLUMNS=80 data-LINES=30 data-CONSOLE=1 class=br></div>
 
 
 <div id=stdout style="border-style:solid; height=50%" class=bl>
