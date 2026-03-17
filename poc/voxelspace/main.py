@@ -4,14 +4,7 @@
 
 import pygbag.aio as asyncio
 
-# /// pyproject
-# [project]
-# name = "name"
-# version = "version"
-# description = "description"
-# readme = {file = "README.txt", content-type = "text/markdown"}
-# requires-python = ">=3.11"
-#
+# /// script
 # dependencies = [
 #  "numpy",
 #  "pygame",
@@ -39,8 +32,6 @@ import pygame
 
 
 from typing import Final
-
-
 
 
 SCREEN_WIDTH: Final = 640
@@ -184,6 +175,7 @@ async def main():
             next_tick = t + 5
 
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
 
 
